@@ -1,4 +1,5 @@
 {
+  "name": "crosscollab",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -20,6 +21,9 @@
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-web-browser": "~8.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.18.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -29,7 +33,9 @@
     "react-native-web": "~0.11.7",
     "react-navigation": "~4.0.10",
     "react-navigation-stack": "~1.10.3",
-    "react-navigation-tabs": "~2.6.2"
+    "react-navigation-tabs": "~2.6.2",
+    "sequelize": "^5.21.3",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
