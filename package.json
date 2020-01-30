@@ -7,7 +7,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "seed": "node server/db/seed.js"
   },
   "jest": {
     "preset": "jest-expo"
@@ -22,6 +23,7 @@
     "expo-font": "~8.0.0",
     "expo-web-browser": "~8.0.0",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "morgan": "^1.9.1",
     "pg": "^7.18.0",
     "react": "~16.9.0",

@@ -3,12 +3,15 @@ const User = require("./user");
 const Crossword = require("./crossword");
 const GameInstance = require("./gameInstance");
 
-Crossword.belongsToMany(User, {
-  through: GameInstance
+GameInstance.belongsTo(Crossword);
+Crossword.hasMany(GameInstance);
+
+User.belongsToMany(GameInstance, {
+  through: "userInstance"
 });
 
-User.belongsToMany(Crossword, {
-  through: GameInstance
+GameInstance.belongsToMany(User, {
+  through: "userInstance"
 });
 
 User.belongsToMany(User, {
