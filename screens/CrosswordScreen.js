@@ -24,136 +24,165 @@ export default class CrosswordTable extends React.Component {
     super(props);
     state = {
       answers: [],
-      guesses: []
+      guesses: [],
+      isReady: false
     };
   }
   async componentDidMount() {
-    console.log("in component did mount", axios);
     try {
-      console.log(`${SERVER_URL}/api/gameInstance/`);
       const { data } = await axios.get(`${SERVER_URL}/api/gameInstance/`);
-      console.log("data", data);
-      // this.setState({answers: data.answers})
+      this.setState({
+        answers: data.answers,
+        guesses: data.guesses,
+        isReady: true
+      });
     } catch (err) {
       console.log(err);
     }
   }
 
   render() {
-    // let numOfRows = Math.sqrt(this.state.answers.length);
+    if (this.state && !this.state.isReady) {
+      return <Text>Loading...</Text>;
+    } else if (!this.state) {
+      return <Text>No state</Text>;
+    }
+
+    let numOfRows = Math.sqrt(this.state.answers.length);
+    let rows = [];
+    for (let i = 0; i < numOfRows; i++) {
+      rows.push([]);
+    }
+    for (let i = 0; i < this.state.answers.length; i++) {
+      let currentRow = Math.floor(i / numOfRows);
+      let currentAnswer = this.state.answers[i];
+      rows[currentRow].push(currentAnswer);
+    }
     return (
-      <View>
-        <Text>BASIC</Text>
+      //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
+      <View
+        style={{
+          flexDirection: "column",
+          flex: 1,
+          alignContent: "flex-start",
+          justifyContent: "flex-start",
+          height: "80%",
+          marginTop: "10%"
+        }}
+      >
+        {rows.map((row, index) => {
+          return (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                borderColor: "blue",
+                borderWidth: 2,
+                height: `${100 / numOfRows}%`
+              }}
+              key={index}
+            >
+              {row.map((cell, idx) => {
+                console.log("cell", cell, "index:", (idx + 1) * (index + 1));
+                if (cell === ".") {
+                  return (
+                    <TextInput
+                      maxLength={0}
+                      style={{
+                        backgroundColor: "black",
+                        height: "100%",
+                        width: `${100 / numOfRows}%`,
+                        borderColor: "black",
+                        borderWidth: 1,
+                        justifyContent: "center"
+                      }}
+                      textAlign={"center"}
+                      key={Math.random() * 1000}
+                    />
+                  );
+                }
+
+                return (
+                  <TextInput
+                    placeholder={cell}
+                    maxLength={1}
+                    style={{
+                      backgroundColor: "white",
+                      height: "100%",
+                      width: `${100 / numOfRows}%`,
+                      borderColor: "black",
+                      borderWidth: 1,
+                      justifyContent: "center"
+                    }}
+                    textAlign={"center"}
+                    key={Math.random() * 10000}
+                  />
+                );
+              })}
+            </View>
+          );
+        })}
       </View>
     );
   }
 }
-let answers = [
-  "d",
-  "X",
-  "g",
-  ".",
-  "t",
-  "d",
-  "o",
-  "g",
-  ".",
-  "t",
-  "d",
-  "o",
-  "g",
-  ".",
-  "t",
-  "d",
-  "o",
-  "g",
-  ".",
-  "t",
-  "d",
-  "o",
-  "Z",
-  ".",
-  "t",
-  "o",
-  "g",
-  ".",
-  "t",
-  "d",
-  "o",
-  "Z",
-  ".",
-  "t",
-  "z",
-  "y"
-];
+
 // let row1 = ["d", "o", "g", ".", "t"];
 // [[],[],[],[],[]]
 // let numOfRows = Math.sqrt(answers.length);
 // export default function CrosswordScreen() {
 //   //transform the array of answers into rows for component purposes
 //   let numOfRows = Math.sqrt(answers.length);
-//   let rows = [];
-//   for (let i = 0; i < numOfRows; i++) {
-//     rows.push([]);
-//   }
-//   for (let i = 0; i < answers.length; i++) {
-//     let currentRow = Math.floor(i / numOfRows);
-//     let currentAnswer = answers[i];
-//     console.log("i", i);
-//     console.log("current row", currentRow);
-//     rows[currentRow].push(currentAnswer);
-//   }
-//   // console.log("rows", rows);
 
 //   return (
-//     <View
-//       style={{
-//         flexDirection: "column",
-//         flex: 1,
-//         alignContent: "flex-start",
-//         justifyContent: "flex-start"
-//       }}
-//     >
-//       {rows.map((row, index) => {
-//         console.log("row", row, "index:", index);
-//         return (
-//           <View
-//             style={{
-//               flex: 1,
-//               flexDirection: "row",
-//               borderColor: "blue",
-//               borderWidth: 2,
-//               height: `${100 / numOfRows}%`
-//             }}
-//             key={index}
-//           >
-//             {row.map((cell, idx) => {
-//               console.log("cell", cell, "index:", (idx + 1) * (index + 1));
-//               if (cell === ".") {
-//                 return (
-//                   <TextInput
-//                     maxLength={0}
-//                     style={(styles.textinput, styles.blackSquare)}
-//                     textAlign={"center"}
-//                     key={Math.random() * 1000}
-//                   />
-//                 );
-//               }
+// <View
+//   style={{
+//     flexDirection: "column",
+//     flex: 1,
+//     alignContent: "flex-start",
+//     justifyContent: "flex-start"
+//   }}
+// >
+//   {rows.map((row, index) => {
+//     console.log("row", row, "index:", index);
+//     return (
+//       <View
+//         style={{
+//           flex: 1,
+//           flexDirection: "row",
+//           borderColor: "blue",
+//           borderWidth: 2,
+//           height: `${100 / numOfRows}%`
+//         }}
+//         key={index}
+//       >
+//         {row.map((cell, idx) => {
+//           console.log("cell", cell, "index:", (idx + 1) * (index + 1));
+//           if (cell === ".") {
+//             return (
+//               <TextInput
+//                 maxLength={0}
+//                 style={(styles.textinput, styles.blackSquare)}
+//                 textAlign={"center"}
+//                 key={Math.random() * 1000}
+//               />
+//             );
+//           }
 
-//               return (
-//                 <TextInput
-//                   placeholder={cell}
-//                   maxLength={1}
-//                   style={styles.textinput}
-//                   textAlign={"center"}
-//                   key={Math.random() * 10000}
-//                 />
-//               );
-//             })}
-//           </View>
-//         );
-//       })}
-//     </View>
+//           return (
+//             <TextInput
+//               placeholder={cell}
+//               maxLength={1}
+//               style={styles.textinput}
+//               textAlign={"center"}
+//               key={Math.random() * 10000}
+//             />
+//           );
+//         })}
+//       </View>
+//     );
+//   })}
+// </View>
 //   );
 // }
 
