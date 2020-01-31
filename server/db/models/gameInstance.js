@@ -1,37 +1,39 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
+const Sequelize = require('sequelize')
+const db = require('../db')
 
-const GameInstance = db.define("gameInstance", {
-  guesses: {
-    type: Sequelize.JSON
-  },
-  answers: {
-    type: Sequelize.JSON
-  },
-  status: {
-    type: Sequelize.ENUM("incomplete", "filled", "correct")
-  }
-});
+const GameInstance = db.define('gameInstance', {
+    guesses: {
+        type: Sequelize.JSON,
+    },
+    answers: {
+        type: Sequelize.JSON,
+    },
+    status: {
+        type: Sequelize.ENUM('incomplete', 'filled', 'correct'),
+    },
+})
 
-GameInstance.addHook("beforeValidate", (gameInstance, options) => {
-  let guessArray = gameInstance.answers.map(answer => {
-    if (answer === ".") {
-      return (guessObj = {
-        answer: answer,
-        guess: ".",
-        userId: 0
-      });
-    }
-    return (guessObj = {
-      answer: answer,
-      guess: "",
-      userId: 0
-    });
-  });
-  gameInstance.guesses = guessArray;
-});
+GameInstance.addHook('beforeValidate', (gameInstance, options) => {
+    let guessArray = gameInstance.answers.map((answer, index) => {
+        if (answer === '.') {
+            return (guessObj = {
+                answer: answer,
+                guess: '.',
+                userId: 0,
+                index,
+            })
+        }
+        return (guessObj = {
+            answer: answer,
+            guess: '',
+            userId: 0,
+            index,
+        })
+    })
+    gameInstance.guesses = guessArray
+})
 
-module.exports = GameInstance;
+module.exports = GameInstance
 
 //let guessArray = [{guess: "", userId: 3}, {guess: "B", userId: 4}]
 //let answers = ['a', 'b', '.', 'c', 'd']
