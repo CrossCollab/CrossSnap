@@ -11,15 +11,17 @@ export default class SingleCrossword extends React.Component {
       description: "",
       difficulty: "",
       size: "",
-      grid: []
+      grid: [],
+      date: "",
+      theme: ""
     };
   }
   async componentDidMount() {
     try {
       const { data } = await axios.get(`${SERVER_URL}/api/crossword/1`); //change /1 to this.props once this component is hooked up
-      const { description, difficulty, size } = data;
+      const { description, difficulty, size, date, theme } = data;
       const { grid } = data.crosswordObjectString;
-      this.setState({ description, difficulty, size, grid });
+      this.setState({ description, difficulty, size, grid, date, theme });
     } catch (err) {
       console.log(err);
     }
@@ -32,12 +34,14 @@ export default class SingleCrossword extends React.Component {
     );
   }
   render() {
-    const { description, difficulty, size, grid } = this.state;
+    const { description, difficulty, size, grid, date, theme } = this.state;
     return (
       <View>
         <Text>Description: {description}</Text>
         <Text>Difficulty: {difficulty}</Text>
         <Text>Size: {size}</Text>
+        <Text>Date: {date}</Text>
+        <Text>Theme: {theme}</Text>
         <TouchableHighlight
           onPress={this.handlePress}
           style={{ backgroundColor: "red" }}
