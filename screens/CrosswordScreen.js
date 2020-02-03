@@ -16,8 +16,6 @@ const SERVER_URL = "http://" + "172.17.23.241:8080";
 // Murad: 172.17.23.241
 // Mike: 172.17.21.173
 
-// import * as Sharing from "expo-sharing";
-
 // import logo from "../assets/images/logo.png"; //need the png
 
 import { MonoText } from "../components/StyledText";
@@ -33,7 +31,26 @@ export default class CrosswordTable extends React.Component {
     };
   }
   async componentDidMount() {
+    const { navigation } = this.props;
+    let gameId = navigation.getParam("gameInstance");
     try {
+      //if the user is joining a game w/ a game ID
+      if (gameId) {
+        console.log("in component did mount w/ game id from nav");
+        const { data } = await axios.get(
+          `${SERVER_URL}/api/gameInstance/${gameId}`
+        );
+        this.setState({
+          answers: data.answers,
+          guesses: data.guesses,
+          isReady: true
+        });
+        this.socket = io(SERVER_URL);
+        this.socket.on("change puzzle", state => {
+          const { guesses } = state;
+          this.setState({ guesses });
+        });
+      }
       this._isMounted = true;
       const { data } = await axios.get(`${SERVER_URL}/api/gameInstance/`);
       this.setState({
@@ -76,6 +93,7 @@ export default class CrosswordTable extends React.Component {
       let currentAnswer = this.state.guesses[i];
       rows[currentRow].push(currentAnswer);
     }
+
     return (
       //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
       <View

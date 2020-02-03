@@ -14,3 +14,13 @@ router.get("/:userid/homepage", async (req, res, next) => {
     next(err);
   }
 });
+
+// Need to require admin privileges here
+router.get("/users", async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});

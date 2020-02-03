@@ -39,11 +39,8 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    // console.log("Props, if any, here:", this.props.getScreenProps);
-    // console.log("Props, if any, here:", this.props.setParams);
-    // console.log("navigation", this.props.navigation);
+    // console.log("Props, if any, here:",
     // console.log("get params:", this.props.match);
-    // console.log(userData);
     return (
       <View style={styles.container}>
         <ScrollView
