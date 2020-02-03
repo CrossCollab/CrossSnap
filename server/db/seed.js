@@ -7069,13 +7069,10 @@ async function seed() {
   );
 
   for (let i = 0; i < gameInstances.length; i++) {
-    console.log("user2", users[2]);
     await gameInstances[i].setCrossword(crosswords[0]);
     await gameInstances[i].addUser(users[2]);
     await gameInstances[i].addUser(users[1]);
   }
-
-  console.log(users[0].__proto__);
   for (let i = 0; i < users.length; i++) {
     await users[i].addFriend(users[2]);
   }

@@ -1,85 +1,106 @@
-// import React from "react";
-// import { connect } from "react-redux";
-// import PropTypes from "prop-types";
-// import { auth } from "../store";
+import * as React from "react";
+import AuthHomeScreen from "./AuthHomeScreen";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput
+} from "react-native";
 
-// /**
-//  * COMPONENT
-//  */
-// const AuthForm = props => {
-//   const { name, displayName, handleSubmit, error } = props;
+// const SERVER_URL = "http://" + "172.17.23.241:8080";
 
-//   return (
-//     <div id="login">
-//       <form onSubmit={handleSubmit} name={name}>
-//         <div>
-//           <label htmlFor="email">
-//             <small>EMAIL</small>
-//           </label>
-//           <input name="email" type="text" />
-//         </div>
-//         <div>
-//           <label htmlFor="password">
-//             <small>PASSWORD</small>
-//           </label>
-//           <input name="password" type="password" />
-//         </div>
-//         <div>
-//           <button type="submit">{displayName}</button>
-//         </div>
-//         {error && error.response && <div> {error.response.data} </div>}
-//       </form>
-//       <button id="google" href="/auth/google">
-//         {displayName} with Google
-//       </button>
-//     </div>
-//   );
-// };
+class AuthForm extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>Login to CrossSnap</Text>
+        <TextInput style={styles.input} placeholder="Username" />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.userButton}
+            onPress={() => this.props.navigation.navigate("HomeScreen")}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.userButton}
+            onPress={() => this.props.navigation.navigate("HomeScreen")}
+          >
+            <Text style={styles.buttonText}>SignUp</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+}
 
-// /**
-//  * CONTAINER
-//  *   Note that we have two different sets of 'mapStateToProps' functions -
-//  *   one for Login, and one for Signup. However, they share the same 'mapDispatchToProps'
-//  *   function, and share the same Component. This is a good example of how we
-//  *   can stay DRY with interfaces that are very similar to each other!
-//  */
-// const mapLogin = state => {
-//   return {
-//     name: "login",
-//     displayName: "Login",
-//     error: state.user.error
-//   };
-// };
+const RootStack = createStackNavigator(
+  {
+    Home: AuthForm,
+    HomeScreen: { screen: AuthHomeScreen }
+  },
+  {
+    initialRouteName: "Home"
+  }
+);
 
-// const mapSignup = state => {
-//   return {
-//     name: "signup",
-//     displayName: "Sign Up",
-//     error: state.user.error
-//   };
-// };
+const AppContainer = createAppContainer(RootStack);
 
-// const mapDispatch = dispatch => {
-//   return {
-//     handleSubmit(evt) {
-//       evt.preventDefault();
-//       const formName = evt.target.name;
-//       const email = evt.target.email.value;
-//       const password = evt.target.password.value;
-//       dispatch(auth(email, password, formName));
-//     }
-//   };
-// };
+export default class App extends React.Component {
+  render() {
+    return <AppContainer />;
+  }
+}
 
-// export const Login = connect(mapLogin, mapDispatch)(AuthForm);
-// export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
-
-// /**
-//  * PROP TYPES
-//  */
-// AuthForm.propTypes = {
-//   name: PropTypes.string.isRequired,
-//   displayName: PropTypes.string.isRequired,
-//   handleSubmit: PropTypes.func.isRequired,
-//   error: PropTypes.object
-// };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(0, 0, 102)"
+  },
+  buttonText: {
+    fontSize: 18,
+    textAlign: "center"
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%"
+  },
+  userButton: {
+    backgroundColor: "#00CED1",
+    padding: 10,
+    width: "45%"
+  },
+  contentContainer: {
+    paddingTop: 30
+  },
+  welcomeContainer: {
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 20,
+    backgroundColor: "white"
+  },
+  welcome: {
+    fontSize: 30,
+    textAlign: "center",
+    margin: 10,
+    color: "white"
+  },
+  input: {
+    width: "90%",
+    backgroundColor: "#fff",
+    padding: 10,
+    marginBottom: 10
+  }
+});

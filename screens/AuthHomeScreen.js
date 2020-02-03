@@ -8,7 +8,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Button,
+  Alert
 } from "react-native";
 
 const SERVER_URL = "http://" + "172.17.23.241:8080";
@@ -16,49 +18,20 @@ const SERVER_URL = "http://" + "172.17.23.241:8080";
 import { MonoText } from "../components/StyledText";
 import { NavigationContext } from "react-navigation";
 
-export default class HomeScreen extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  async componentDidMount() {
-    // const {
-    //   match: { params }
-    // } = this.props;
-
-    try {
-      // const userData = await Axios.get(
-      //   `${SERVER_URL}/api/${this.props.navigation.params.userid}/homepage`
-      // );
-      console.log("hey, the console log is appearing!!!!");
-      console.log("Props, if any, here:", this.props.navigation);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
+export default class AuthHomeScreen extends React.Component {
   render() {
-    // console.log("Props, if any, here:",
-    // console.log("get params:", this.props.match);
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
-          <View style={styles.getStartedContainer}>
-            <Text style={styles.getStartedText}>Sample text here</Text>
-          </View>
-        </ScrollView>
+        <Text style={styles.getStartedText}>Sample text here; test 2</Text>
+        <Button
+          title="Logout"
+          color="#f194ff"
+          onPress={() => Alert.alert("Sample alert")}
+        />
       </View>
     );
   }
 }
-
-HomeScreen.navigationOptions = {
-  header: null
-};
 
 const styles = StyleSheet.create({
   container: {
