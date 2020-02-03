@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const GameInstance = require("../db/models/gameInstance");
+const User = require("../db/models/user");
 
 module.exports = router;
 
@@ -19,3 +20,36 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 });
+
+
+router.get("/:gameId", async (req, res, next) => {
+  try {
+    console.log("in backend route to find gameInstance: ", req.params.gameId);
+    const game = await GameInstance.findOne({
+      where: {
+        id: req.params.gameId
+      }
+    });
+    let guessesAnswers = {
+      answers: game.answers,
+      guesses: game.guesses
+    };
+    res.json(guessesAnswers);
+  } catch (err) {
+    next(err);
+  }
+});
+router.post("/", async (req, res, next) => {
+  console.log("in backend post route for new game instance");
+  try {
+    //create new game instance using the selected cw id sent along req.body
+    const gameInstance = await GameInstance.create(req.body);
+    //add a user to that game instance (later this will be sent along req.body as well)
+    const user = await User.findByPk(3);
+    await gameInstance.addUser(user);
+    res.json(gameInstance);
+  } catch (err) {
+    next(err);
+  }
+});
+
