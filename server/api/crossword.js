@@ -9,9 +9,16 @@ router.get("/:id", async (req, res, next) => {
     const crossword = await Crossword.findOne({
       where: {
         id: req.params.id
-      }
-    });
+      }})
     res.send(crossword);
+  } catch (err) {
+    next(err);
+  }
+});
+router.get("/", async (req, res, next) => {
+  try {
+    const crosswords = await Crossword.findAll();
+    res.json(crosswords);
   } catch (err) {
     next(err);
   }

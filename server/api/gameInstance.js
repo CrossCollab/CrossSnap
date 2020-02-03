@@ -21,6 +21,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+
 router.get("/:gameId", async (req, res, next) => {
   try {
     console.log("in backend route to find gameInstance: ", req.params.gameId);
@@ -51,3 +52,4 @@ router.post("/", async (req, res, next) => {
     next(err);
   }
 });
+

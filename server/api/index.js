@@ -4,7 +4,6 @@ module.exports = router;
 
 router.use("/gameInstance", require("./gameInstance"));
 router.use("/crossword", require("./crossword"));
-
 router.use((req, res, next) => {
   const error = new Error("not found");
   error.status = 404;

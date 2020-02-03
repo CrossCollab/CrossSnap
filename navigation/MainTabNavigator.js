@@ -8,7 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 import LinksScreen from "../screens/LinksScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrosswordScreen from "../screens/CrosswordScreen";
-
+import SingleCrosswordScreen from "../screens/SingleCrosswordScreen";
 const config = Platform.select({
   web: { headerMode: "screen" },
   default: {}
@@ -95,11 +95,29 @@ CrosswordStack.navigationOptions = {
 
 CrosswordStack.path = "";
 
+const SingleCrosswordStack = createStackNavigator(
+  {
+    SingleCrosswordScreen
+  },
+  config
+);
+SingleCrosswordStack.navigationOptions = {
+  tabBarLabel: "SingleCrossword",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+    />
+  )
+};
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-  CrosswordStack
+
+  CrosswordStack,
+  SingleCrosswordScreen
 });
 
 tabNavigator.path = "";
