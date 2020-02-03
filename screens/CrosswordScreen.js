@@ -12,13 +12,17 @@ import {
 } from "react-native";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.21.173:8080";
+const SERVER_URL = "http://" + "172.17.23.241:8080";
+// Murad: 172.17.23.241
+// Mike: 172.17.21.173
+
 // import * as Sharing from "expo-sharing";
 
 // import logo from "../assets/images/logo.png"; //need the png
 
 import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
+
 export default class CrosswordTable extends React.Component {
   constructor(props) {
     super(props);
