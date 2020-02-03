@@ -13,7 +13,10 @@ router.get("/", async (req, res, next) => {
     });
     let guessesAnswers = {
       answers: game.answers,
-      guesses: game.guesses
+      guesses: game.guesses,
+      numbers: game.numbers,
+      across: game.across,
+      down: game.down
     };
     res.json(guessesAnswers);
   } catch (err) {
@@ -28,9 +31,13 @@ router.get("/:gameId", async (req, res, next) => {
         id: req.params.gameId
       }
     });
+    console.log("game: ", game);
     let guessesAnswers = {
       answers: game.answers,
-      guesses: game.guesses
+      guesses: game.guesses,
+      numbers: game.numbers,
+      across: game.across,
+      down: game.down
     };
     res.json(guessesAnswers);
   } catch (err) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-const SERVER_URL = "http://" + "172.17.21.173:8080";
+import SERVER_URL from "../serverUrl";
 const GET_CROSSWORD = "GET_CROSSWORD";
 
 const getCrossword = crossword => {

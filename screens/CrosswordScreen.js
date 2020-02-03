@@ -1,5 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
+import SERVER_URL from "../serverUrl";
 import {
   Image,
   Platform,
@@ -12,7 +13,7 @@ import {
 } from "react-native";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.21.173";
+// const SERVER_URL = "http://" + "172.17.21.173";
 // import * as Sharing from "expo-sharing";
 
 // import logo from "../assets/images/logo.png"; //need the png
@@ -25,42 +26,45 @@ export default class CrosswordTable extends React.Component {
     this.state = {
       answers: [],
       guesses: [],
-      isReady: false
+      isReady: false,
+      currentCell: {}
     };
   }
   async componentDidMount() {
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
+    console.log("game id", gameId);
     try {
       //if the user is joining a game w/ a game ID
       if (gameId) {
-        console.log("in component did mount w/ game id from nav");
         const { data } = await axios.get(
           `${SERVER_URL}/api/gameInstance/${gameId}`
         );
+        console.log("data!!!", data.guesses[0].down);
         this.setState({
           answers: data.answers,
           guesses: data.guesses,
           isReady: true
         });
+        console.log("this state guesses: ", this.state.guesses);
         this.socket = io(SERVER_URL);
         this.socket.on("change puzzle", state => {
           const { guesses } = state;
           this.setState({ guesses });
         });
       }
-      this._isMounted = true;
-      const { data } = await axios.get(`${SERVER_URL}/api/gameInstance/`);
-      this.setState({
-        answers: data.answers,
-        guesses: data.guesses,
-        isReady: true
-      });
-      this.socket = io(SERVER_URL);
-      this.socket.on("change puzzle", state => {
-        const { guesses } = state;
-        this.setState({ guesses });
-      });
+      // this._isMounted = true;
+      // const { data } = await axios.get(`${SERVER_URL}/api/gameInstance/`);
+      // this.setState({
+      //   answers: data.answers,
+      //   guesses: data.guesses,
+      //   isReady: true
+      // });
+      // this.socket = io(SERVER_URL);
+      // this.socket.on("change puzzle", state => {
+      //   const { guesses } = state;
+      //   this.setState({ guesses });
+      // });
     } catch (err) {
       console.log(err);
     }
@@ -136,27 +140,54 @@ export default class CrosswordTable extends React.Component {
                 }
 
                 return (
-                  <TextInput
-                    maxLength={1}
+                  <TouchableOpacity
+                    key={cell.index}
+                    onPress={() => {
+                      this.setState({ currentCell: cell });
+                      console.log("hello");
+                      console.log("cell down", cell);
+                    }}
                     style={{
-                      backgroundColor: "white",
+                      backgroundColor: "gray",
                       height: "100%",
                       width: `${100 / numOfRows}%`,
                       borderColor: "black",
                       borderWidth: 1,
                       justifyContent: "center"
                     }}
-                    textAlign={"center"}
-                    key={cell.index}
-                    onChangeText={this.handleChange(cell.index)}
                   >
-                    {cell.guess}
-                  </TextInput>
+                    {cell.number ? (
+                      <Text style={{ flex: 1, fontSize: 6, zIndex: 10 }}>
+                        {cell.number}
+                      </Text>
+                    ) : (
+                      <Text></Text>
+                    )}
+                    <TextInput
+                      maxLength={1}
+                      style={{ backgroundColor: "white" }}
+                      // style={{
+                      //   backgroundColor: "white",
+                      //   height: "100%",
+                      //   width: `${100 / numOfRows}%`,
+                      //   borderColor: "black",
+                      //   borderWidth: 1,
+                      //   justifyContent: "center"
+                      // }}
+                      textAlign={"center"}
+                      key={cell.index}
+                      onChangeText={this.handleChange(cell.index)}
+                    >
+                      {cell.guess}
+                    </TextInput>
+                  </TouchableOpacity>
                 );
               })}
             </View>
           );
         })}
+        <Text>current across clue: {this.state.currentCell.across}</Text>
+        <Text>current down clue: {this.state.currentCell.down}</Text>
       </View>
     );
   }
