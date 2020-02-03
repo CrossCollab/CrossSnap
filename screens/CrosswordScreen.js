@@ -1,9 +1,24 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import SERVER_URL from "../serverUrl";
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput
+} from "react-native";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.22.96:8080";
+// const SERVER_URL = "http://" + "172.17.21.173";
+// import * as Sharing from "expo-sharing";
+
+// import logo from "../assets/images/logo.png"; //need the png
+
+import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 export default class CrosswordTable extends React.Component {
   constructor(props) {
@@ -12,6 +27,7 @@ export default class CrosswordTable extends React.Component {
       answers: [],
       guesses: [],
       isReady: false,
+      currentCell: {}
       gameId: 0
     };
   }
@@ -147,27 +163,54 @@ export default class CrosswordTable extends React.Component {
                 }
 
                 return (
-                  <TextInput
-                    maxLength={1}
+                  <TouchableOpacity
+                    key={cell.index}
+                    onPress={() => {
+                      this.setState({ currentCell: cell });
+                      console.log("hello");
+                      console.log("cell down", cell);
+                    }}
                     style={{
-                      backgroundColor: "white",
+                      backgroundColor: "gray",
                       height: "100%",
                       width: `${100 / numOfRows}%`,
                       borderColor: "black",
                       borderWidth: 1,
                       justifyContent: "center"
                     }}
-                    textAlign={"center"}
-                    key={cell.index}
-                    onChangeText={this.handleChange(cell.index)}
                   >
-                    {cell.guess}
-                  </TextInput>
+                    {cell.number ? (
+                      <Text style={{ flex: 1, fontSize: 6, zIndex: 10 }}>
+                        {cell.number}
+                      </Text>
+                    ) : (
+                      <Text></Text>
+                    )}
+                    <TextInput
+                      maxLength={1}
+                      style={{ backgroundColor: "white" }}
+                      // style={{
+                      //   backgroundColor: "white",
+                      //   height: "100%",
+                      //   width: `${100 / numOfRows}%`,
+                      //   borderColor: "black",
+                      //   borderWidth: 1,
+                      //   justifyContent: "center"
+                      // }}
+                      textAlign={"center"}
+                      key={cell.index}
+                      onChangeText={this.handleChange(cell.index)}
+                    >
+                      {cell.guess}
+                    </TextInput>
+                  </TouchableOpacity>
                 );
               })}
             </View>
           );
         })}
+        <Text>current across clue: {this.state.currentCell.across}</Text>
+        <Text>current down clue: {this.state.currentCell.down}</Text>
       </View>
     );
   }

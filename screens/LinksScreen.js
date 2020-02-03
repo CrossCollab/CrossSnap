@@ -42,7 +42,10 @@ export default class LinksScreen extends React.Component {
     let newGameInstance = {
       crosswordId: this.state.crosswordId,
       status: "incomplete",
-      answers: data.crosswordObjectString.grid
+      answers: data.crosswordObjectString.grid,
+      numbers: data.crosswordObjectString.gridnums,
+      across: data.crosswordObjectString.clues.across,
+      down: data.crosswordObjectString.clues.down
     };
 
     //create new gameInstance in DB
@@ -62,7 +65,8 @@ export default class LinksScreen extends React.Component {
     let newGameInstance = {
       crosswordId: this.state.crosswordId,
       status: "incomplete",
-      answers: data.crosswordObjectString.grid
+      answers: data.crosswordObjectString.grid,
+      numbers: data.crosswordObjectString.gridnums
     };
 
     //create new gameInstance in DB
