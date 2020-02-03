@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.21.173";
+const SERVER_URL = "http://" + "172.17.22.96:8080";
 // import * as Sharing from "expo-sharing";
 
 // import logo from "../assets/images/logo.png"; //need the png
@@ -38,12 +38,23 @@ export default class CrosswordTable extends React.Component {
         const { data } = await axios.get(
           `${SERVER_URL}/api/gameInstance/${gameId}`
         );
+        console.log("got data from gameInstance");
         this.setState({
           answers: data.answers,
           guesses: data.guesses,
           isReady: true
         });
-        this.socket = io(SERVER_URL);
+        this.socket = io(`${SERVER_URL}`);
+
+        function onConnect() {
+          console.log("connected");
+          //this.emit rather than this.socket.emit because the socket is already the this object
+          //as it's being called inside this.socket.on
+          this.emit("join", gameId);
+        }
+
+        this.socket.on("connect", onConnect);
+
         this.socket.on("change puzzle", state => {
           const { guesses } = state;
           this.setState({ guesses });
