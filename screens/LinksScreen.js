@@ -12,7 +12,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "10.0.1.6:8080";
+const SERVER_URL = "http://" + "172.17.21.173:8080";
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
@@ -50,7 +50,6 @@ export default class LinksScreen extends React.Component {
       `${SERVER_URL}/api/gameInstance/`,
       newGameInstance
     );
-    console.log("made a new game instance", response.data.id);
     //route to crossword Screen with component passed in
   };
 
@@ -71,7 +70,6 @@ export default class LinksScreen extends React.Component {
       `${SERVER_URL}/api/gameInstance/`,
       newGameInstance
     );
-    console.log("made a new game instance", response.data.id);
     //route to crossword Screen with component passed in
   };
   render() {
