@@ -12,7 +12,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.21.173:8080";
+const SERVER_URL = "http://" + "172.17.22.96:8080";
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
@@ -122,7 +122,7 @@ export default class LinksScreen extends React.Component {
             //on pressing join sends user to the crossword screen w/ nav props
 
             this.props.navigation.navigate("Crossword", {
-              gameInstance: 3,
+              gameInstance: this.state.gameInstanceId,
               userId: 4
             })
           }
