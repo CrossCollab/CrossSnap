@@ -83,6 +83,7 @@ const CrosswordStack = createStackNavigator(
 );
 
 CrosswordStack.navigationOptions = {
+  //changed name to crossword for parallelism with others (if Mike/Murad have used this for navigation we can revert)
   tabBarLabel: "Crossword",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -98,7 +99,7 @@ const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-  CrosswordScreen
+  CrosswordStack
 });
 
 tabNavigator.path = "";
