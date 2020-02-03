@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "10.0.1.6:8080";
+const SERVER_URL = "http://" + "172.17.21.173";
 // import * as Sharing from "expo-sharing";
 
 // import logo from "../assets/images/logo.png"; //need the png

@@ -20,13 +20,7 @@ class SingleCrossword extends React.Component {
   }
   componentDidMount() {
     try {
-      console.log("CDM");
       this.props.setCrossword(1);
-      console.log("CDM after");
-      // const { data } = await axios.get(`${SERVER_URL}/api/crossword/1`); //change /1 to this.props once this component is hooked up
-      // const { description, difficulty, size, date, theme } = data;
-      // const { grid } = data.crosswordObjectString;
-      // this.setState({ description, difficulty, size, grid, date, theme });
     } catch (err) {
       console.log(err);
     }
@@ -39,7 +33,6 @@ class SingleCrossword extends React.Component {
     );
   }
   render() {
-    console.log("props", this.props);
     const {
       description,
       difficulty,
@@ -66,7 +59,6 @@ class SingleCrossword extends React.Component {
   }
 }
 const mapState = state => {
-  console.log("am i getting here at all MAP STATE", state);
   return {
     crossword: state.crossword
   };

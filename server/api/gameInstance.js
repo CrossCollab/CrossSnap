@@ -21,10 +21,8 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-
 router.get("/:gameId", async (req, res, next) => {
   try {
-    console.log("in backend route to find gameInstance: ", req.params.gameId);
     const game = await GameInstance.findOne({
       where: {
         id: req.params.gameId
@@ -40,7 +38,6 @@ router.get("/:gameId", async (req, res, next) => {
   }
 });
 router.post("/", async (req, res, next) => {
-  console.log("in backend post route for new game instance");
   try {
     //create new game instance using the selected cw id sent along req.body
     const gameInstance = await GameInstance.create(req.body);
@@ -52,4 +49,3 @@ router.post("/", async (req, res, next) => {
     next(err);
   }
 });
-

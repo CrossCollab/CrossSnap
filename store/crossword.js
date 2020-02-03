@@ -9,11 +9,8 @@ const getCrossword = crossword => {
 export const setCrossword = id => {
   return async dispatch => {
     try {
-      console.log("in redux before axios");
       const { data } = await axios.get(`${SERVER_URL}/api/crossword/${id}`);
-      console.log("redux", data);
       dispatch(getCrossword(data));
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -21,7 +18,6 @@ export const setCrossword = id => {
 };
 
 const crosswordReducer = (state = {}, action) => {
-  console.log("action", action);
   switch (action.type) {
     case GET_CROSSWORD:
       return action.crossword;
