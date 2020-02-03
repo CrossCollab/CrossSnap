@@ -1,23 +1,9 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput
-} from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import axios from "axios";
 
 const SERVER_URL = "http://" + "172.17.22.96:8080";
-// import * as Sharing from "expo-sharing";
-
-// import logo from "../assets/images/logo.png"; //need the png
-
-import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 export default class CrosswordTable extends React.Component {
   constructor(props) {
@@ -25,65 +11,76 @@ export default class CrosswordTable extends React.Component {
     this.state = {
       answers: [],
       guesses: [],
-      isReady: false
+      isReady: false,
+      gameId: 0
     };
   }
   async componentDidMount() {
+    //a user should always be coming here with some gameInstance ID via nav props
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
+
     try {
-      //if the user is joining a game w/ a game ID
-      if (gameId) {
-        console.log("in component did mount w/ game id from nav");
-        const { data } = await axios.get(
-          `${SERVER_URL}/api/gameInstance/${gameId}`
-        );
-        console.log("got data from gameInstance");
-        this.setState({
-          answers: data.answers,
-          guesses: data.guesses,
-          isReady: true
-        });
-        this.socket = io(`${SERVER_URL}`);
+      //get the gameInstance model instance from the backend
+      const { data } = await axios.get(
+        `${SERVER_URL}/api/gameInstance/${gameId}`
+      );
 
-        function onConnect() {
-          console.log("connected");
-          //this.emit rather than this.socket.emit because the socket is already the this object
-          //as it's being called inside this.socket.on
-          this.emit("join", gameId);
-        }
-
-        this.socket.on("connect", onConnect);
-
-        this.socket.on("change puzzle", state => {
-          const { guesses } = state;
-          this.setState({ guesses });
-        });
-      }
-      this._isMounted = true;
-      const { data } = await axios.get(`${SERVER_URL}/api/gameInstance/`);
+      //set the state of the local CWordTable component
+      //pulling the answers/guesses/gameId in from the instance
       this.setState({
         answers: data.answers,
         guesses: data.guesses,
-        isReady: true
+        isReady: true,
+        gameId
       });
-      this.socket = io(SERVER_URL);
-      this.socket.on("change puzzle", state => {
-        const { guesses } = state;
-        this.setState({ guesses });
+
+      //set up a client-side socket
+      this.socket = io(`${SERVER_URL}`);
+
+      function onConnect() {
+        //this.emit rather than this.socket.emit because the socket is already the this object
+        //as it's being called inside this.socket.on
+        this.emit("join", gameId);
+      }
+
+      //once the socket receives the connect message from the server-side, ask to join the
+      //room with the id matching the gameId
+      this.socket.on("connect", onConnect);
+
+      //NEED TO ADD SOMETHING PULLING IN THE CURRENT ROOM STATE FOR A NEW PLAYER ADDITION?
+
+      //when the client receives a message from server socket of change puzzle,
+      //update the state of the guesses array
+      this.socket.on("change puzzle", msg => {
+        this.setState({ guesses: msg.guesses });
       });
     } catch (err) {
-      console.log(err);
+      console.err(err);
     }
   }
+
+  //whenever the client changes the value of a crossword square
   handleChange = idx => letter => {
+    //copy the guesses object on state (crude approach, but works)
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+    //update the value of the guess with the new letter
     allGuesses[idx].guess = letter;
+    //set the state as the new guesses Obj, call changeHelper function
     this.setState({ guesses: allGuesses }, this.changeHelper);
   };
+
+  //this function sends a message to the socket with the current state and roomId
   changeHelper() {
-    this.socket.emit("change puzzle", this.state);
+    let socketMsg = {
+      state: this.state,
+      room: this.state.gameId
+    };
+    this.socket.emit("change puzzle", socketMsg);
   }
+
+  //need to remove the socket listeners, turn them 'off' in here
+  componentWillUnmount() {}
 
   render() {
     if (this.state && !this.state.isReady) {
@@ -92,6 +89,8 @@ export default class CrosswordTable extends React.Component {
       return <Text>No state</Text>;
     }
 
+    //the num of rows is the square root of the total # of guesses (all our xwords are squares)
+    //pushes each guess from this.state into a row array
     let numOfRows = Math.sqrt(this.state.guesses.length);
     let rows = [];
     for (let i = 0; i < numOfRows; i++) {
@@ -99,10 +98,11 @@ export default class CrosswordTable extends React.Component {
     }
     for (let i = 0; i < this.state.guesses.length; i++) {
       let currentRow = Math.floor(i / numOfRows);
-      let currentAnswer = this.state.guesses[i];
-      rows[currentRow].push(currentAnswer);
+      let currentGuess = this.state.guesses[i];
+      rows[currentRow].push(currentGuess);
     }
 
+    //later we should probabaly create subComponents for XWord Table, Row, and Cell...
     return (
       //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
       <View

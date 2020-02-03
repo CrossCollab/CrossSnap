@@ -122,7 +122,7 @@ export default class LinksScreen extends React.Component {
             //on pressing join sends user to the crossword screen w/ nav props
 
             this.props.navigation.navigate("Crossword", {
-              gameInstance: 3,
+              gameInstance: this.state.gameInstanceId,
               userId: 4
             })
           }
