@@ -1,4 +1,5 @@
 import React from "react";
+import UserProfile from "../screens/UserProfile";
 import {
   View,
   Text,
@@ -16,20 +17,24 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
-      password: "",
-      email: ""
+      firstName: "a",
+      lastName: "b",
+      password: "3",
+      email: "hhh@gmail.com"
     };
+
+    this.submitNewUser = this.submitNewUser.bind(this);
   }
 
   static navigationOptions = {
     header: null
   };
 
-  submitNewUser() {
-    console.log("HELLLLLOOOOOOOOO");
-    this.props.createUser(this.state);
+  async submitNewUser() {
+    await this.props.createUser(this.state);
+    if (this.props.user.id) {
+      this.props.navigation.navigate("UserProfile");
+    }
   }
 
   render() {

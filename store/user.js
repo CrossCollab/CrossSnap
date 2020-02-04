@@ -6,7 +6,7 @@ const ADD_USER = "ADD_USER";
 const addUser = user => {
   return {
     type: ADD_USER,
-    user
+    user: user
   };
 };
 
@@ -14,8 +14,10 @@ export const createUser = user => {
   return async dispatch => {
     try {
       const { data } = await axios.post(`${SERVER_URL}/api/user/signup`, user);
+      // console.log("DATA HERE!!!", data);
       dispatch(addUser(data));
     } catch (err) {
+      // console.log("crap :(");
       console.log(err);
     }
   };
