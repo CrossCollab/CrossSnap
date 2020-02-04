@@ -12,7 +12,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.22.96:8080";
+import SERVER_URL from "../serverUrl";
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
