@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 // const SERVER_URL = "http://" + "172.17.23.241:8080";
 
-export default class AuthenticatedHomeScreen extends React.Component {
+export default class UserProfile extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -12,7 +12,7 @@ export default class AuthenticatedHomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Sample text here; test 2</Text>
+        <Text style={styles.welcomeContainer}>Welcome, User XYZ!</Text>
         <TouchableOpacity style={styles.userButton} onPress={() => alert("hi")}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

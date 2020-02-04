@@ -1,5 +1,5 @@
 import * as React from "react";
-import HomeScreen from "./HomeScreen";
+import UserProfile from "./UserProfile";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import {
@@ -35,7 +35,7 @@ export class AuthForm extends React.Component {
       userInfo.password === this.state.password
     ) {
       await AsyncStorage.setItem("isLoggedIn", "1");
-      this.props.navigation.navigate("HomeScreen");
+      this.props.navigation.navigate("UserProfile");
     } else {
       alert("Username or password incorrect");
     }
@@ -75,14 +75,14 @@ export class AuthForm extends React.Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.userButton}
-            // onPress={() => this.props.navigation.navigate("HomeScreen")}
+            // onPress={() => this.props.navigation.navigate("UserProfile")}
             onPress={this._login}
           >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.userButton}
-            onPress={() => this.props.navigation.navigate("HomeScreen")}
+            onPress={() => this.props.navigation.navigate("UserProfile")}
           >
             <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
@@ -142,8 +142,8 @@ const RootStack = createStackNavigator({
     screen: AuthForm
   },
   // Home page is login form; redirect post-login to authenticated home screen will be automatic for returning users
-  HomeScreen: {
-    screen: HomeScreen
+  UserProfile: {
+    screen: UserProfile
   }
 });
 
