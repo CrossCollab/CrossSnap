@@ -4,7 +4,7 @@ module.exports = router;
 
 router.use("/gameInstance", require("./gameInstance"));
 
-router.use("/", require("./user"));
+router.use("/user", require("./user"));
 
 router.use("/crossword", require("./crossword"));
 
