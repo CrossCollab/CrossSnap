@@ -27,7 +27,7 @@ export default class CrosswordTable extends React.Component {
       answers: [],
       guesses: [],
       isReady: false,
-      currentCell: {}
+      currentCell: {},
       gameId: 0
     };
   }
