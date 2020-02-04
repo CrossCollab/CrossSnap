@@ -3,7 +3,6 @@ import { Text, View, TouchableHighlight, Alert } from "react-native";
 import axios from "axios";
 import { connect } from "react-redux";
 import { setCrossword } from "../store/crossword";
-
 import SERVER_URL from "../serverUrl";
 
 class SingleCrossword extends React.Component {

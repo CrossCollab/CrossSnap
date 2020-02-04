@@ -135,8 +135,6 @@ export default class CrosswordTable extends React.Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                borderColor: "black",
-                borderWidth: 2,
                 height: `${100 / numOfRows}%`
               }}
               key={index}
@@ -144,19 +142,14 @@ export default class CrosswordTable extends React.Component {
               {row.map((cell, idx) => {
                 if (cell.answer === ".") {
                   return (
-                    <TextInput
-                      maxLength={0}
+                    <TouchableOpacity
                       style={{
-                        backgroundColor: "black",
+                        backgroundColor: "gray",
                         height: "100%",
                         width: `${100 / numOfRows}%`,
-                        borderColor: "black",
-                        borderWidth: 1,
                         justifyContent: "center"
                       }}
-                      textAlign={"center"}
-                      key={cell.index}
-                    />
+                    ></TouchableOpacity>
                   );
                 }
 
@@ -165,36 +158,35 @@ export default class CrosswordTable extends React.Component {
                     key={cell.index}
                     onPress={() => {
                       this.setState({ currentCell: cell });
-                      console.log("hello");
-                      console.log("cell down", cell);
                     }}
                     style={{
-                      backgroundColor: "gray",
+                      backgroundColor: "#d1d9e6",
                       height: "100%",
                       width: `${100 / numOfRows}%`,
-                      borderColor: "black",
+                      borderColor: "gray",
                       borderWidth: 1,
                       justifyContent: "center"
                     }}
                   >
                     {cell.number ? (
-                      <Text style={{ flex: 1, fontSize: 6, zIndex: 10 }}>
+                      <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}>
                         {cell.number}
                       </Text>
                     ) : (
-                      <Text></Text>
+                      <Text
+                        style={{ flex: 1, fontSize: 6, zIndex: 999 }}
+                      ></Text>
                     )}
                     <TextInput
                       maxLength={1}
-                      style={{ backgroundColor: "white" }}
-                      // style={{
-                      //   backgroundColor: "white",
-                      //   height: "100%",
-                      //   width: `${100 / numOfRows}%`,
-                      //   borderColor: "black",
-                      //   borderWidth: 1,
-                      //   justifyContent: "center"
-                      // }}
+                      style={{
+                        backgroundColor: "white",
+                        height: "50%",
+                        width: "50%",
+                        alignSelf: "center",
+                        marginBottom: "35%",
+                        zIndex: 9999
+                      }}
                       textAlign={"center"}
                       key={cell.index}
                       onChangeText={this.handleChange(cell.index)}

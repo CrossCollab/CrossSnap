@@ -1,17 +1,27 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { connect } from "react-redux";
 
-export default class UserProfile extends React.Component {
+class UserProfile extends React.Component {
+  constructor() {
+    super();
+    this.handleLogout = this.handleLogout.bind(this);
+  }
   static navigationOptions = {
     header: null
   };
-
+  async handleLogout() {
+    await AsyncStorage.setItem("isLoggedIn", "2");
+    this.props.navigation.navigate("Login");
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcomeContainer}>Welcome, User XYZ!</Text>
-        <TouchableOpacity style={styles.userButton} onPress={() => alert("hi")}>
+        <Text style={styles.welcomeContainer}>
+          Welcome, {this.props.user.firstName}
+        </Text>
+        <TouchableOpacity style={styles.userButton} onPress={this.handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
@@ -62,3 +72,8 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+const mapState = state => {
+  return { user: state.user };
+};
+
+export default connect(mapState)(UserProfile);

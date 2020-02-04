@@ -40,3 +40,17 @@ router.post("/signup", async (req, res, next) => {
     }
   }
 });
+
+router.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const data = await User.findOne({ where: { email, password } });
+    if (data) {
+      res.send(data);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    next(err);
+  }
+});

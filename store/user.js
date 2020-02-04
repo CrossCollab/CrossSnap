@@ -23,6 +23,19 @@ export const createUser = user => {
   };
 };
 
+export const loginUser = user => {
+  return async dispatch => {
+    try {
+      console.log("in thunk");
+      const { data } = await axios.post(`${SERVER_URL}/api/user/login`, user);
+
+      dispatch(addUser(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
 export default function(state = {}, action) {
   switch (action.type) {
     case ADD_USER:
