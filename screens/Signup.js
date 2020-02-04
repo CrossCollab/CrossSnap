@@ -1,4 +1,5 @@
 import React from "react";
+import UserProfile from "../screens/UserProfile";
 import {
   View,
   Text,
@@ -9,22 +10,32 @@ import {
   ActivityIndicator,
   StatusBar
 } from "react-native";
+import { connect } from "react-redux";
+import { createUser } from "../store/user";
 
-export default class Signup extends React.Component {
+class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
-      username: "",
-      password: "",
-      email: ""
+      firstName: "a",
+      lastName: "b",
+      password: "3",
+      email: "hhh@gmail.com"
     };
+
+    this.submitNewUser = this.submitNewUser.bind(this);
   }
 
   static navigationOptions = {
     header: null
   };
+
+  async submitNewUser() {
+    await this.props.createUser(this.state);
+    if (this.props.user.id) {
+      this.props.navigation.navigate("UserProfile");
+    }
+  }
 
   render() {
     return (
@@ -56,14 +67,6 @@ export default class Signup extends React.Component {
 
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          onChangeText={username => this.setState({ username })}
-          value={this.state.username}
-          autoCapitalize="none"
-        />
-
-        <TextInput
-          style={styles.input}
           placeholder="Password"
           secureTextEntry
           onChangeText={password => this.setState({ password })}
@@ -73,7 +76,7 @@ export default class Signup extends React.Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.userButton}
-            onPress={() => this.props.navigation.navigate("UserProfile")}
+            onPress={this.submitNewUser}
           >
             <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
@@ -126,3 +129,18 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
+const mapState = state => {
+  return {
+    user: state.user,
+    isLoggedIn: !!state.user.id
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    createUser: user => dispatch(createUser(user))
+  };
+};
+
+export default connect(mapState, mapDispatch)(Signup);

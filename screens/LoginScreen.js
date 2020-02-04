@@ -1,49 +1,38 @@
 import * as React from "react";
-import UserProfile from "./UserProfile";
-import CrosswordScreen from "./CrosswordScreen";
-import Signup from "./Signup";
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  AsyncStorage,
-  ActivityIndicator,
-  StatusBar
+  AsyncStorage
 } from "react-native";
+import { connect } from "react-redux";
+import { loginUser } from "../store/user";
 
-const userInfo = { username: "admin", password: "123" };
-
-export class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      email: "",
       password: ""
     };
 
     this._login = this._login.bind(this);
-    this._loadData = this._loadData.bind(this);
   }
 
   _login = async () => {
-    if (
-      userInfo.username === this.state.username &&
-      userInfo.password === this.state.password
-    ) {
-      await AsyncStorage.setItem("isLoggedIn", "1");
-      this.props.navigation.navigate("UserProfile");
-    } else {
-      alert("Username or password incorrect");
+    try {
+      await this.props.loginUser(this.state);
+      if (this.props.user.email === this.state.email) {
+        await AsyncStorage.setItem("isLoggedIn", "1");
+        this.props.navigation.navigate("Main");
+      } else {
+        alert("Email or password incorrect");
+      }
+    } catch (err) {
+      console.log(err);
     }
-  };
-
-  _loadData = async () => {
-    const isLoggedIn = await AsyncStorage.getItem(isLoggedIn);
-    this.props.navigation.navigate(isLoggedIn !== "1" ? "Auth" : "App");
   };
 
   static navigationOptions = {
@@ -57,9 +46,9 @@ export class Login extends React.Component {
 
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          onChangeText={username => this.setState({ username })}
-          value={this.state.username}
+          placeholder="Email"
+          onChangeText={email => this.setState({ email })}
+          value={this.state.email}
           autoCapitalize="none"
         />
 
@@ -71,11 +60,7 @@ export class Login extends React.Component {
           value={this.state.password}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.userButton}
-            // onPress={() => this.props.navigation.navigate("UserProfile")}
-            onPress={this._login}
-          >
+          <TouchableOpacity style={styles.userButton} onPress={this._login}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -134,50 +119,14 @@ const styles = StyleSheet.create({
   }
 });
 
-// ROOTSTACK: navigation
-const RootStack = createStackNavigator({
-  Home: {
-    screen: Login
-  },
-  // Home page is login form; redirect post-login to authenticated home screen will be automatic for returning users
-  Signup: {
-    screen: Signup
-  },
-  UserProfile: {
-    screen: UserProfile
-  }
-});
+const mapState = state => {
+  return { user: state.user };
+};
+const mapDispatch = dispatch => {
+  return {
+    loginUser: user => dispatch(loginUser(user))
+  };
+};
 
-// AUTHSTACK: redirect to login screen upon hitting wrong credentials
-const AuthStack = createStackNavigator({ Home: Login });
-
-// AUTH LOADING SCREEN: set to initial route name because we will fetch our authentication state from persistent storage inside of that screen component
-export class AuthLoadingScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this._loadData();
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator />
-        <StatusBar barStyle="default" />
-      </View>
-    );
-  }
-}
-
-// SWITCH NAVIGATOR: https://reactnavigation.org/docs/en/auth-flow.html
-export default createAppContainer(
-  createSwitchNavigator(
-    {
-      AuthLoading: AuthLoadingScreen,
-      App: RootStack,
-      Auth: AuthStack
-    },
-    {
-      initialRouteName: "AuthLoading"
-    }
-  )
-);
+const doesThisWork = connect(mapState, mapDispatch)(Login);
+export default doesThisWork;

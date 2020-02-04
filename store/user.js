@@ -1,67 +1,46 @@
-// import axios from "axios";
-// // import history from "../history";
+import axios from "axios";
+import SERVER_URL from "../serverUrl";
 
-// // Action types
-// const GET_USER = "GET_USER";
-// const REMOVE_USER = "REMOVE_USER";
-// const UPDATE_USER = "UPDATE_USER";
+const ADD_USER = "ADD_USER";
 
-// // Initial state
-// let defaultUser = {};
+const addUser = user => {
+  return {
+    type: ADD_USER,
+    user: user
+  };
+};
 
-// // Action creators
-// const getUser = user => ({ type: GET_USER, user });
-// const removeUser = () => ({ type: REMOVE_USER });
+export const createUser = user => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.post(`${SERVER_URL}/api/user/signup`, user);
+      // console.log("DATA HERE!!!", data);
+      dispatch(addUser(data));
+    } catch (err) {
+      // console.log("crap :(");
+      console.log(err);
+    }
+  };
+};
 
-// // Thunk creators
-// export const me = () => async dispatch => {
-//   try {
-//     const res = await axios.get("/auth/me");
-//     const sid = await axios.get("/auth/sid");
-//     if (!res.data) defaultUser = { sid: sid.data };
-//     dispatch(getUser(res.data || defaultUser));
-//     dispatch(fetchCart(res.data.id || sid.data));
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+export const loginUser = user => {
+  return async dispatch => {
+    try {
+      console.log("in thunk");
+      const { data } = await axios.post(`${SERVER_URL}/api/user/login`, user);
 
-// export const auth = (email, password, method) => async dispatch => {
-//   let res;
-//   try {
-//     res = await axios.post(`/auth/${method}`, { email, password });
-//   } catch (authError) {
-//     return dispatch(getUser({ error: authError }));
-//   }
+      dispatch(addUser(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
-//   try {
-//     dispatch(getUser(res.data));
-//     // history.push("/");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
-// export const logout = () => async dispatch => {
-//   try {
-//     await axios.post("/auth/logout");
-//     dispatch(removeUser());
-//     // history.push("/");
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
-// // Reducer
-// export default function(state = defaultUser, action) {
-//   switch (action.type) {
-//     case GET_USER:
-//       return action.user;
-//     case REMOVE_USER:
-//       return defaultUser;
-//     case UPDATE_USER:
-//       return action.user;
-//     default:
-//       return state;
-//   }
-// }
+export default function(state = {}, action) {
+  switch (action.type) {
+    case ADD_USER:
+      return action.user;
+    default:
+      return state;
+  }
+}
