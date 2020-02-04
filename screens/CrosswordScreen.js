@@ -12,6 +12,7 @@ import {
   TextInput
 } from "react-native";
 import CWCell from "../components/CWCell";
+import CWRow from "../components/CWRow";
 import axios from "axios";
 
 // Murad: 172.17.23.241
@@ -33,6 +34,7 @@ export default class CrosswordTable extends React.Component {
       gameId: 0
     };
 
+    //bind these functions so child components can call them in OG context
     this.handleChange = this.handleChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.changeHelper = this.changeHelper.bind(this);
@@ -144,35 +146,17 @@ export default class CrosswordTable extends React.Component {
       >
         {rows.map((row, index) => {
           return (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                height: `${100 / numOfRows}%`
-              }}
-              key={index}
-            >
-              {row.map((cell, idx) => {
-                return (
-                  <CWCell
-                    cell={cell}
-                    handleChange={this.handleChange}
-                    handlePress={this.handlePress}
-                    rowCount={numOfRows}
-                  />
-                );
-              })}
-            </View>
+            <CWRow
+              row={row}
+              index={index}
+              handleChange={this.handleChange}
+              handlePress={this.handlePress}
+              rowCount={numOfRows}
+            />
           );
         })}
         <Text>current across clue: {this.state.currentCell.across}</Text>
         <Text>current down clue: {this.state.currentCell.down}</Text>
-        {/* <CWCell
-          cell={{ index: 6, width: `${100 / numOfRows}%`, number: 6 }}
-          handleChange={this.handleChange}
-          handlePress={this.handlePress}
-          style={{ height: "5%", width: "5%" }}
-        /> */}
       </View>
     );
   }

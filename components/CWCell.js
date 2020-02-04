@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput
-} from "react-native";
+import { Text, TouchableOpacity, TextInput } from "react-native";
 
 export default function CWCell(props) {
   let idx = props.index;
