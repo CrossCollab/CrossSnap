@@ -101,8 +101,9 @@ export default class CrosswordTable extends React.Component {
     this.socket.emit("change puzzle", socketMsg);
   }
 
-  handlePress(index) {
-    this.setState({ currentCell: index });
+  handlePress(cell) {
+    console.log("handling press");
+    this.setState({ currentCell: cell });
   }
 
   //need to remove the socket listeners, turn them 'off' in here
@@ -152,61 +153,13 @@ export default class CrosswordTable extends React.Component {
               key={index}
             >
               {row.map((cell, idx) => {
-                if (cell.answer === ".") {
-                  return (
-                    <TouchableOpacity
-                      key={cell.index + 300}
-                      style={{
-                        backgroundColor: "gray",
-                        height: "100%",
-                        width: `${100 / numOfRows}%`,
-                        justifyContent: "center"
-                      }}
-                    ></TouchableOpacity>
-                  );
-                }
-
                 return (
-                  <TouchableOpacity
-                    key={cell.index + 300}
-                    onPress={() => {
-                      this.setState({ currentCell: cell });
-                    }}
-                    style={{
-                      backgroundColor: "#d1d9e6",
-                      height: "100%",
-                      width: `${100 / numOfRows}%`,
-                      borderColor: "gray",
-                      borderWidth: 1,
-                      justifyContent: "center"
-                    }}
-                  >
-                    {cell.number ? (
-                      <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}>
-                        {cell.number}
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{ flex: 1, fontSize: 6, zIndex: 999 }}
-                      ></Text>
-                    )}
-                    <TextInput
-                      maxLength={1}
-                      style={{
-                        backgroundColor: "white",
-                        height: "50%",
-                        width: "50%",
-                        alignSelf: "center",
-                        marginBottom: "35%",
-                        zIndex: 9999
-                      }}
-                      textAlign={"center"}
-                      key={cell.index}
-                      onChangeText={this.handleChange(cell.index)}
-                    >
-                      {cell.guess}
-                    </TextInput>
-                  </TouchableOpacity>
+                  <CWCell
+                    cell={cell}
+                    handleChange={this.handleChange}
+                    handlePress={this.handlePress}
+                    rowCount={numOfRows}
+                  />
                 );
               })}
             </View>
@@ -214,12 +167,12 @@ export default class CrosswordTable extends React.Component {
         })}
         <Text>current across clue: {this.state.currentCell.across}</Text>
         <Text>current down clue: {this.state.currentCell.down}</Text>
-        <CWCell
+        {/* <CWCell
           cell={{ index: 6, width: `${100 / numOfRows}%`, number: 6 }}
           handleChange={this.handleChange}
           handlePress={this.handlePress}
           style={{ height: "5%", width: "5%" }}
-        />
+        /> */}
       </View>
     );
   }

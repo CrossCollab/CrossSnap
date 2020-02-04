@@ -13,7 +13,6 @@ import {
 export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
-  console.log("cell:", cell.index);
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
@@ -21,8 +20,8 @@ export default function CWCell(props) {
         key={cell.index}
         style={{
           backgroundColor: "gray",
-          height: "5%",
-          width: cell.width,
+          height: "100%",
+          width: `${100 / props.rowCount}%`,
           justifyContent: "center"
         }}
       ></TouchableOpacity>
@@ -33,12 +32,13 @@ export default function CWCell(props) {
       <TouchableOpacity
         key={cell.index}
         onPress={() => {
-          props.handlePress(cell.index);
+          console.log("pressed");
+          props.handlePress(cell);
         }}
         style={{
           backgroundColor: "#d1d9e6",
-          height: "5%",
-          width: cell.width,
+          height: "100%",
+          width: `${100 / props.rowCount}%`,
           borderColor: "gray",
           borderWidth: 1,
           justifyContent: "center"
