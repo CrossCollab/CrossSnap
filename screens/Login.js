@@ -51,8 +51,6 @@ export class Login extends React.Component {
   };
 
   render() {
-    console.log("PROPS", this.props);
-
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Login to CrossSnap</Text>

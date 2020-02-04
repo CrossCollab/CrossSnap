@@ -11,6 +11,7 @@ import {
   View,
   TextInput
 } from "react-native";
+import CWCell from "../components/CWCell";
 import axios from "axios";
 
 // Murad: 172.17.23.241
@@ -31,6 +32,10 @@ export default class CrosswordTable extends React.Component {
       currentCell: {},
       gameId: 0
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handlePress = this.handlePress.bind(this);
+    this.changeHelper = this.changeHelper.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -96,6 +101,10 @@ export default class CrosswordTable extends React.Component {
     this.socket.emit("change puzzle", socketMsg);
   }
 
+  handlePress(index) {
+    this.setState({ currentCell: index });
+  }
+
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -146,6 +155,7 @@ export default class CrosswordTable extends React.Component {
                 if (cell.answer === ".") {
                   return (
                     <TouchableOpacity
+                      key={cell.index + 300}
                       style={{
                         backgroundColor: "gray",
                         height: "100%",
@@ -158,7 +168,7 @@ export default class CrosswordTable extends React.Component {
 
                 return (
                   <TouchableOpacity
-                    key={cell.index}
+                    key={cell.index + 300}
                     onPress={() => {
                       this.setState({ currentCell: cell });
                     }}
@@ -204,6 +214,12 @@ export default class CrosswordTable extends React.Component {
         })}
         <Text>current across clue: {this.state.currentCell.across}</Text>
         <Text>current down clue: {this.state.currentCell.down}</Text>
+        <CWCell
+          cell={{ index: 6, width: `${100 / numOfRows}%`, number: 6 }}
+          handleChange={this.handleChange}
+          handlePress={this.handlePress}
+          style={{ height: "5%", width: "5%" }}
+        />
       </View>
     );
   }
