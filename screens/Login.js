@@ -17,7 +17,7 @@ import {
 
 const userInfo = { username: "admin", password: "123" };
 
-export class AuthForm extends React.Component {
+export class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 // ROOTSTACK: navigation
 const RootStack = createStackNavigator({
   Home: {
-    screen: AuthForm
+    screen: Login
   },
   // Home page is login form; redirect post-login to authenticated home screen will be automatic for returning users
   Signup: {
@@ -151,7 +151,7 @@ const RootStack = createStackNavigator({
 });
 
 // AUTHSTACK: redirect to login screen upon hitting wrong credentials
-const AuthStack = createStackNavigator({ Home: AuthForm });
+const AuthStack = createStackNavigator({ Home: Login });
 
 // AUTH LOADING SCREEN: set to initial route name because we will fetch our authentication state from persistent storage inside of that screen component
 export class AuthLoadingScreen extends React.Component {

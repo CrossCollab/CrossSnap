@@ -8,7 +8,7 @@ import LinksScreen from "../screens/LinksScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrosswordScreen from "../screens/CrosswordScreen";
 import SingleCrosswordScreen from "../screens/SingleCrosswordScreen";
-import AuthForm from "../screens/Auth-Form";
+import Login from "../screens/Login";
 // import createRootNavigator from "react-navigation";
 
 const config = Platform.select({
@@ -20,7 +20,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: {
-      screen: AuthForm,
+      screen: Login,
       navigationOptions: {
         header: null
       }
