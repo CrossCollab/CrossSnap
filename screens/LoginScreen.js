@@ -24,7 +24,7 @@ class Login extends React.Component {
   _login = async () => {
     try {
       await this.props.loginUser(this.state);
-      if (this.props.user.email === this.state.email) {
+      if (this.props.user.email === this.state.email && this.state.email) {
         await AsyncStorage.setItem("isLoggedIn", "1");
         this.props.navigation.navigate("Main");
       } else {

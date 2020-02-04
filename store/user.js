@@ -26,7 +26,6 @@ export const createUser = user => {
 export const loginUser = user => {
   return async dispatch => {
     try {
-      console.log("in thunk");
       const { data } = await axios.post(`${SERVER_URL}/api/user/login`, user);
 
       dispatch(addUser(data));

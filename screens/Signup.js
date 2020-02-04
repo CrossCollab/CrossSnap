@@ -1,14 +1,10 @@
 import React from "react";
-import UserProfile from "../screens/UserProfile";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
-  AsyncStorage,
-  ActivityIndicator,
-  StatusBar
+  TextInput
 } from "react-native";
 import { connect } from "react-redux";
 import { createUser } from "../store/user";
@@ -17,10 +13,10 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "a",
-      lastName: "b",
-      password: "3",
-      email: "hhh@gmail.com"
+      firstName: "sample",
+      lastName: "shample",
+      password: "212",
+      email: "sampleSHAMPLE@gmail.com"
     };
 
     this.submitNewUser = this.submitNewUser.bind(this);

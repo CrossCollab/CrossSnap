@@ -12,6 +12,7 @@ export class AuthLoadingScreen extends React.Component {
   }
   _loadData = async () => {
     const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+    console.log("(1=LoggedIn; 2=LoggedOut)   |  Value:", isLoggedIn);
     this.props.navigation.navigate(isLoggedIn !== "1" ? "Auth" : "Main");
   };
   render() {
