@@ -12,7 +12,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import axios from "axios";
 
-const SERVER_URL = "http://" + "172.17.21.173:8080";
+const SERVER_URL = "http://" + "172.17.22.96:8080";
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
@@ -42,7 +42,10 @@ export default class LinksScreen extends React.Component {
     let newGameInstance = {
       crosswordId: this.state.crosswordId,
       status: "incomplete",
-      answers: data.crosswordObjectString.grid
+      answers: data.crosswordObjectString.grid,
+      numbers: data.crosswordObjectString.gridnums,
+      across: data.crosswordObjectString.clues.across,
+      down: data.crosswordObjectString.clues.down
     };
 
     //create new gameInstance in DB
@@ -62,7 +65,8 @@ export default class LinksScreen extends React.Component {
     let newGameInstance = {
       crosswordId: this.state.crosswordId,
       status: "incomplete",
-      answers: data.crosswordObjectString.grid
+      answers: data.crosswordObjectString.grid,
+      numbers: data.crosswordObjectString.gridnums
     };
 
     //create new gameInstance in DB
@@ -122,7 +126,7 @@ export default class LinksScreen extends React.Component {
             //on pressing join sends user to the crossword screen w/ nav props
 
             this.props.navigation.navigate("Crossword", {
-              gameInstance: 3,
+              gameInstance: this.state.gameInstanceId,
               userId: 4
             })
           }

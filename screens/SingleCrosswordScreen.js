@@ -4,7 +4,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { setCrossword } from "../store/crossword";
 
-const SERVER_URL = "http://" + "172.17.21.173:8080";
+const SERVER_URL = "http://" + "172.17.22.96:8080";
 
 class SingleCrossword extends React.Component {
   constructor(props) {

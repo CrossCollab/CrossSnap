@@ -1,39 +1,100 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
+const Sequelize = require("sequelize");
+const db = require("../db");
+const Crossword = require("../models/crossword");
 
-const GameInstance = db.define('gameInstance', {
-    guesses: {
-        type: Sequelize.JSON,
-    },
-    answers: {
-        type: Sequelize.JSON,
-    },
-    status: {
-        type: Sequelize.ENUM('incomplete', 'filled', 'correct'),
-    },
-})
+const GameInstance = db.define("gameInstance", {
+  guesses: {
+    type: Sequelize.JSON
+  },
+  answers: {
+    type: Sequelize.JSON
+  },
+  status: {
+    type: Sequelize.ENUM("incomplete", "filled", "correct")
+  },
+  numbers: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER)
+  },
+  across: {
+    type: Sequelize.ARRAY(Sequelize.STRING)
+  },
+  down: {
+    type: Sequelize.ARRAY(Sequelize.STRING)
+  }
+});
 
-GameInstance.addHook('beforeValidate', (gameInstance, options) => {
-    let guessArray = gameInstance.answers.map((answer, index) => {
-        if (answer === '.') {
-            return (guessObj = {
-                answer: answer,
-                guess: '.',
-                userId: 0,
-                index,
-            })
+GameInstance.addHook("beforeValidate", (gameInstance, options) => {
+  let acrossObj = {};
+  gameInstance.across.forEach((clue, index) => {
+    let clueNumber = clue.split(". ")[0];
+    let cluePhrase = clue.split(". ")[1];
+    acrossObj[clueNumber] = cluePhrase;
+  });
+  let downObj = {};
+  gameInstance.down.forEach((clue, index) => {
+    let clueNumber = clue.split(". ")[0];
+    let cluePhrase = clue.split(". ")[1];
+    downObj[clueNumber] = cluePhrase;
+  });
+
+  let guessArray = gameInstance.answers.map((answer, index) => {
+    if (answer === ".") {
+      return (guessObj = {
+        answer: answer,
+        guess: ".",
+        userId: 0,
+        index
+      });
+    }
+
+    const findAcross = index => {
+      const clueNumber = gameInstance.numbers[index];
+      if (gameInstance.answers[index] === ".") {
+        return undefined;
+      } else if (clueNumber) {
+        if (!acrossObj[`${clueNumber}`]) {
+          const lowerNumber = index - 1;
+          return findAcross(lowerNumber);
+        } else {
+          return acrossObj[`${clueNumber}`];
         }
-        return (guessObj = {
-            answer: answer,
-            guess: '',
-            userId: 0,
-            index,
-        })
-    })
-    gameInstance.guesses = guessArray
-})
+      } else {
+        const lowerNumber = index - 1;
+        return findAcross(lowerNumber);
+      }
+    };
+    const tableLength = Math.sqrt(gameInstance.numbers.length);
+    const findDown = index => {
+      const clueNumber = gameInstance.numbers[index];
+      if (gameInstance.answers[index] === ".") {
+        return undefined;
+      } else if (clueNumber) {
+        if (!downObj[`${clueNumber}`]) {
+          const lowerNumber = index - tableLength;
+          return findDown(lowerNumber);
+        } else {
+          return downObj[`${clueNumber}`];
+        }
+      } else {
+        const lowerNumber = index - tableLength;
+        return findDown(lowerNumber);
+      }
+    };
+    return (guessObj = {
+      answer: answer,
+      guess: "",
+      userId: 0,
+      index,
+      number: gameInstance.numbers[index],
+      across: findAcross(index),
+      down: findDown(index)
+    });
+  });
 
-module.exports = GameInstance
+  gameInstance.guesses = guessArray;
+});
+
+module.exports = GameInstance;
 
 //let guessArray = [{guess: "", userId: 3}, {guess: "B", userId: 4}]
 //let answers = ['a', 'b', '.', 'c', 'd']
