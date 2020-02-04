@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
+import CWTable from "../components/CWTable";
 import axios from "axios";
 
 // Murad: 172.17.23.241
@@ -134,52 +135,15 @@ export default class CrosswordTable extends React.Component {
     //later we should probabaly create subComponents for XWord Table, Row, and Cell...
     return (
       //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
-      <View
-        style={{
-          flexDirection: "column",
-          flex: 1,
-          alignContent: "flex-start",
-          justifyContent: "flex-start",
-          height: "80%",
-          marginTop: "10%"
-        }}
-      >
-        {rows.map((row, index) => {
-          return (
-            <CWRow
-              row={row}
-              index={index}
-              handleChange={this.handleChange}
-              handlePress={this.handlePress}
-              rowCount={numOfRows}
-            />
-          );
-        })}
-        <Text>current across clue: {this.state.currentCell.across}</Text>
-        <Text>current down clue: {this.state.currentCell.down}</Text>
-      </View>
+      <CWTable
+        rows={rows}
+        numOfRows={numOfRows}
+        handleChange={this.handleChange}
+        handlePress={this.handlePress}
+        acrossClue={this.state.currentCell.across}
+        downClue={this.state.currentCell.down}
+      />
     );
   }
 }
-const styles = StyleSheet.create({
-  // view: {
-  //   flexDirection: "row",
-  //   height: "25%"
-  // },
-  textinput: {
-    backgroundColor: "white",
-    height: "100%",
-    // width: `${100 / numOfRows}%`,
-    borderColor: "black",
-    borderWidth: 2,
-    justifyContent: "center"
-  },
-  blackSquare: {
-    backgroundColor: "black",
-    height: "100%",
-    // width: `${100 / numOfRows}%`,
-    borderColor: "black",
-    borderWidth: 2,
-    justifyContent: "center"
-  }
-});
+const styles = StyleSheet.create({});
