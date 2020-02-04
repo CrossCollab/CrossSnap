@@ -14,6 +14,7 @@ import {
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
 import CWTable from "../components/CWTable";
+import CWGameWrapper from "../components/CWGameWrapper";
 import axios from "axios";
 
 // Murad: 172.17.23.241
@@ -85,13 +86,11 @@ export default class CrosswordTable extends React.Component {
     }
   }
 
-  //whenever the client changes the value of a crossword square
+  //whenever the client changes the value of a crossword square, copy the guesses obj
+  //update the value of the appropo letter, update state
   handleChange = idx => letter => {
-    //copy the guesses object on state (crude approach, but works)
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-    //update the value of the guess with the new letter
     allGuesses[idx].guess = letter;
-    //set the state as the new guesses Obj, call changeHelper function
     this.setState({ guesses: allGuesses }, this.changeHelper);
   };
 
@@ -121,23 +120,13 @@ export default class CrosswordTable extends React.Component {
 
     //the num of rows is the square root of the total # of guesses (all our xwords are squares)
     //pushes each guess from this.state into a row array
-    let numOfRows = Math.sqrt(this.state.guesses.length);
-    let rows = [];
-    for (let i = 0; i < numOfRows; i++) {
-      rows.push([]);
-    }
-    for (let i = 0; i < this.state.guesses.length; i++) {
-      let currentRow = Math.floor(i / numOfRows);
-      let currentGuess = this.state.guesses[i];
-      rows[currentRow].push(currentGuess);
-    }
-
-    //later we should probabaly create subComponents for XWord Table, Row, and Cell...
+    //unclear... perhaps this should be inside a functional component?
+    const { navigation } = this.props;
+    let gameId = navigation.getParam("gameInstance");
     return (
-      //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
-      <CWTable
-        rows={rows}
-        numOfRows={numOfRows}
+      <CWGameWrapper
+        gameId={gameId}
+        guesses={this.state.guesses}
         handleChange={this.handleChange}
         handlePress={this.handlePress}
         acrossClue={this.state.currentCell.across}
