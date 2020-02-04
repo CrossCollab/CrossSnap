@@ -2,8 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-// const SERVER_URL = "http://" + "172.17.23.241:8080";
-
 export default class UserProfile extends React.Component {
   static navigationOptions = {
     header: null

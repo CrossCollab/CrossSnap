@@ -17,7 +17,7 @@ router.get("/:userid/userprofile", async (req, res, next) => {
 });
 
 // Placeholder route; not actually used by client, more for testing purposes
-router.get("/users", async (req, res, next) => {
+router.get("/allusers", async (req, res, next) => {
   try {
     const users = await User.findAll();
     res.json(users);

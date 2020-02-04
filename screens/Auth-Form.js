@@ -1,5 +1,7 @@
 import * as React from "react";
 import UserProfile from "./UserProfile";
+import CrosswordScreen from "./CrosswordScreen";
+import Signup from "./Signup";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import {
@@ -12,8 +14,6 @@ import {
   ActivityIndicator,
   StatusBar
 } from "react-native";
-
-// const SERVER_URL = "http://" + "172.17.23.241:8080";
 
 const userInfo = { username: "admin", password: "123" };
 
@@ -82,7 +82,7 @@ export class AuthForm extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.userButton}
-            onPress={() => this.props.navigation.navigate("UserProfile")}
+            onPress={() => this.props.navigation.navigate("Signup")}
           >
             <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
@@ -142,6 +142,9 @@ const RootStack = createStackNavigator({
     screen: AuthForm
   },
   // Home page is login form; redirect post-login to authenticated home screen will be automatic for returning users
+  Signup: {
+    screen: Signup
+  },
   UserProfile: {
     screen: UserProfile
   }
