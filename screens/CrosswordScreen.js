@@ -11,6 +11,10 @@ import {
   View,
   TextInput
 } from "react-native";
+import CWCell from "../components/CWCell";
+import CWRow from "../components/CWRow";
+import CWTable from "../components/CWTable";
+import CWGameWrapper from "../components/CWGameWrapper";
 import axios from "axios";
 import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
@@ -25,6 +29,11 @@ export default class CrosswordTable extends React.Component {
       currentCell: {},
       gameId: 0
     };
+
+    //bind these functions so child components can call them in OG context
+    this.handleChange = this.handleChange.bind(this);
+    this.handlePress = this.handlePress.bind(this);
+    this.changeHelper = this.changeHelper.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -71,13 +80,11 @@ export default class CrosswordTable extends React.Component {
     }
   }
 
-  //whenever the client changes the value of a crossword square
+  //whenever the client changes the value of a crossword square, copy the guesses obj
+  //update the value of the appropo letter, update state
   handleChange = idx => letter => {
-    //copy the guesses object on state (crude approach, but works)
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-    //update the value of the guess with the new letter
     allGuesses[idx].guess = letter;
-    //set the state as the new guesses Obj, call changeHelper function
     this.setState({ guesses: allGuesses }, this.changeHelper);
   };
 
@@ -88,6 +95,11 @@ export default class CrosswordTable extends React.Component {
       room: this.state.gameId
     };
     this.socket.emit("change puzzle", socketMsg);
+  }
+
+  handlePress(cell) {
+    console.log("handling press");
+    this.setState({ currentCell: cell });
   }
 
   //need to remove the socket listeners, turn them 'off' in here
@@ -102,125 +114,19 @@ export default class CrosswordTable extends React.Component {
 
     //the num of rows is the square root of the total # of guesses (all our xwords are squares)
     //pushes each guess from this.state into a row array
-    let numOfRows = Math.sqrt(this.state.guesses.length);
-    let rows = [];
-    for (let i = 0; i < numOfRows; i++) {
-      rows.push([]);
-    }
-    for (let i = 0; i < this.state.guesses.length; i++) {
-      let currentRow = Math.floor(i / numOfRows);
-      let currentGuess = this.state.guesses[i];
-      rows[currentRow].push(currentGuess);
-    }
-
-    //later we should probabaly create subComponents for XWord Table, Row, and Cell...
+    //unclear... perhaps this should be inside a functional component?
+    const { navigation } = this.props;
+    let gameId = navigation.getParam("gameInstance");
     return (
-      //   <CrosswordTable rows={rows} guesses={this.state.guesses} answers={this.state.answers}
-      <View
-        style={{
-          flexDirection: "column",
-          flex: 1,
-          alignContent: "flex-start",
-          justifyContent: "flex-start",
-          height: "80%",
-          marginTop: "10%"
-        }}
-      >
-        {rows.map((row, index) => {
-          return (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                height: `${100 / numOfRows}%`
-              }}
-              key={index}
-            >
-              {row.map((cell, idx) => {
-                if (cell.answer === ".") {
-                  return (
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: "gray",
-                        height: "100%",
-                        width: `${100 / numOfRows}%`,
-                        justifyContent: "center"
-                      }}
-                    ></TouchableOpacity>
-                  );
-                }
-
-                return (
-                  <TouchableOpacity
-                    key={cell.index}
-                    onPress={() => {
-                      this.setState({ currentCell: cell });
-                    }}
-                    style={{
-                      backgroundColor: "#d1d9e6",
-                      height: "100%",
-                      width: `${100 / numOfRows}%`,
-                      borderColor: "gray",
-                      borderWidth: 1,
-                      justifyContent: "center"
-                    }}
-                  >
-                    {cell.number ? (
-                      <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}>
-                        {cell.number}
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{ flex: 1, fontSize: 6, zIndex: 999 }}
-                      ></Text>
-                    )}
-                    <TextInput
-                      maxLength={1}
-                      style={{
-                        backgroundColor: "white",
-                        height: "50%",
-                        width: "50%",
-                        alignSelf: "center",
-                        marginBottom: "35%",
-                        zIndex: 9999
-                      }}
-                      textAlign={"center"}
-                      key={cell.index}
-                      onChangeText={this.handleChange(cell.index)}
-                    >
-                      {cell.guess}
-                    </TextInput>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          );
-        })}
-        <Text>current across clue: {this.state.currentCell.across}</Text>
-        <Text>current down clue: {this.state.currentCell.down}</Text>
-      </View>
+      <CWGameWrapper
+        gameId={gameId}
+        guesses={this.state.guesses}
+        handleChange={this.handleChange}
+        handlePress={this.handlePress}
+        acrossClue={this.state.currentCell.across}
+        downClue={this.state.currentCell.down}
+      />
     );
   }
 }
-const styles = StyleSheet.create({
-  // view: {
-  //   flexDirection: "row",
-  //   height: "25%"
-  // },
-  textinput: {
-    backgroundColor: "white",
-    height: "100%",
-    // width: `${100 / numOfRows}%`,
-    borderColor: "black",
-    borderWidth: 2,
-    justifyContent: "center"
-  },
-  blackSquare: {
-    backgroundColor: "black",
-    height: "100%",
-    // width: `${100 / numOfRows}%`,
-    borderColor: "black",
-    borderWidth: 2,
-    justifyContent: "center"
-  }
-});
+const styles = StyleSheet.create({});

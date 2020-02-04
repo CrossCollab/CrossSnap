@@ -34,6 +34,7 @@ class Login extends React.Component {
       console.log(err);
     }
   };
+
   static navigationOptions = {
     header: null
   };
