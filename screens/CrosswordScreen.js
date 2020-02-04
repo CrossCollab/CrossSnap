@@ -12,12 +12,6 @@ import {
   TextInput
 } from "react-native";
 import axios from "axios";
-
-// Murad: 172.17.23.241
-// Mike: 172.17.21.173
-
-// import logo from "../assets/images/logo.png"; //need the png
-
 import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 
