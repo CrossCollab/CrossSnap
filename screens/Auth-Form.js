@@ -24,6 +24,9 @@ export class AuthForm extends React.Component {
       username: "",
       password: ""
     };
+
+    this._login = this._login.bind(this);
+    this._loadData = this._loadData.bind(this);
   }
 
   _login = async () => {
@@ -48,9 +51,7 @@ export class AuthForm extends React.Component {
   };
 
   render() {
-    // console.log("STATE", this.state);
     console.log("PROPS", this.props);
-    console.log("Navigation", this.props.navigation.navigate);
 
     return (
       <View style={styles.container}>
@@ -135,23 +136,21 @@ const styles = StyleSheet.create({
   }
 });
 
-const RootStack = createStackNavigator(
-  {
-    Home: {
-      screen: AuthForm
-    },
-    HomeScreen: {
-      screen: HomeScreen
-    }
+// ROOTSTACK: navigation
+const RootStack = createStackNavigator({
+  Home: {
+    screen: AuthForm
+  },
+  // Home page is login form; redirect post-login to authenticated home screen will be automatic for returning users
+  HomeScreen: {
+    screen: HomeScreen
   }
-  // {
-  //   initialRouteName: "Home"
-  // }
-);
+});
 
-// AUTH STACK BELOW:
-const AuthStack = createStackNavigator({ Home: HomeScreen });
+// AUTHSTACK: redirect to login screen upon hitting wrong credentials
+const AuthStack = createStackNavigator({ Home: AuthForm });
 
+// AUTH LOADING SCREEN: set to initial route name because we will fetch our authentication state from persistent storage inside of that screen component
 export class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -168,23 +167,16 @@ export class AuthLoadingScreen extends React.Component {
   }
 }
 
-const AppContainer = createAppContainer(RootStack);
-
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}
-
-// export default createAppContainer(
-//   createSwitchNavigator(
-//     {
-//       AuthLoading: AuthLoadingScreen,
-//       App: RootStack,
-//       Auth: AuthStack
-//     },
-//     {
-//       initialRouteName: "AuthLoading"
-//     }
-//   )
-// );
+// SWITCH NAVIGATOR: https://reactnavigation.org/docs/en/auth-flow.html
+export default createAppContainer(
+  createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: RootStack,
+      Auth: AuthStack
+    },
+    {
+      initialRouteName: "AuthLoading"
+    }
+  )
+);
