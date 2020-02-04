@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import AppNavigator from "./navigation/AppNavigator";
 import store from "./store/index";
 import "react-native-gesture-handler";
+// import MainTabNavigator from "./navigation/MainTabNavigator";
 
 // const AppNavigator = createStackNavigator(
 //   {
@@ -25,71 +26,75 @@ import "react-native-gesture-handler";
 
 // const AppContainer = createAppContainer(AppNavigator);
 
-// export default class App extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       isReady: false
-//     };
-//   }
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReady: false
+    };
+  }
 
-//   render() {
-//     return <AppContainer />;
+  render() {
+    return (
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
+    );
+  }
+}
+
+// export default function App(props) {
+//   const [isLoadingComplete, setLoadingComplete] = useState(false);
+
+//   if (!isLoadingComplete && !props.skipLoadingScreen) {
+//     return (
+//       <AppLoading
+//         startAsync={loadResourcesAsync}
+//         onError={handleLoadingError}
+//         onFinish={() => handleFinishLoading(setLoadingComplete)}
+//       />
+//     );
+//   } else {
+//     return (
+//       <View style={styles.container}>
+//         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+//         <Provider store={store}>
+//           <AppNavigator />
+//         </Provider>
+//       </View>
+//     );
 //   }
 // }
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+// async function loadResourcesAsync() {
+//   await Promise.all([
+//     Asset.loadAsync([
+//       require("./assets/images/robot-dev.png"),
+//       require("./assets/images/robot-prod.png")
+//     ]),
+//     Font.loadAsync({
+//       // This is the font that we are using for our tab bar
+//       ...Ionicons.font,
+//       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
+//       // remove this if you are not using it in your app
+//       "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf")
+//     })
+//   ]);
+// }
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <Provider store={store}>
-          <AppNavigator />
-        </Provider>
-      </View>
-    );
-  }
-}
+// function handleLoadingError(error) {
+//   // In this case, you might want to report the error to your error reporting
+//   // service, for example Sentry
+//   console.warn(error);
+// }
 
-async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([
-      require("./assets/images/robot-dev.png"),
-      require("./assets/images/robot-prod.png")
-    ]),
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
-      ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf")
-    })
-  ]);
-}
+// function handleFinishLoading(setLoadingComplete) {
+//   setLoadingComplete(true);
+// }
 
-function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
-  console.warn(error);
-}
-
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  }
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff"
+//   }
+// });
