@@ -11,7 +11,6 @@ import { ExpoLinksView } from "@expo/samples";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import axios from "axios";
-
 import SERVER_URL from "../serverUrl";
 
 export default class LinksScreen extends React.Component {
