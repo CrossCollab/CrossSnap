@@ -34,9 +34,9 @@ export default function CWCell(props) {
               ? "#e0c422"
               : cell.across === props.acrossClue &&
                 props.currentView === "across"
-              ? "#7fb8db"
+              ? "#c1ebb2"
               : cell.down === props.downClue && props.currentView === "down"
-              ? "#7fb8db"
+              ? "#c1ebb2"
               : "#d1d9e6",
           height: "100%",
           width: `${100 / props.rowCount}%`,

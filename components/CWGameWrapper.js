@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import CWCell from "./CWCell";
 import CWRow from "./CWRow";
 import CWTable from "./CWTable";
+import CWClue from "./CWClue";
 
 export default function CWGameWrapper(props) {
   let numOfRows = Math.sqrt(props.guesses.length);
@@ -30,9 +31,13 @@ export default function CWGameWrapper(props) {
         downClue={props.downClue}
         currentCell={props.currentCell}
         currentView={props.currentView}
+        key={9999}
       />
-      <Text>current across clue: {props.acrossClue}</Text>
-      <Text>current down clue: {props.downClue}</Text>
+      <CWClue
+        currentView={props.currentView}
+        acrossClue={props.acrossClue}
+        downClue={props.downClue}
+      />
     </View>
   );
 }

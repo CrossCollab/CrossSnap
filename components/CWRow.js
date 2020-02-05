@@ -10,7 +10,7 @@ export default function CWRow(props) {
         flexDirection: "row",
         height: `${100 / props.rowCount}%`
       }}
-      key={props.index}
+      key={props.index + 500}
     >
       {props.row.map(cell => {
         return (
