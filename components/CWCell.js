@@ -57,7 +57,7 @@ export default function CWCell(props) {
           key={cell.index}
           onChangeText={props.handleChange(cell.index)}
         >
-          {cell.answer}
+          {cell.guess}
         </TextInput>
       </TouchableOpacity>
     );

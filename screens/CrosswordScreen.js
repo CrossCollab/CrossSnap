@@ -58,7 +58,6 @@ export default class CrosswordTable extends React.Component {
         isReady: true,
         gameId
       });
-
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
