@@ -98,7 +98,7 @@ export default class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    console.log("handling press");
+    // console.log("handling press");
     this.setState({ currentCell: cell });
   }
 

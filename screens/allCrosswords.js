@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { setCrossword } from "../store/crossword";
 import SERVER_URL from "../serverUrl";
 
-class SingleCrossword extends React.Component {
+class allCrosswords extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,19 +19,16 @@ class SingleCrossword extends React.Component {
   }
   componentDidMount() {
     try {
-      this.props.setCrossword(1);
+      // this.props.setCrossword(1);
     } catch (err) {
       console.log(err);
     }
   }
-  handlePress() {
-    Alert.alert(
-      "Touch that button again and I'm going to be mad",
-      "I'm actually not joking",
-      [{ text: "Don't touch that button!!!!!" }]
-    );
-  }
+
   render() {
+    console.log("hi");
+    console.log("PROPS HERE:", this.props.crossword.date);
+
     const {
       description,
       difficulty,
@@ -47,12 +44,6 @@ class SingleCrossword extends React.Component {
         <Text>Size: {size}</Text>
         <Text>Date: {date}</Text>
         <Text>Theme: {theme}</Text>
-        <TouchableHighlight
-          onPress={this.handlePress}
-          style={{ backgroundColor: "red" }}
-        >
-          <Text>Play Game</Text>
-        </TouchableHighlight>
       </View>
     );
   }
@@ -68,4 +59,4 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(mapState, mapDispatch)(SingleCrossword);
+export default connect(mapState, mapDispatch)(allCrosswords);
