@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import CWCell from "./CWCell";
 import CWRow from "./CWRow";
 import CWTable from "./CWTable";
+import CWClue from "./CWClue";
 
 export default function CWGameWrapper(props) {
   let numOfRows = Math.sqrt(props.guesses.length);
@@ -20,13 +21,23 @@ export default function CWGameWrapper(props) {
   //can adjust to pull in gameInstance data here versus in the componentDidMount section...
   //still need info on selected cell and on the neighbor cells
   return (
-    <CWTable
-      rows={rows}
-      numOfRows={numOfRows}
-      handleChange={props.handleChange}
-      handlePress={props.handlePress}
-      acrossClue={props.acrossClue}
-      downClue={props.downClue}
-    />
+    <View style={{ height: "100%", width: "100%" }}>
+      <CWTable
+        rows={rows}
+        numOfRows={numOfRows}
+        handleChange={props.handleChange}
+        handlePress={props.handlePress}
+        acrossClue={props.acrossClue}
+        downClue={props.downClue}
+        currentCell={props.currentCell}
+        currentView={props.currentView}
+        key={9999}
+      />
+      <CWClue
+        currentView={props.currentView}
+        acrossClue={props.acrossClue}
+        downClue={props.downClue}
+      />
+    </View>
   );
 }

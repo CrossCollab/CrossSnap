@@ -27,7 +27,8 @@ export default class CrosswordTable extends React.Component {
       guesses: [],
       isReady: false,
       currentCell: {},
-      gameId: 0
+      gameId: 0,
+      currentView: "across"
     };
 
     //bind these functions so child components can call them in OG context
@@ -98,8 +99,16 @@ export default class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    // console.log("handling press");
+    console.log("handling press");
+    console.log("pressed cell:", cell);
     this.setState({ currentCell: cell });
+    if (cell.index === this.state.currentCell.index) {
+      if (this.state.currentView === "across") {
+        this.setState({ currentView: "down" });
+      } else {
+        this.setState({ currentView: "across" });
+      }
+    }
   }
 
   //need to remove the socket listeners, turn them 'off' in here
@@ -125,6 +134,8 @@ export default class CrosswordTable extends React.Component {
         handlePress={this.handlePress}
         acrossClue={this.state.currentCell.across}
         downClue={this.state.currentCell.down}
+        currentCell={this.state.currentCell}
+        currentView={this.state.currentView}
       />
     );
   }
