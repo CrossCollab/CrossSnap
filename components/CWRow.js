@@ -19,6 +19,10 @@ export default function CWRow(props) {
             handleChange={props.handleChange}
             handlePress={props.handlePress}
             rowCount={props.rowCount}
+            currentCell={props.currentCell}
+            downClue={props.downClue}
+            acrossClue={props.acrossClue}
+            currentView={props.currentView}
           />
         );
       })}

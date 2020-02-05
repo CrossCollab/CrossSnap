@@ -25,9 +25,19 @@ export default function CWCell(props) {
         onPress={() => {
           console.log("pressed");
           props.handlePress(cell);
+          console.log("cell: ", cell);
+          console.log("currentView: ", props.currentView);
         }}
         style={{
-          backgroundColor: "#d1d9e6",
+          backgroundColor:
+            cell.index === props.currentCell.index
+              ? "#e0c422"
+              : cell.across === props.acrossClue &&
+                props.currentView === "across"
+              ? "#7fb8db"
+              : cell.down === props.downClue && props.currentView === "down"
+              ? "#7fb8db"
+              : "#d1d9e6",
           height: "100%",
           width: `${100 / props.rowCount}%`,
           borderColor: "gray",

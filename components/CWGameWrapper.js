@@ -20,13 +20,19 @@ export default function CWGameWrapper(props) {
   //can adjust to pull in gameInstance data here versus in the componentDidMount section...
   //still need info on selected cell and on the neighbor cells
   return (
-    <CWTable
-      rows={rows}
-      numOfRows={numOfRows}
-      handleChange={props.handleChange}
-      handlePress={props.handlePress}
-      acrossClue={props.acrossClue}
-      downClue={props.downClue}
-    />
+    <View style={{ height: "100%", width: "100%" }}>
+      <CWTable
+        rows={rows}
+        numOfRows={numOfRows}
+        handleChange={props.handleChange}
+        handlePress={props.handlePress}
+        acrossClue={props.acrossClue}
+        downClue={props.downClue}
+        currentCell={props.currentCell}
+        currentView={props.currentView}
+      />
+      <Text>current across clue: {props.acrossClue}</Text>
+      <Text>current down clue: {props.downClue}</Text>
+    </View>
   );
 }
