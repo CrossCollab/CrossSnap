@@ -18,6 +18,7 @@ import CWGameWrapper from "../components/CWGameWrapper";
 import axios from "axios";
 import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
+import Confetti from "../components/Confetti";
 
 export default class CrosswordTable extends React.Component {
   constructor(props) {
@@ -28,13 +29,15 @@ export default class CrosswordTable extends React.Component {
       isReady: false,
       currentCell: {},
       gameId: 0,
-      currentView: "across"
+      currentView: "across",
+      confetti: false
     };
 
     //bind these functions so child components can call them in OG context
     this.handleChange = this.handleChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.changeHelper = this.changeHelper.bind(this);
+    this.checkBoard = this.checkBoard.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -55,7 +58,6 @@ export default class CrosswordTable extends React.Component {
         isReady: true,
         gameId
       });
-
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
@@ -99,8 +101,6 @@ export default class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    console.log("handling press");
-    console.log("pressed cell:", cell);
     this.setState({ currentCell: cell });
     if (cell.index === this.state.currentCell.index) {
       if (this.state.currentView === "across") {
@@ -110,7 +110,31 @@ export default class CrosswordTable extends React.Component {
       }
     }
   }
+  checkBoard() {
+    const checkedGuesses = this.state.guesses.map(guess => {
+      if (guess.guess === guess.answer) {
+        return { ...guess, correct: true };
+      } else {
+        return guess;
+      }
+    });
+    this.setState({ guesses: checkedGuesses }, this.checkBoardHelper);
 
+    let isThisAllCorrect = true;
+    this.state.guesses.forEach(guess => {
+      if (guess.guess !== guess.answer) {
+        isThisAllCorrect = false;
+      }
+    });
+    if (isThisAllCorrect) {
+      this.setState({ confetti: true });
+    }
+  }
+  async checkBoardHelper() {
+    await axios.put(`${SERVER_URL}/api/gameInstance/${this.state.gameId}`, {
+      guesses: this.state.guesses
+    });
+  }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -126,18 +150,23 @@ export default class CrosswordTable extends React.Component {
     //unclear... perhaps this should be inside a functional component?
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
-    return (
-      <CWGameWrapper
-        gameId={gameId}
-        guesses={this.state.guesses}
-        handleChange={this.handleChange}
-        handlePress={this.handlePress}
-        acrossClue={this.state.currentCell.across}
-        downClue={this.state.currentCell.down}
-        currentCell={this.state.currentCell}
-        currentView={this.state.currentView}
-      />
-    );
+    if (this.state.confetti) {
+      return <Confetti />;
+    } else {
+      return (
+        <CWGameWrapper
+          gameId={gameId}
+          guesses={this.state.guesses}
+          handleChange={this.handleChange}
+          handlePress={this.handlePress}
+          acrossClue={this.state.currentCell.across}
+          downClue={this.state.currentCell.down}
+          currentCell={this.state.currentCell}
+          currentView={this.state.currentView}
+          checkBoard={this.checkBoard}
+        />
+      );
+    }
   }
 }
 const styles = StyleSheet.create({});

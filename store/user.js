@@ -26,9 +26,20 @@ export const createUser = user => {
 export const loginUser = user => {
   return async dispatch => {
     try {
-      console.log("in thunk");
       const { data } = await axios.post(`${SERVER_URL}/api/user/login`, user);
 
+      dispatch(addUser(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const fetchUser = userId => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.get(
+        `${SERVER_URL}/api/user/${userId}/userprofile`
+      );
       dispatch(addUser(data));
     } catch (err) {
       console.log(err);
