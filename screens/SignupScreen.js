@@ -1,5 +1,5 @@
 import React from "react";
-import UserProfile from "../screens/UserProfile";
+import UserProfileScreen from "./UserProfileScreen";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 import { connect } from "react-redux";
 import { createUser } from "../store/user";
 
-class Signup extends React.Component {
+class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +33,7 @@ class Signup extends React.Component {
   async submitNewUser() {
     await this.props.createUser(this.state);
     if (this.props.user.id) {
-      this.props.navigation.navigate("UserProfile");
+      this.props.navigation.navigate("Main");
     }
   }
 
@@ -143,4 +143,4 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(mapState, mapDispatch)(Signup);
+export default connect(mapState, mapDispatch)(SignupScreen);

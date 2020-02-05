@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
-class UserProfile extends React.Component {
+class UserProfileScreen extends React.Component {
   constructor() {
     super();
     this.handleLogout = this.handleLogout.bind(this);
@@ -12,7 +12,8 @@ class UserProfile extends React.Component {
     header: null
   };
   async handleLogout() {
-    await AsyncStorage.setItem("isLoggedIn", "2");
+    // await AsyncStorage.setItem("isLoggedIn", );
+    await AsyncStorage.clear();
     this.props.navigation.navigate("Login");
   }
   render() {
@@ -76,4 +77,4 @@ const mapState = state => {
   return { user: state.user };
 };
 
-export default connect(mapState)(UserProfile);
+export default connect(mapState)(UserProfileScreen);
