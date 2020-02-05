@@ -25,19 +25,9 @@ export default function CWCell(props) {
         onPress={() => {
           console.log("pressed");
           props.handlePress(cell);
-          console.log("cell: ", cell);
-          console.log("currentView: ", props.currentView);
         }}
         style={{
-          backgroundColor:
-            cell.index === props.currentCell.index
-              ? "#e0c422"
-              : cell.across === props.acrossClue &&
-                props.currentView === "across"
-              ? "#c1ebb2"
-              : cell.down === props.downClue && props.currentView === "down"
-              ? "#c1ebb2"
-              : "#d1d9e6",
+          backgroundColor: "#d1d9e6",
           height: "100%",
           width: `${100 / props.rowCount}%`,
           borderColor: "gray",
@@ -67,7 +57,7 @@ export default function CWCell(props) {
           key={cell.index}
           onChangeText={props.handleChange(cell.index)}
         >
-          {cell.guess}
+          {cell.answer}
         </TextInput>
       </TouchableOpacity>
     );

@@ -5,6 +5,7 @@ import CWRow from "./CWRow";
 import CWTable from "./CWTable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CWClue from "./CWClue";
+import HeaderOptions from "./HeaderOptions";
 
 export default function CWGameWrapper(props) {
   let numOfRows = Math.sqrt(props.guesses.length);
@@ -12,6 +13,7 @@ export default function CWGameWrapper(props) {
   for (let i = 0; i < numOfRows; i++) {
     rows.push([]);
   }
+  console.log("props in wrapper", props.guesses);
   for (let i = 0; i < props.guesses.length; i++) {
     let currentRow = Math.floor(i / numOfRows);
     let currentGuess = props.guesses[i];
@@ -23,6 +25,7 @@ export default function CWGameWrapper(props) {
   //still need info on selected cell and on the neighbor cells
   return (
     <View style={{ height: "100%", width: "100%" }}>
+      <HeaderOptions checkBoard={props.checkBoard} />
       <CWTable
         rows={rows}
         numOfRows={numOfRows}
