@@ -4,6 +4,7 @@ import LoginScreen from "../screens/LoginScreen";
 import { createStackNavigator } from "react-navigation-stack";
 import { AsyncStorage, ActivityIndicator, StatusBar, View } from "react-native";
 import React from "react";
+import SignupScreen from "../screens/SignupScreen";
 
 export class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export class AuthLoadingScreen extends React.Component {
 }
 
 const LoginStack = createStackNavigator({ Login: LoginScreen });
+const SignUpStack = createStackNavigator({ SignUp: SignupScreen });
 export default createAppContainer(
   createSwitchNavigator(
     {
@@ -33,7 +35,8 @@ export default createAppContainer(
       // Read more at https://reactnavigation.org/docs/en/auth-flow.html
       AuthLoading: AuthLoadingScreen,
       Main: MainTabNavigator,
-      Auth: LoginStack
+      Auth: LoginStack,
+      SignUp: SignUpStack
     },
     { initialRouteName: "AuthLoading" }
   )

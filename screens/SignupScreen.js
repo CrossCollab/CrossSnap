@@ -1,55 +1,65 @@
-import * as React from "react";
+import React from "react";
+import UserProfileScreen from "./UserProfileScreen";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
-  AsyncStorage
+  TextInput
 } from "react-native";
 import { connect } from "react-redux";
-import { loginUser } from "../store/user";
+import { createUser } from "../store/user";
 
-class Login extends React.Component {
+class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      firstName: "sample",
+      lastName: "shample",
+      password: "212",
+      email: "sampleSHAMPLE@gmail.com"
     };
 
-    this._login = this._login.bind(this);
+    this.submitNewUser = this.submitNewUser.bind(this);
   }
-
-  _login = async () => {
-    try {
-      await this.props.loginUser(this.state);
-      if (this.props.user.email === this.state.email && this.state.email) {
-        await AsyncStorage.setItem("isLoggedIn", "1");
-        this.props.navigation.navigate("Main");
-      } else {
-        alert("Email or password incorrect");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   static navigationOptions = {
     header: null
   };
 
+  async submitNewUser() {
+    await this.props.createUser(this.state);
+    if (this.props.user.id) {
+      this.props.navigation.navigate("Main");
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Login to CrossSnap</Text>
+        <Text style={styles.welcome}>
+          Sign up to join the CrossSnap community!
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          onChangeText={firstName => this.setState({ firstName })}
+          value={this.state.firstName}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          onChangeText={lastName => this.setState({ lastName })}
+          value={this.state.lastName}
+        />
 
         <TextInput
           style={styles.input}
           placeholder="Email"
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
-          autoCapitalize="none"
         />
 
         <TextInput
@@ -59,13 +69,11 @@ class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
+
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.userButton} onPress={this._login}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.userButton}
-            onPress={() => this.props.navigation.navigate("SignUp")}
+            onPress={this.submitNewUser}
           >
             <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "90%"
   },
   userButton: {
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   welcome: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: "center",
     margin: 10,
     color: "white"
@@ -120,13 +128,16 @@ const styles = StyleSheet.create({
 });
 
 const mapState = state => {
-  return { user: state.user };
-};
-const mapDispatch = dispatch => {
   return {
-    loginUser: user => dispatch(loginUser(user))
+    user: state.user,
+    isLoggedIn: !!state.user.id
   };
 };
 
-const doesThisWork = connect(mapState, mapDispatch)(Login);
-export default doesThisWork;
+const mapDispatch = dispatch => {
+  return {
+    createUser: user => dispatch(createUser(user))
+  };
+};
+
+export default connect(mapState, mapDispatch)(SignupScreen);
