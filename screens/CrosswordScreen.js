@@ -118,6 +118,16 @@ export default class CrosswordTable extends React.Component {
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
     return (
+      // <View>
+      //   <TouchableOpacity
+      //     onPress={this.state.guesses.map(guess => {
+      //       if (guess.guess === guess.answer) {
+      //         return (guess.correct = true);
+      //       }
+      //     })}
+      //   >
+      //     <Text>Check Crossword</Text>
+      //   </TouchableOpacity>
       <CWGameWrapper
         gameId={gameId}
         guesses={this.state.guesses}
@@ -126,6 +136,7 @@ export default class CrosswordTable extends React.Component {
         acrossClue={this.state.currentCell.across}
         downClue={this.state.currentCell.down}
       />
+      // </View>
     );
   }
 }

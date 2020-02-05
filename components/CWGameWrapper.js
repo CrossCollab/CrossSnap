@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import CWCell from "./CWCell";
 import CWRow from "./CWRow";
 import CWTable from "./CWTable";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function CWGameWrapper(props) {
   let numOfRows = Math.sqrt(props.guesses.length);

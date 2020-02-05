@@ -46,7 +46,7 @@ export default function CWCell(props) {
         <TextInput
           maxLength={1}
           style={{
-            backgroundColor: "white",
+            backgroundColor: cell.correct ? "green" : "white",
             height: "50%",
             width: "50%",
             alignSelf: "center",
