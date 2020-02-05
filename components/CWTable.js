@@ -1,19 +1,23 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import CWCell from "./CWCell";
 import CWRow from "./CWRow";
 
 export default function CWTable(props) {
   return (
-    <View
+    <ScrollView
       style={{
         flexDirection: "column",
         flex: 1,
         alignContent: "flex-start",
-        justifyContent: "flex-start",
+        // justifyContent: "flex-start",
         height: "80%",
         marginTop: "10%"
       }}
+      maximumZoomScale="2.5"
+      minimumZoomScale="1"
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
     >
       {props.rows.map((row, index) => {
         return (
@@ -23,12 +27,14 @@ export default function CWTable(props) {
             handleChange={props.handleChange}
             handlePress={props.handlePress}
             rowCount={props.numOfRows}
+            currentCell={props.currentCell}
+            downClue={props.downClue}
+            acrossClue={props.acrossClue}
+            currentView={props.currentView}
           />
         );
       })}
-      <Text>current across clue: {props.acrossClue}</Text>
-      <Text>current down clue: {props.downClue}</Text>
-    </View>
+    </ScrollView>
     // <View
     //   style={{
     //     flex: 1,
