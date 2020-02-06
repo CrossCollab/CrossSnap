@@ -34,6 +34,18 @@ export const loginUser = user => {
     }
   };
 };
+export const fetchUser = userId => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.get(
+        `${SERVER_URL}/api/user/${userId}/userprofile`
+      );
+      dispatch(addUser(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 export default function(state = {}, action) {
   switch (action.type) {

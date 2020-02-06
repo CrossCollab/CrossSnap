@@ -30,6 +30,7 @@ class SignupScreen extends React.Component {
   async submitNewUser() {
     await this.props.createUser(this.state);
     if (this.props.user.id) {
+      AsyncStorage.setItem("userId", this.props.user.id);
       this.props.navigation.navigate("Main");
     }
   }

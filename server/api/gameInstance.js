@@ -56,3 +56,10 @@ router.post("/", async (req, res, next) => {
     next(err);
   }
 });
+router.put("/:id", async (req, res, next) => {
+  const { guesses } = req.body;
+  const gameInstance = await GameInstance.findOne({
+    where: { id: req.params.id }
+  });
+  await gameInstance.update({ guesses, status: "filled" });
+});
