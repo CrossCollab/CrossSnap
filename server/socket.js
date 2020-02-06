@@ -1,8 +1,9 @@
 module.exports = io => {
   io.on("connection", socket => {
-    // console.log(socket.id, " has made a persistent connection to the server!");
+    console.log(socket.id, " has made a persistent connection to the server!");
     socket.on("change puzzle", msg => {
-      socket.to(msg.room).emit("change puzzle", msg.state);
+      console.log("in socket change puzzle");
+      socket.to(msg.room).emit("change puzzle", msg.guesses);
     });
 
     socket.on("join", function(room) {
