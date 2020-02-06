@@ -60,7 +60,6 @@ router.put("/:id", async (req, res, next) => {
   try {
     const { guesses } = req.body;
     const jsonGuesses = JSON.stringify(guesses);
-    console.log("what", guesses[0]);
     const gameInstance = await GameInstance.findOne({
       where: { id: req.params.id }
     });
