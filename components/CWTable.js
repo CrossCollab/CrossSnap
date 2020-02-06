@@ -31,6 +31,7 @@ export default function CWTable(props) {
             downClue={props.downClue}
             acrossClue={props.acrossClue}
             currentView={props.currentView}
+            refs={props.refs}
           />
         );
       })}
