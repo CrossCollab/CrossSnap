@@ -31,7 +31,7 @@ router.get("/:gameId", async (req, res, next) => {
         id: req.params.gameId
       }
     });
-    console.log("game: ", game);
+    // console.log("game: ", game);
     let guessesAnswers = {
       answers: game.answers,
       guesses: game.guesses,

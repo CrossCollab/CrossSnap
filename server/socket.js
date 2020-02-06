@@ -20,6 +20,7 @@ module.exports = io => {
       //   console.log("updated: ", updatedInstance.guesses[0]);
       // }, 10000);
       try {
+        console.log("im here");
         const game = await GameInstance.findOne({
           where: { id: msg.state.gameId }
         });
@@ -34,6 +35,7 @@ module.exports = io => {
         console.log(err);
       }
       // await game.update({ guesses: msg.state.guesses });
+      // socket.on("change puzzle", msg => {
       socket.to(msg.room).emit("change puzzle", msg.state);
     });
 

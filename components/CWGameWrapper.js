@@ -35,6 +35,7 @@ export default function CWGameWrapper(props) {
         currentCell={props.currentCell}
         currentView={props.currentView}
         key={9999}
+        refs={props.refs}
       />
       <CWClue
         currentView={props.currentView}

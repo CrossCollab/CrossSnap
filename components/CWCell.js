@@ -4,11 +4,14 @@ import { Text, TouchableOpacity, TextInput } from "react-native";
 export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
+
+  //pulled in master...
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
       <TouchableOpacity
         key={cell.index}
+        ref={props.refs[cell.index]}
         style={{
           backgroundColor: "gray",
           height: "100%",
@@ -23,11 +26,19 @@ export default function CWCell(props) {
       <TouchableOpacity
         key={cell.index}
         onPress={() => {
-          console.log("pressed");
+          // console.log("pressed");
           props.handlePress(cell);
         }}
         style={{
-          backgroundColor: "#d1d9e6",
+          backgroundColor:
+            cell.index === props.currentCell.index
+              ? "#e0c422"
+              : cell.across === props.acrossClue &&
+                props.currentView === "across"
+              ? "#c1ebb2"
+              : cell.down === props.downClue && props.currentView === "down"
+              ? "#c1ebb2"
+              : "#d1d9e6",
           height: "100%",
           width: `${100 / props.rowCount}%`,
           borderColor: "gray",
@@ -53,9 +64,13 @@ export default function CWCell(props) {
             marginBottom: "35%",
             zIndex: 9999
           }}
+          ref={props.refs[cell.index]}
           textAlign={"center"}
           key={cell.index}
-          onChangeText={props.handleChange(cell.index)}
+          onKeyPress={() => {
+            props.refs[cell.index + 1].current.focus();
+            props.handleChange(cell.index);
+          }}
         >
           {cell.guess}
         </TextInput>

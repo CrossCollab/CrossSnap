@@ -24,7 +24,7 @@ const GameInstance = db.define("gameInstance", {
 });
 
 GameInstance.addHook("beforeValidate", (gameInstance, options) => {
-  console.log("gameInstance", gameInstance.guesses);
+  console.log("beforeVaid", gameInstance.guesses[0]);
   let acrossObj = {};
   gameInstance.across.forEach((clue, index) => {
     let clueNumber = clue.split(". ")[0];
