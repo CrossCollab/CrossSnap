@@ -23,6 +23,7 @@ export default function CWRow(props) {
             downClue={props.downClue}
             acrossClue={props.acrossClue}
             currentView={props.currentView}
+            refs={props.refs}
           />
         );
       })}

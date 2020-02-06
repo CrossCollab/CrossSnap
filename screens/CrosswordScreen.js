@@ -30,7 +30,8 @@ export default class CrosswordTable extends React.Component {
       currentCell: {},
       gameId: 0,
       currentView: "across",
-      confetti: false
+      confetti: false,
+      refs: []
     };
 
     //bind these functions so child components can call them in OG context
@@ -81,6 +82,12 @@ export default class CrosswordTable extends React.Component {
     } catch (err) {
       console.err(err);
     }
+
+    let references = Array(this.state.answers.length)
+      .fill(0)
+      .map(() => React.createRef());
+
+    this.setState({ refs: references });
   }
 
   //whenever the client changes the value of a crossword square, copy the guesses obj
@@ -89,6 +96,7 @@ export default class CrosswordTable extends React.Component {
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     allGuesses[idx].guess = letter;
     this.setState({ guesses: allGuesses }, this.changeHelper);
+    this.state.refs[idx + 1].current.focus();
   };
 
   //this function sends a message to the socket with the current state and roomId
@@ -164,6 +172,7 @@ export default class CrosswordTable extends React.Component {
           currentCell={this.state.currentCell}
           currentView={this.state.currentView}
           checkBoard={this.checkBoard}
+          refs={this.state.refs}
         />
       );
     }
