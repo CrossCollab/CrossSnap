@@ -4,6 +4,8 @@ import { Text, TouchableOpacity, TextInput } from "react-native";
 export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
+
+  //pulled in master...
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
