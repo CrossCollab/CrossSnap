@@ -57,9 +57,20 @@ router.post("/", async (req, res, next) => {
   }
 });
 router.put("/:id", async (req, res, next) => {
-  const { guesses } = req.body;
-  const gameInstance = await GameInstance.findOne({
-    where: { id: req.params.id }
-  });
-  await gameInstance.update({ guesses, status: "filled" });
+  try {
+    const { guesses } = req.body;
+    const jsonGuesses = JSON.stringify(guesses);
+    console.log("what", guesses[0]);
+    const gameInstance = await GameInstance.findOne({
+      where: { id: req.params.id }
+    });
+    const updatedInstance = await gameInstance.update({
+      guesses: jsonGuesses,
+      status: "filled"
+    });
+    console.log(updatedInstance.guesses[0]);
+    res.send(updatedInstance);
+  } catch (err) {
+    next(err);
+  }
 });
