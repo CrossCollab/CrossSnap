@@ -63,6 +63,7 @@ export default class CrosswordTable extends React.Component {
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
+        console.log("joined socket");
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
         this.emit("join", gameId);
@@ -77,7 +78,8 @@ export default class CrosswordTable extends React.Component {
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
       this.socket.on("change puzzle", msg => {
-        this.setState({ guesses: msg.guesses });
+        console.log("updating state from socket");
+        this.setState({ guesses: msg });
       });
     } catch (err) {
       console.err(err);
@@ -94,17 +96,19 @@ export default class CrosswordTable extends React.Component {
   //update the value of the appropo letter, update state
   handleChange = idx => letter => {
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-    allGuesses[idx].guess = letter;
+    allGuesses[idx].guess = letter.nativeEvent.key;
     this.setState({ guesses: allGuesses }, this.changeHelper);
     this.state.refs[idx + 1].current.focus();
   };
 
   //this function sends a message to the socket with the current state and roomId
   changeHelper() {
+    console.log("in change helper");
     let socketMsg = {
-      state: this.state,
+      guesses: this.state.guesses,
       room: this.state.gameId
     };
+    console.log("socket msg ready");
     this.socket.emit("change puzzle", socketMsg);
   }
 

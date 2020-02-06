@@ -5,7 +5,6 @@ export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
 
-  //pulled in master...
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
@@ -67,10 +66,7 @@ export default function CWCell(props) {
           ref={props.refs[cell.index]}
           textAlign={"center"}
           key={cell.index}
-          onKeyPress={() => {
-            props.refs[cell.index + 1].current.focus();
-            props.handleChange(cell.index);
-          }}
+          onKeyPress={props.handleChange(cell.index)}
         >
           {cell.guess}
         </TextInput>
