@@ -28,7 +28,7 @@ module.exports = io => {
         // const jsonGuesses = msg.state.guesses.map(guess => {
         //   return JSON.stringify(guess);
         // });
-        const jsonGuesses = JSON.stringify(msg.state.guesses);
+        const jsonGuesses = JSON.stringify(msg.guesses);
         const updatedGame = await game.update({ guesses: jsonGuesses });
         console.log("updated game: ", updatedGame.guesses[0]);
       } catch (err) {
@@ -36,7 +36,7 @@ module.exports = io => {
       }
       // await game.update({ guesses: msg.state.guesses });
       // socket.on("change puzzle", msg => {
-      socket.to(msg.room).emit("change puzzle", msg.state);
+      socket.to(msg.room).emit("change puzzle", msg.guesses);
     });
 
     socket.on("join", function(room) {

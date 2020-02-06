@@ -13,6 +13,10 @@ export default function CWGameWrapper(props) {
   for (let i = 0; i < numOfRows; i++) {
     rows.push([]);
   }
+<<<<<<< HEAD
+=======
+  // console.log("props in wrapper", props.guesses);
+>>>>>>> f7a4557f7d087169be33de29fe0bacaede7df276
   for (let i = 0; i < props.guesses.length; i++) {
     let currentRow = Math.floor(i / numOfRows);
     let currentGuess = props.guesses[i];
