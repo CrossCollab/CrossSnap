@@ -99,8 +99,8 @@ export default class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    console.log("handling press");
-    console.log("pressed cell:", cell);
+    // console.log("handling press");
+    // console.log("pressed cell:", cell);
     this.setState({ currentCell: cell });
     if (cell.index === this.state.currentCell.index) {
       if (this.state.currentView === "across") {

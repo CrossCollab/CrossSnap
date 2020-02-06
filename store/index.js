@@ -3,11 +3,13 @@ import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from "redux-logger";
 import crosswordReducer from "./crossword";
+import allCrosswordsReducer from "./allCrosswords";
 import user from "./user";
 
 const reducer = combineReducers({
   crossword: crosswordReducer,
-  user: user
+  user: user,
+  crosswords: allCrosswordsReducer
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
