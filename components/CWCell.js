@@ -23,7 +23,7 @@ export default function CWCell(props) {
       <TouchableOpacity
         key={cell.index}
         onPress={() => {
-          console.log("pressed");
+          // console.log("pressed");
           props.handlePress(cell);
         }}
         style={{

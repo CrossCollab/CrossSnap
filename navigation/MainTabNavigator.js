@@ -7,7 +7,7 @@ import UserProfileScreen from "../screens/UserProfileScreen";
 import LinksScreen from "../screens/LinksScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrosswordScreen from "../screens/CrosswordScreen";
-import SingleCrosswordScreen from "../screens/SingleCrosswordScreen";
+import allCrosswordsScreen from "../screens/allCrosswordsScreen";
 // import createRootNavigator from "react-navigation";
 
 const config = Platform.select({
@@ -102,28 +102,29 @@ CrosswordStack.navigationOptions = {
 
 CrosswordStack.path = "";
 
-const SingleCrosswordStack = createStackNavigator(
+const allCrosswordsStack = createStackNavigator(
   {
-    SingleCrosswordScreen
+    allCrosswordsScreen
   },
   config
 );
-SingleCrosswordStack.navigationOptions = {
-  tabBarLabel: "SingleCrossword",
+allCrosswordsStack.navigationOptions = {
+  tabBarLabel: "All Crosswords",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+      name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
     />
   )
 };
+// <ion-icon name="grid"></ion-icon>
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
   CrosswordStack,
-  SingleCrosswordScreen
+  allCrosswordsStack
 });
 
 tabNavigator.path = "";
