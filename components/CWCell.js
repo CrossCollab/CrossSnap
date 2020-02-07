@@ -1,5 +1,11 @@
 import React from "react";
-import { Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+  View
+} from "react-native";
 
 export default function CWCell(props) {
   let idx = props.index;
@@ -20,13 +26,6 @@ export default function CWCell(props) {
           justifyContent: "center"
         }}
         onFocus={event => {
-          // console.log("blank cell event: paused");
-          // console.log("props.columnLength", props.columnLength);
-          // console.log("props.currentView", props.currentView);
-          // console.log("props.direction", props.direction);
-          console.log("cell.index: ", cell.index);
-          console.log("column length: ", props.columnLength);
-          console.log("arr length: ", Math.pow(props.columnLength, 2));
           if (props.currentView === "across") {
             if (props.direction === "forward") {
               if (cell.index + 1 >= Math.pow(props.columnLength, 2)) {
@@ -43,12 +42,10 @@ export default function CWCell(props) {
           } else {
             //view is down
             if (props.direction === "forward") {
-              console.log("jumping column grey");
               if (
                 cell.index + props.columnLength >=
                 Math.pow(props.columnLength, 2)
               ) {
-                console.log("about to hop a gray bottom cell");
                 props.refs[
                   1 +
                     cell.index +
@@ -75,7 +72,7 @@ export default function CWCell(props) {
     //else if the cell has some stored answer value
   } else {
     return (
-      <TouchableOpacity
+      <View
         key={cell.index}
         onPress={() => {
           props.refs[cell.index].current.focus();
@@ -100,21 +97,45 @@ export default function CWCell(props) {
       >
         {/*if the cell has a clue number to display in it... */}
         {cell.number ? (
-          <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}>
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 4,
+              zIndex: 99999,
+              position: "absolute",
+              left: "0%",
+              top: "0%",
+              backgroundColor: "lightgrey",
+              borderColor: "grey",
+              borderWidth: 1
+            }}
+          >
             {cell.number}
           </Text>
         ) : (
-          <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}></Text>
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 5,
+              zIndex: 999,
+              position: "absolute",
+              left: "2%"
+            }}
+          ></Text>
         )}
         <TextInput
+          blurOnSubmit={false}
+          autoCapitalize="characters"
           maxLength={1}
           style={{
             backgroundColor: cell.correct ? "green" : "white",
-            height: "50%",
-            width: "80%",
+            height: "60%",
+            width: "60%",
             alignSelf: "center",
             marginBottom: "35%",
-            zIndex: 9999
+            zIndex: 9999,
+            top: "12%",
+            fontSize: 8
           }}
           ref={props.refs[cell.index]}
           textAlign={"center"}
@@ -126,7 +147,7 @@ export default function CWCell(props) {
         >
           {cell.guess}
         </TextInput>
-      </TouchableOpacity>
+      </View>
     );
   }
 }
