@@ -20,10 +20,13 @@ export default function CWCell(props) {
           justifyContent: "center"
         }}
         onFocus={event => {
-          console.log("blank cell event: paused");
-          console.log("props.columnLength", props.columnLength);
-          console.log("props.currentView", props.currentView);
-          console.log("props.direction", props.direction);
+          // console.log("blank cell event: paused");
+          // console.log("props.columnLength", props.columnLength);
+          // console.log("props.currentView", props.currentView);
+          // console.log("props.direction", props.direction);
+          console.log("cell.index: ", cell.index);
+          console.log("column length: ", props.columnLength);
+          console.log("arr length: ", Math.pow(props.columnLength, 2));
           if (props.currentView === "across") {
             if (props.direction === "forward") {
               if (cell.index + 1 >= Math.pow(props.columnLength, 2)) {
@@ -41,9 +44,29 @@ export default function CWCell(props) {
             //view is down
             if (props.direction === "forward") {
               console.log("jumping column grey");
-              props.refs[cell.index + props.columnLength].current.focus();
+              if (
+                cell.index + props.columnLength >=
+                Math.pow(props.columnLength, 2)
+              ) {
+                console.log("about to hop a gray bottom cell");
+                props.refs[
+                  1 +
+                    cell.index +
+                    props.columnLength -
+                    Math.pow(props.columnLength, 2)
+                ].current.focus();
+              } else {
+                props.refs[cell.index + props.columnLength].current.focus();
+              }
             } else {
-              props.refs[cell.index - props.columnLength].current.focus();
+              if (cell.index - props.columnLength < 0) {
+                props.refs[
+                  Math.pow(props.columnLength, 2) -
+                    (1 + props.columnLength - cell.index)
+                ].current.focus();
+              } else {
+                props.refs[cell.index - props.columnLength].current.focus();
+              }
             }
           }
         }}
