@@ -8,16 +8,23 @@ export default function CWCell(props) {
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
-      <TouchableOpacity
+      <TextInput
         key={cell.index}
         ref={props.refs[cell.index]}
+        maxLength={0}
         style={{
           backgroundColor: "gray",
           height: "100%",
           width: `${100 / props.rowCount}%`,
           justifyContent: "center"
         }}
-      ></TouchableOpacity>
+        onFocus={event => {
+          console.log("blank cell event: paused");
+          if (props.currentView === "across") {
+            // props.traverse(cell.index);
+          }
+        }}
+      ></TextInput>
     );
     //else if the cell has some stored answer value
   } else {

@@ -37,6 +37,7 @@ export default function CWGameWrapper(props) {
         currentView={props.currentView}
         key={9999}
         refs={props.refs}
+        traverse={props.traverse}
       />
       <CWClue
         currentView={props.currentView}

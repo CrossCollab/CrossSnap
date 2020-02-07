@@ -33,6 +33,7 @@ export default function CWTable(props) {
             currentView={props.currentView}
             refs={props.refs}
             key={index}
+            traverse={props.traverse}
           />
         );
       })}

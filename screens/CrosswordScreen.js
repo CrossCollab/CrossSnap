@@ -31,7 +31,9 @@ export default class CrosswordTable extends React.Component {
       gameId: 0,
       currentView: "across",
       confetti: false,
-      refs: []
+      refs: [],
+      columnLength: 0,
+      direction: "forward"
     };
 
     //bind these functions so child components can call them in OG context
@@ -39,6 +41,7 @@ export default class CrosswordTable extends React.Component {
     this.handlePress = this.handlePress.bind(this);
     this.changeHelper = this.changeHelper.bind(this);
     this.checkBoard = this.checkBoard.bind(this);
+    this.traverse = this.traverse.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -57,7 +60,8 @@ export default class CrosswordTable extends React.Component {
         answers: data.answers,
         guesses: data.guesses,
         isReady: true,
-        gameId
+        gameId,
+        columnLength: Math.sqrt(data.answers.length)
       });
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
@@ -90,27 +94,50 @@ export default class CrosswordTable extends React.Component {
       .map(() => React.createRef());
 
     this.setState({ refs: references });
+
+    //build the column traversal order
+    //for example w/ a 3x3 grid it would be [0, 3, 6, 1, 4, 7, 2, 5, 8]
   }
 
   //whenever the client changes the value of a crossword square, copy the guesses obj
   //update the value of the appropo letter, update state
+  //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
-    console.log("key", letter.nativeEvent.key);
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+    //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
-      if (allGuesses[idx] === "") {
-        this.state.refs[idx - 1].current.focus();
+      //if the cell was already empty (don't need to update game state)
+      if (allGuesses[idx].guess === "") {
+        this.traverse(idx, letter);
       } else {
         allGuesses[idx].guess = "";
         this.setState({ guesses: allGuesses }, this.changeHelper);
-        this.state.refs[idx - 1].current.focus();
+        this.traverse(idx, letter);
       }
     } else {
       allGuesses[idx].guess = letter.nativeEvent.key;
       this.setState({ guesses: allGuesses }, this.changeHelper);
-      this.state.refs[idx + 1].current.focus();
+      this.traverse(idx, letter);
     }
   };
+
+  traverse(idx, letter) {
+    //if the key is delete, move backwards, else move forwards
+    if (letter.nativeEvent.key === "Backspace") {
+      if (this.state.currentView === "across") {
+        this.state.refs[idx - 1].current.focus();
+      } else {
+        this.state.refs[idx - this.state.columnLength].current.focus();
+      }
+    } else {
+      //if it's any other letter, move forward
+      if (this.state.currentView === "across") {
+        this.state.refs[idx + 1].current.focus();
+      } else {
+        this.state.refs[idx + this.state.columnLength].current.focus();
+      }
+    }
+  }
 
   //this function sends a message to the socket with the current state and roomId
   changeHelper() {
@@ -188,6 +215,7 @@ export default class CrosswordTable extends React.Component {
           currentView={this.state.currentView}
           checkBoard={this.checkBoard}
           refs={this.state.refs}
+          traverse={this.traverse}
         />
       );
     }
