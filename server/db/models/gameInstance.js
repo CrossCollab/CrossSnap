@@ -23,7 +23,8 @@ const GameInstance = db.define("gameInstance", {
   }
 });
 
-GameInstance.addHook("beforeValidate", (gameInstance, options) => {
+GameInstance.addHook("beforeCreate", (gameInstance, options) => {
+  console.log("beforeVaid", gameInstance.guesses[0]);
   let acrossObj = {};
   gameInstance.across.forEach((clue, index) => {
     let clueNumber = clue.split(". ")[0];
@@ -93,6 +94,15 @@ GameInstance.addHook("beforeValidate", (gameInstance, options) => {
 
   gameInstance.guesses = guessArray;
 });
+// GameInstance.addHook('beforeUpdate', gameInstance=>{
+//   answer: answer,
+//       guess: guess,
+//       userId: 0,
+//       index,
+//       number: gameInstance.numbers[index],
+//       across: findAcross(index),
+//       down: findDown(index)
+// })
 
 module.exports = GameInstance;
 
