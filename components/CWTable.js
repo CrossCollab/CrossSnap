@@ -11,8 +11,8 @@ export default function CWTable(props) {
         flex: 1,
         alignContent: "flex-start",
         // justifyContent: "flex-start",
-        height: "80%",
-        marginTop: "10%"
+        height: "100%",
+        marginTop: "0%"
       }}
       maximumZoomScale="2.5"
       minimumZoomScale="1"
@@ -33,6 +33,9 @@ export default function CWTable(props) {
             currentView={props.currentView}
             refs={props.refs}
             key={index}
+            traverse={props.traverse}
+            direction={props.direction}
+            columnLength={props.columnLength}
           />
         );
       })}
