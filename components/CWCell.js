@@ -98,7 +98,7 @@ export default function CWCell(props) {
           <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}></Text>
         )}
         <TextInput
-          blurOnSubmit={false}
+          // blurOnSubmit={false}
           autoCapitalize="characters"
           maxLength={1}
           style={{

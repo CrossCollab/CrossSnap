@@ -43,6 +43,7 @@ export default class CrosswordTable extends React.Component {
     this.changeHelper = this.changeHelper.bind(this);
     this.checkBoard = this.checkBoard.bind(this);
     this.traverse = this.traverse.bind(this);
+    this.swapView = this.swapView.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -175,6 +176,14 @@ export default class CrosswordTable extends React.Component {
     this.socket.emit("change puzzle", socketMsg);
   }
 
+  swapView() {
+    if (this.state.currentView === "across") {
+      this.setState({ currentView: "down" });
+    } else {
+      this.setState({ currentView: "across" });
+    }
+  }
+
   handlePress(cell) {
     this.setState({ currentCell: cell });
     if (cell.index === this.state.currentCell.index) {
@@ -243,6 +252,7 @@ export default class CrosswordTable extends React.Component {
           traverse={this.traverse}
           direction={this.state.direction}
           columnLength={this.state.columnLength}
+          swapView={this.swapView}
         />
       );
     }
