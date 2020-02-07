@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Keyboard
+} from "react-native";
 
 export default function HeaderOptions(props) {
   return (
@@ -16,9 +22,9 @@ export default function HeaderOptions(props) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.touchable}
-        onPress={() => console.log("pressed")}
+        onPress={() => props.refs[0].current.focus()}
       >
-        <Text>ZoomOut</Text>
+        <Text>FocusTop</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.touchable}
