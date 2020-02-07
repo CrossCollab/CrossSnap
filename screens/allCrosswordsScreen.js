@@ -10,12 +10,10 @@ export class allCrosswordsScreen extends Component {
     this.state = {};
     this.handlePress = this.handlePress.bind(this);
   }
-  handlePress() {
-    console.log("what");
-  }
+
   renderItem({ item, index }) {
     return (
-      <TouchableOpacity onPress={this.handlePress}>
+      <TouchableOpacity>
         <View
           style={{
             borderRadius: 10,

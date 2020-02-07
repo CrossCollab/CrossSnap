@@ -9,11 +9,6 @@ class UserProfileScreen extends React.Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  // async componentDidMount() {
-  //   const userId = await AsyncStorage.getItem("userId");
-  //   console.log("userId", userId);
-  // }
-
   static navigationOptions = {
     header: null
   };

@@ -24,7 +24,7 @@ const GameInstance = db.define("gameInstance", {
 });
 
 // GameInstance.addHook("beforeCreate", (gameInstance, options) => {
-//   console.log("beforeVaid", gameInstance.guesses[0]);
+
 //   let acrossObj = {};
 //   gameInstance.across.forEach((clue, index) => {
 //     let clueNumber = clue.split(". ")[0];

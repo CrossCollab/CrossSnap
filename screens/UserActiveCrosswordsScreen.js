@@ -88,7 +88,6 @@ export class UserActiveCrosswordsScreen extends React.Component {
   }
 
   render() {
-    console.log("PROPS HERE", this.props);
     return (
       <View>
         <TouchableOpacity>

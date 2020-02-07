@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity } from "react-native";
 
 export default function HeaderOptions(props) {
   return (
-    <View style={{ height: "10%" }}>
+    <View style={{ height: "8%" }}>
       <TouchableOpacity onPress={props.checkBoard}>
         <Text>Check Game</Text>
       </TouchableOpacity>
+      {/* <Text>There are {props.currentUsers.length} playing!</Text> */}
     </View>
   );
 }

@@ -12,6 +12,7 @@ import {
   View,
   TextInput
 } from "react-native";
+import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
 import CWTable from "../components/CWTable";
@@ -33,7 +34,10 @@ class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
-      userId: 0
+      userId: 0,
+      columnLength: 0,
+      direction: "forward",
+      currentPlayers: []
     };
 
     //bind these functions so child components can call them in OG context
@@ -41,6 +45,7 @@ class CrosswordTable extends React.Component {
     this.handlePress = this.handlePress.bind(this);
     this.changeHelper = this.changeHelper.bind(this);
     this.checkBoard = this.checkBoard.bind(this);
+    this.traverse = this.traverse.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -60,14 +65,14 @@ class CrosswordTable extends React.Component {
         guesses: data.guesses,
         isReady: true,
         gameId,
-        userId: this.props.user.id
+        userId: this.props.user.id,
+        columnLength: Math.sqrt(data.answers.length)
       });
       const userId = this.state.userId;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
-        console.log("joined socket");
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
         this.emit("join", { gameId, userId });
@@ -81,8 +86,15 @@ class CrosswordTable extends React.Component {
 
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
+      this.socket.on("new player", info => {
+        const { firstName, users } = info;
+        console.log("users", users);
+        Toast.show({
+          text: `${firstName} has entered the game!`
+        });
+        this.setState({ currentPlayers: users });
+      });
       this.socket.on("change puzzle", msg => {
-        console.log("updating state from socket");
         this.setState({ guesses: msg });
       });
     } catch (err) {
@@ -94,25 +106,82 @@ class CrosswordTable extends React.Component {
       .map(() => React.createRef());
 
     this.setState({ refs: references });
+
+    //build the column traversal order
+    //for example w/ a 3x3 grid it would be [0, 3, 6, 1, 4, 7, 2, 5, 8]
   }
 
   //whenever the client changes the value of a crossword square, copy the guesses obj
   //update the value of the appropo letter, update state
+  //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-    allGuesses[idx].guess = letter.nativeEvent.key;
-    this.setState({ guesses: allGuesses }, this.changeHelper);
-    this.state.refs[idx + 1].current.focus();
+    //if backspace is pressed
+    if (letter.nativeEvent.key === "Backspace") {
+      this.setState({ direction: "backwards" });
+      //if the cell was already empty (don't need to update game state)
+      if (allGuesses[idx].guess === "") {
+        this.traverse(idx, letter);
+      } else {
+        allGuesses[idx].guess = "";
+        this.setState({ guesses: allGuesses }, this.changeHelper);
+        this.traverse(idx, letter);
+      }
+    } else {
+      this.setState({ direction: "forward" });
+      allGuesses[idx].guess = letter.nativeEvent.key;
+      this.setState({ guesses: allGuesses }, this.changeHelper);
+      this.traverse(idx, letter);
+    }
   };
+
+  traverse(idx, letter) {
+    //if the key is delete, move backwards, else move forwards
+    if (letter.nativeEvent.key === "Backspace") {
+      if (this.state.currentView === "across") {
+        //in case we go off board (top left)
+        if (idx - 1 === -1) {
+          this.state.refs[this.state.answers.length - 1].current.focus();
+        } else {
+          this.state.refs[idx - 1].current.focus();
+        }
+      } else {
+        if (idx - this.state.columnLength < 0) {
+          //in case we go off top
+          this.state.refs[
+            this.state.answers.length - (1 + this.state.columnLength - idx)
+          ].current.focus();
+        } else {
+          this.state.refs[idx - this.state.columnLength].current.focus();
+        }
+      }
+    } else {
+      //if it's any other letter, move forward
+      if (this.state.currentView === "across") {
+        if (idx + 1 >= this.state.answers.length) {
+          //in case we go off board (bottom right)
+          this.state.refs[0].current.focus();
+        } else {
+          this.state.refs[idx + 1].current.focus();
+        }
+      } else {
+        if (idx + this.state.columnLength >= this.state.answers.length) {
+          this.state.refs[
+            1 + idx + this.state.columnLength - this.state.answers.length
+          ].current.focus();
+        } else {
+          this.state.refs[idx + this.state.columnLength].current.focus();
+        }
+      }
+    }
+  }
 
   //this function sends a message to the socket with the current state and roomId
   changeHelper() {
-    console.log("in change helper");
     let socketMsg = {
       guesses: this.state.guesses,
       room: this.state.gameId
     };
-    console.log("socket msg ready");
     this.socket.emit("change puzzle", socketMsg);
   }
 
@@ -151,8 +220,6 @@ class CrosswordTable extends React.Component {
       guesses: this.state.guesses
     });
   }
-  //need to remove the socket listeners, turn them 'off' in here
-  componentWillUnmount() {}
 
   render() {
     if (this.state && !this.state.isReady) {
@@ -171,6 +238,7 @@ class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
+          currentUsers={this.state.currentUsers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}
@@ -181,6 +249,9 @@ class CrosswordTable extends React.Component {
           currentView={this.state.currentView}
           checkBoard={this.checkBoard}
           refs={this.state.refs}
+          traverse={this.traverse}
+          direction={this.state.direction}
+          columnLength={this.state.columnLength}
         />
       );
     }
@@ -190,4 +261,3 @@ const mapState = state => {
   return { user: state.user };
 };
 export default connect(mapState)(CrosswordTable);
-const styles = StyleSheet.create({});

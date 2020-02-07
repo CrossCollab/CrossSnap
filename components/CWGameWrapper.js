@@ -13,7 +13,6 @@ export default function CWGameWrapper(props) {
   for (let i = 0; i < numOfRows; i++) {
     rows.push([]);
   }
-  // console.log("props in wrapper", props.guesses);
   for (let i = 0; i < props.guesses.length; i++) {
     let currentRow = Math.floor(i / numOfRows);
     let currentGuess = props.guesses[i];
@@ -25,7 +24,10 @@ export default function CWGameWrapper(props) {
   //still need info on selected cell and on the neighbor cells
   return (
     <View style={{ height: "100%", width: "100%" }}>
-      <HeaderOptions checkBoard={props.checkBoard} />
+      <HeaderOptions
+        checkBoard={props.checkBoard}
+        currentUsers={props.currentUsers}
+      />
       <CWTable
         rows={rows}
         numOfRows={numOfRows}
@@ -37,6 +39,9 @@ export default function CWGameWrapper(props) {
         currentView={props.currentView}
         key={9999}
         refs={props.refs}
+        traverse={props.traverse}
+        direction={props.direction}
+        columnLength={props.columnLength}
       />
       <CWClue
         currentView={props.currentView}

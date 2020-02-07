@@ -25,6 +25,9 @@ export default function CWRow(props) {
             currentView={props.currentView}
             refs={props.refs}
             key={index + 999}
+            traverse={props.traverse}
+            direction={props.direction}
+            columnLength={props.columnLength}
           />
         );
       })}
