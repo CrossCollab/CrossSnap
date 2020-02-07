@@ -127,16 +127,39 @@ export default class CrosswordTable extends React.Component {
     //if the key is delete, move backwards, else move forwards
     if (letter.nativeEvent.key === "Backspace") {
       if (this.state.currentView === "across") {
-        this.state.refs[idx - 1].current.focus();
+        //in case we go off board (top left)
+        if (idx - 1 === -1) {
+          this.state.refs[this.state.answers.length - 1].current.focus();
+        } else {
+          this.state.refs[idx - 1].current.focus();
+        }
       } else {
-        this.state.refs[idx - this.state.columnLength].current.focus();
+        if (idx - this.state.columnLength < 0) {
+          //in case we go off top
+          this.state.refs[
+            this.state.answers.length - (1 + this.state.columnLength - idx)
+          ].current.focus();
+        } else {
+          this.state.refs[idx - this.state.columnLength].current.focus();
+        }
       }
     } else {
       //if it's any other letter, move forward
       if (this.state.currentView === "across") {
-        this.state.refs[idx + 1].current.focus();
+        if (idx + 1 >= this.state.answers.length) {
+          //in case we go off board (bottom right)
+          this.state.refs[0].current.focus();
+        } else {
+          this.state.refs[idx + 1].current.focus();
+        }
       } else {
-        this.state.refs[idx + this.state.columnLength].current.focus();
+        if (idx + this.state.columnLength >= this.state.answers.length) {
+          this.state.refs[
+            1 + idx + this.state.columnLength - this.state.answers.length
+          ].current.focus();
+        } else {
+          this.state.refs[idx + this.state.columnLength].current.focus();
+        }
       }
     }
   }
