@@ -26,12 +26,13 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:gameId", async (req, res, next) => {
   try {
+    console.log("params", req.params.gameId);
     const game = await GameInstance.findOne({
       where: {
         id: req.params.gameId
       }
     });
-    // console.log("game: ", game);
+    console.log("game: ", game);
     let guessesAnswers = {
       answers: game.answers,
       guesses: game.guesses,
