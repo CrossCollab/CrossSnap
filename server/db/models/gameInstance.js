@@ -23,77 +23,77 @@ const GameInstance = db.define("gameInstance", {
   }
 });
 
-GameInstance.addHook("beforeCreate", (gameInstance, options) => {
-  console.log("beforeVaid", gameInstance.guesses[0]);
-  let acrossObj = {};
-  gameInstance.across.forEach((clue, index) => {
-    let clueNumber = clue.split(". ")[0];
-    let cluePhrase = clue.split(". ")[1];
-    acrossObj[clueNumber] = cluePhrase;
-  });
-  let downObj = {};
-  gameInstance.down.forEach((clue, index) => {
-    let clueNumber = clue.split(". ")[0];
-    let cluePhrase = clue.split(". ")[1];
-    downObj[clueNumber] = cluePhrase;
-  });
+// GameInstance.addHook("beforeCreate", (gameInstance, options) => {
+//   console.log("beforeVaid", gameInstance.guesses[0]);
+//   let acrossObj = {};
+//   gameInstance.across.forEach((clue, index) => {
+//     let clueNumber = clue.split(". ")[0];
+//     let cluePhrase = clue.split(". ")[1];
+//     acrossObj[clueNumber] = cluePhrase;
+//   });
+//   let downObj = {};
+//   gameInstance.down.forEach((clue, index) => {
+//     let clueNumber = clue.split(". ")[0];
+//     let cluePhrase = clue.split(". ")[1];
+//     downObj[clueNumber] = cluePhrase;
+//   });
 
-  let guessArray = gameInstance.answers.map((answer, index) => {
-    if (answer === ".") {
-      return (guessObj = {
-        answer: answer,
-        guess: ".",
-        userId: 0,
-        index
-      });
-    }
+//   let guessArray = gameInstance.answers.map((answer, index) => {
+//     if (answer === ".") {
+//       return (guessObj = {
+//         answer: answer,
+//         guess: ".",
+//         userId: 0,
+//         index
+//       });
+//     }
 
-    const findAcross = index => {
-      const clueNumber = gameInstance.numbers[index];
-      if (gameInstance.answers[index] === ".") {
-        return undefined;
-      } else if (clueNumber) {
-        if (!acrossObj[`${clueNumber}`]) {
-          const lowerNumber = index - 1;
-          return findAcross(lowerNumber);
-        } else {
-          return acrossObj[`${clueNumber}`];
-        }
-      } else {
-        const lowerNumber = index - 1;
-        return findAcross(lowerNumber);
-      }
-    };
-    const tableLength = Math.sqrt(gameInstance.numbers.length);
-    const findDown = index => {
-      const clueNumber = gameInstance.numbers[index];
-      if (gameInstance.answers[index] === ".") {
-        return undefined;
-      } else if (clueNumber) {
-        if (!downObj[`${clueNumber}`]) {
-          const lowerNumber = index - tableLength;
-          return findDown(lowerNumber);
-        } else {
-          return downObj[`${clueNumber}`];
-        }
-      } else {
-        const lowerNumber = index - tableLength;
-        return findDown(lowerNumber);
-      }
-    };
-    return (guessObj = {
-      answer: answer,
-      guess: "",
-      userId: 0,
-      index,
-      number: gameInstance.numbers[index],
-      across: findAcross(index),
-      down: findDown(index)
-    });
-  });
+//     const findAcross = index => {
+//       const clueNumber = gameInstance.numbers[index];
+//       if (gameInstance.answers[index] === ".") {
+//         return undefined;
+//       } else if (clueNumber) {
+//         if (!acrossObj[`${clueNumber}`]) {
+//           const lowerNumber = index - 1;
+//           return findAcross(lowerNumber);
+//         } else {
+//           return acrossObj[`${clueNumber}`];
+//         }
+//       } else {
+//         const lowerNumber = index - 1;
+//         return findAcross(lowerNumber);
+//       }
+//     };
+//     const tableLength = Math.sqrt(gameInstance.numbers.length);
+//     const findDown = index => {
+//       const clueNumber = gameInstance.numbers[index];
+//       if (gameInstance.answers[index] === ".") {
+//         return undefined;
+//       } else if (clueNumber) {
+//         if (!downObj[`${clueNumber}`]) {
+//           const lowerNumber = index - tableLength;
+//           return findDown(lowerNumber);
+//         } else {
+//           return downObj[`${clueNumber}`];
+//         }
+//       } else {
+//         const lowerNumber = index - tableLength;
+//         return findDown(lowerNumber);
+//       }
+//     };
+//     return (guessObj = {
+//       answer: answer,
+//       guess: "",
+//       userId: 0,
+//       index,
+//       number: gameInstance.numbers[index],
+//       across: findAcross(index),
+//       down: findDown(index)
+//     });
+//   });
 
-  gameInstance.guesses = guessArray;
-});
+//   gameInstance.guesses = guessArray;
+// });
 // GameInstance.addHook('beforeUpdate', gameInstance=>{
 //   answer: answer,
 //       guess: guess,
