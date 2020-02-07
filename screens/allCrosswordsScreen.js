@@ -8,11 +8,14 @@ export class allCrosswordsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handlePress = this.handlePress.bind(this);
   }
-
+  handlePress() {
+    console.log("what");
+  }
   renderItem({ item, index }) {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={this.handlePress}>
         <View
           style={{
             borderRadius: 10,
@@ -62,7 +65,7 @@ export class allCrosswordsScreen extends Component {
   render() {
     return (
       <View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={this.handlePress}>
           <Text>**Hi, Click here to test TouchableOpacity**</Text>
           <Text>
             ***Don't forget a filter box here to allow users to view crosswords

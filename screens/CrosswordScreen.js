@@ -62,7 +62,7 @@ class CrosswordTable extends React.Component {
         gameId,
         userId: this.props.user.id
       });
-      console.log("user: ", this.state.userId);
+      const userId = this.state.userId;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
@@ -70,7 +70,7 @@ class CrosswordTable extends React.Component {
         console.log("joined socket");
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", gameId);
+        this.emit("join", { gameId, userId });
       }
 
       //once the socket receives the connect message from the server-side, ask to join the
@@ -86,7 +86,7 @@ class CrosswordTable extends React.Component {
         this.setState({ guesses: msg });
       });
     } catch (err) {
-      // console.err(err);
+      console.err(err);
     }
 
     let references = Array(this.state.answers.length)
