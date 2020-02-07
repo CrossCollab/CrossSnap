@@ -26,8 +26,15 @@ export default function CWCell(props) {
           console.log("props.direction", props.direction);
           if (props.currentView === "across") {
             if (props.direction === "forward") {
-              props.refs[cell.index + 1].current.focus();
+              if (cell.index + 1 >= Math.pow(props.columnLength, 2)) {
+                props.refs[0].current.focus();
+              } else {
+                props.refs[cell.index + 1].current.focus();
+              }
             } else {
+              if (cell.index - 1 < 0) {
+                props.refs[Math.pow(props.columnLength, 2)].current.focus();
+              }
               props.refs[cell.index + -1].current.focus();
             }
           } else {
