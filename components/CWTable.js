@@ -34,6 +34,8 @@ export default function CWTable(props) {
             refs={props.refs}
             key={index}
             traverse={props.traverse}
+            direction={props.direction}
+            columnLength={props.columnLength}
           />
         );
       })}

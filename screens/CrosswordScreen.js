@@ -106,6 +106,7 @@ export default class CrosswordTable extends React.Component {
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
+      this.setState({ direction: "backwards" });
       //if the cell was already empty (don't need to update game state)
       if (allGuesses[idx].guess === "") {
         this.traverse(idx, letter);
@@ -115,6 +116,7 @@ export default class CrosswordTable extends React.Component {
         this.traverse(idx, letter);
       }
     } else {
+      this.setState({ direction: "forward" });
       allGuesses[idx].guess = letter.nativeEvent.key;
       this.setState({ guesses: allGuesses }, this.changeHelper);
       this.traverse(idx, letter);
@@ -216,6 +218,8 @@ export default class CrosswordTable extends React.Component {
           checkBoard={this.checkBoard}
           refs={this.state.refs}
           traverse={this.traverse}
+          direction={this.state.direction}
+          columnLength={this.state.columnLength}
         />
       );
     }

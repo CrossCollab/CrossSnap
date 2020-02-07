@@ -9,6 +9,7 @@ export default function CWCell(props) {
   if (cell.answer === ".") {
     return (
       <TextInput
+        caretHidden={true}
         key={cell.index}
         ref={props.refs[cell.index]}
         maxLength={0}
@@ -20,8 +21,23 @@ export default function CWCell(props) {
         }}
         onFocus={event => {
           console.log("blank cell event: paused");
+          console.log("props.columnLength", props.columnLength);
+          console.log("props.currentView", props.currentView);
+          console.log("props.direction", props.direction);
           if (props.currentView === "across") {
-            // props.traverse(cell.index);
+            if (props.direction === "forward") {
+              props.refs[cell.index + 1].current.focus();
+            } else {
+              props.refs[cell.index + -1].current.focus();
+            }
+          } else {
+            //view is down
+            if (props.direction === "forward") {
+              console.log("jumping column grey");
+              props.refs[cell.index + props.columnLength].current.focus();
+            } else {
+              props.refs[cell.index - props.columnLength].current.focus();
+            }
           }
         }}
       ></TextInput>
