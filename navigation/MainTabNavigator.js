@@ -8,14 +8,16 @@ import LinksScreen from "../screens/LinksScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrosswordScreen from "../screens/CrosswordScreen";
 import allCrosswordsScreen from "../screens/allCrosswordsScreen";
-// import createRootNavigator from "react-navigation";
+import UserActiveCrosswordsScreen from "../screens/UserActiveCrosswordsScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
   default: {}
 });
 
-// Need to add if(userLoggedIn &&) and render user profile page if yes
+////////////////////////////
+////////home screen/////////
+////////////////////////////
 const HomeStack = createStackNavigator(
   {
     Home: {
@@ -23,6 +25,9 @@ const HomeStack = createStackNavigator(
       navigationOptions: {
         header: null
       }
+    },
+    UserActiveCrosswords: {
+      screen: UserActiveCrosswordsScreen
     }
   },
   config
@@ -44,6 +49,9 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = "";
 
+/////////////////////////////
+////////links screen/////////
+/////////////////////////////
 const LinksStack = createStackNavigator(
   {
     Links: LinksScreen
@@ -60,9 +68,11 @@ LinksStack.navigationOptions = {
     />
   )
 };
-
 LinksStack.path = "";
 
+////////////////////////////
+//////settings screen///////
+////////////////////////////
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen
@@ -82,6 +92,9 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = "";
 
+/////////////////////////////
+///single crossword screen///
+/////////////////////////////
 const CrosswordStack = createStackNavigator(
   {
     Crossword: CrosswordScreen
@@ -90,7 +103,6 @@ const CrosswordStack = createStackNavigator(
 );
 
 CrosswordStack.navigationOptions = {
-  //changed name to crossword for parallelism with others (if Mike/Murad have used this for navigation we can revert)
   tabBarLabel: "Crossword",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -102,6 +114,9 @@ CrosswordStack.navigationOptions = {
 
 CrosswordStack.path = "";
 
+////////////////////////////
+///all crosswords screen////
+////////////////////////////
 const allCrosswordsStack = createStackNavigator(
   {
     allCrosswordsScreen
@@ -117,14 +132,39 @@ allCrosswordsStack.navigationOptions = {
     />
   )
 };
-// <ion-icon name="grid"></ion-icon>
 
+allCrosswordsStack.path = "";
+
+//////////////////////////////////////////
+//user-specific active crosswords screen//
+//////////////////////////////////////////
+// const UserActiveCrosswordsStack = createStackNavigator(
+//   {
+//     UserActiveCrosswordsScreen
+//   },
+//   config
+// );
+// UserActiveCrosswordsStack.navigationOptions = {
+//   tabBarLabel: "Active Crosswords",
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
+//     />
+//   )
+// };
+// UserActiveCrosswordsStack.path = "";
+
+////////////////////////////
+//////bottom navigator//////
+////////////////////////////
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
   CrosswordStack,
   allCrosswordsStack
+  // UserActiveCrosswordsStack
 });
 
 tabNavigator.path = "";

@@ -26,12 +26,13 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:gameId", async (req, res, next) => {
   try {
+    console.log("params", req.params.gameId);
     const game = await GameInstance.findOne({
       where: {
         id: req.params.gameId
       }
     });
-    // console.log("game: ", game);
+    console.log("game: ", game);
     let guessesAnswers = {
       answers: game.answers,
       guesses: game.guesses,
@@ -44,18 +45,20 @@ router.get("/:gameId", async (req, res, next) => {
     next(err);
   }
 });
+
 router.post("/", async (req, res, next) => {
   try {
     //create new game instance using the selected cw id sent along req.body
     const gameInstance = await GameInstance.create(req.body);
     //add a user to that game instance (later this will be sent along req.body as well)
-    const user = await User.findByPk(3);
+    const user = await User.findByPk(4);
     await gameInstance.addUser(user);
     res.json(gameInstance);
   } catch (err) {
     next(err);
   }
 });
+
 router.put("/:id", async (req, res, next) => {
   try {
     const { guesses } = req.body;
