@@ -12,7 +12,7 @@ export default function CWRow(props) {
       }}
       key={props.index + 500}
     >
-      {props.row.map(cell => {
+      {props.row.map((cell, index) => {
         return (
           <CWCell
             cell={cell}
@@ -23,6 +23,8 @@ export default function CWRow(props) {
             downClue={props.downClue}
             acrossClue={props.acrossClue}
             currentView={props.currentView}
+            refs={props.refs}
+            key={index + 999}
           />
         );
       })}

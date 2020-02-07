@@ -23,14 +23,12 @@ export default function CWClue(props) {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        // console.log("keyboard visible");
         setKeyboardVisible(true);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
-        // console.log("keyboard hidden");
         setKeyboardVisible(false);
       }
     );
