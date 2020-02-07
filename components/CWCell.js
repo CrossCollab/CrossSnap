@@ -25,8 +25,8 @@ export default function CWCell(props) {
       <TouchableOpacity
         key={cell.index}
         onPress={() => {
-          // console.log("pressed");
-          props.handlePress(cell);
+          props.refs[cell.index].current.focus();
+          //focus on the text input when the touchable opacity is pressed
         }}
         style={{
           backgroundColor:
@@ -58,7 +58,7 @@ export default function CWCell(props) {
           style={{
             backgroundColor: cell.correct ? "green" : "white",
             height: "50%",
-            width: "50%",
+            width: "80%",
             alignSelf: "center",
             marginBottom: "35%",
             zIndex: 9999
@@ -67,6 +67,9 @@ export default function CWCell(props) {
           textAlign={"center"}
           key={cell.index}
           onKeyPress={props.handleChange(cell.index)}
+          onFocus={() => {
+            props.handlePress(cell);
+          }}
         >
           {cell.guess}
         </TextInput>

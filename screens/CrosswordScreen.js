@@ -95,10 +95,21 @@ export default class CrosswordTable extends React.Component {
   //whenever the client changes the value of a crossword square, copy the guesses obj
   //update the value of the appropo letter, update state
   handleChange = idx => letter => {
+    console.log("key", letter.nativeEvent.key);
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-    allGuesses[idx].guess = letter.nativeEvent.key;
-    this.setState({ guesses: allGuesses }, this.changeHelper);
-    this.state.refs[idx + 1].current.focus();
+    if (letter.nativeEvent.key === "Backspace") {
+      if (allGuesses[idx] === "") {
+        this.state.refs[idx - 1].current.focus();
+      } else {
+        allGuesses[idx].guess = "";
+        this.setState({ guesses: allGuesses }, this.changeHelper);
+        this.state.refs[idx - 1].current.focus();
+      }
+    } else {
+      allGuesses[idx].guess = letter.nativeEvent.key;
+      this.setState({ guesses: allGuesses }, this.changeHelper);
+      this.state.refs[idx + 1].current.focus();
+    }
   };
 
   //this function sends a message to the socket with the current state and roomId

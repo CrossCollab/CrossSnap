@@ -37,6 +37,74 @@ export default class LinksScreen extends React.Component {
     const { data } = await axios.get(
       `${SERVER_URL}/api/crossword/${this.state.crosswordId}`
     );
+
+    let acrossObj = {};
+    data.crosswordObjectString.across.forEach((clue, index) => {
+      let clueNumber = clue.split(". ")[0];
+      let cluePhrase = clue.split(". ")[1];
+      acrossObj[clueNumber] = cluePhrase;
+    });
+    let downObj = {};
+    data.crosswordObjectString.down.forEach((clue, index) => {
+      let clueNumber = clue.split(". ")[0];
+      let cluePhrase = clue.split(". ")[1];
+      downObj[clueNumber] = cluePhrase;
+    });
+
+    let guessArray = data.crosswordObjectString.answers.map((answer, index) => {
+      if (answer === ".") {
+        return (guessObj = {
+          answer: answer,
+          guess: ".",
+          userId: 0,
+          index
+        });
+      }
+
+      const findAcross = index => {
+        const clueNumber = data.crosswordObjectString.numbers[index];
+        if (data.crosswordObjectString.answers[index] === ".") {
+          return undefined;
+        } else if (clueNumber) {
+          if (!acrossObj[`${clueNumber}`]) {
+            const lowerNumber = index - 1;
+            return findAcross(lowerNumber);
+          } else {
+            return acrossObj[`${clueNumber}`];
+          }
+        } else {
+          const lowerNumber = index - 1;
+          return findAcross(lowerNumber);
+        }
+      };
+      const tableLength = Math.sqrt(data.crosswordObjectString.numbers.length);
+      const findDown = index => {
+        const clueNumber = data.crosswordObjectString.numbers[index];
+        if (data.crosswordObjectString.answers[index] === ".") {
+          return undefined;
+        } else if (clueNumber) {
+          if (!downObj[`${clueNumber}`]) {
+            const lowerNumber = index - tableLength;
+            return findDown(lowerNumber);
+          } else {
+            return downObj[`${clueNumber}`];
+          }
+        } else {
+          const lowerNumber = index - tableLength;
+          return findDown(lowerNumber);
+        }
+      };
+      return (guessObj = {
+        answer: answer,
+        guess: "",
+        userId: 0,
+        index,
+        number: data.crosswordObjectString.numbers[index],
+        across: findAcross(index),
+        down: findDown(index)
+      });
+    });
+
     //make a new game instance object that will be used to create one in the db
     let newGameInstance = {
       crosswordId: this.state.crosswordId,
@@ -44,7 +112,8 @@ export default class LinksScreen extends React.Component {
       answers: data.crosswordObjectString.grid,
       numbers: data.crosswordObjectString.gridnums,
       across: data.crosswordObjectString.clues.across,
-      down: data.crosswordObjectString.clues.down
+      down: data.crosswordObjectString.clues.down,
+      guesses: guessArray
     };
 
     //create new gameInstance in DB
