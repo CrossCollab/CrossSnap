@@ -82,7 +82,7 @@ export default class CrosswordTable extends React.Component {
         this.setState({ guesses: msg });
       });
     } catch (err) {
-      console.err(err);
+      // console.err(err);
     }
 
     let references = Array(this.state.answers.length)

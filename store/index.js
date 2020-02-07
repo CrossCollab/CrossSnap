@@ -5,15 +5,15 @@ import { createLogger } from "redux-logger";
 import crosswordReducer from "./crossword";
 import allCrosswordsReducer from "./allCrosswords";
 import user from "./user";
+import userActiveCrosswordsReducer from "./userActiveCrosswords";
 
 const reducer = combineReducers({
   crossword: crosswordReducer,
   user: user,
-  crosswords: allCrosswordsReducer
+  crosswords: allCrosswordsReducer,
+  userActiveCrosswords: userActiveCrosswordsReducer
 });
-const middleware = composeWithDevTools(
-  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
-);
+const middleware = composeWithDevTools(applyMiddleware(thunkMiddleware));
 const store = createStore(reducer, middleware);
 
 export default store;

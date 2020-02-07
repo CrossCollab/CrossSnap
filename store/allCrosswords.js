@@ -19,7 +19,7 @@ export const fetchCrosswords = () => {
       const response = await axios.get(`${SERVER_URL}/api/crossword`);
       dispatch(getAllCrosswords(response.data));
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 };
