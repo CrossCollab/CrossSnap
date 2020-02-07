@@ -28,7 +28,7 @@ module.exports = io => {
       } catch (err) {
         console.log(err);
       }
-      socket.to(msg.room).emit("change puzzle", msg.guesses);
+      socket.broadcast.to(msg.room).emit("change puzzle", msg.guesses);
     });
 
     socket.on("join", function(room) {

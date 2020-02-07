@@ -1,6 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import SERVER_URL from "../serverUrl";
+import { connect } from "react-redux";
 import {
   Image,
   Platform,
@@ -20,7 +21,7 @@ import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 import Confetti from "../components/Confetti";
 
-export default class CrosswordTable extends React.Component {
+class CrosswordTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +32,8 @@ export default class CrosswordTable extends React.Component {
       gameId: 0,
       currentView: "across",
       confetti: false,
-      refs: []
+      refs: [],
+      userId: 0
     };
 
     //bind these functions so child components can call them in OG context
@@ -57,8 +59,10 @@ export default class CrosswordTable extends React.Component {
         answers: data.answers,
         guesses: data.guesses,
         isReady: true,
-        gameId
+        gameId,
+        userId: this.props.user.id
       });
+      console.log("user: ", this.state.userId);
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
@@ -182,4 +186,8 @@ export default class CrosswordTable extends React.Component {
     }
   }
 }
+const mapState = state => {
+  return { user: state.user };
+};
+export default connect(mapState)(CrosswordTable);
 const styles = StyleSheet.create({});
