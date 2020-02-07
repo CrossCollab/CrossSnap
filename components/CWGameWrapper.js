@@ -28,7 +28,6 @@ export default function CWGameWrapper(props) {
       <HeaderOptions
         swapView={props.swapView}
         checkBoard={props.checkBoard}
-        style={{ height: "8%" }}
         refs={props.refs}
       />
       <CWTable
