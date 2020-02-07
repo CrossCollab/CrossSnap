@@ -112,7 +112,6 @@ export default class LinksScreen extends React.Component {
       down: data.crosswordObjectString.clues.down,
       guesses: guessArray
     };
-    console.log("guessArray: ", guessArray[0]);
     //create new gameInstance in DB
     await axios.post(`${SERVER_URL}/api/gameInstance/`, newGameInstance);
     //route to crossword Screen with component passed in

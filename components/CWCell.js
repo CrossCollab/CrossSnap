@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, TextInput } from "react-native";
+import { Text, TouchableOpacity, TextInput, Keyboard } from "react-native";
 
 export default function CWCell(props) {
   let idx = props.index;
@@ -20,13 +20,6 @@ export default function CWCell(props) {
           justifyContent: "center"
         }}
         onFocus={event => {
-          // console.log("blank cell event: paused");
-          // console.log("props.columnLength", props.columnLength);
-          // console.log("props.currentView", props.currentView);
-          // console.log("props.direction", props.direction);
-          console.log("cell.index: ", cell.index);
-          console.log("column length: ", props.columnLength);
-          console.log("arr length: ", Math.pow(props.columnLength, 2));
           if (props.currentView === "across") {
             if (props.direction === "forward") {
               if (cell.index + 1 >= Math.pow(props.columnLength, 2)) {
@@ -43,12 +36,10 @@ export default function CWCell(props) {
           } else {
             //view is down
             if (props.direction === "forward") {
-              console.log("jumping column grey");
               if (
                 cell.index + props.columnLength >=
                 Math.pow(props.columnLength, 2)
               ) {
-                console.log("about to hop a gray bottom cell");
                 props.refs[
                   1 +
                     cell.index +
@@ -107,6 +98,8 @@ export default function CWCell(props) {
           <Text style={{ flex: 1, fontSize: 6, zIndex: 999 }}></Text>
         )}
         <TextInput
+          blurOnSubmit={false}
+          autoCapitalize="characters"
           maxLength={1}
           style={{
             backgroundColor: cell.correct ? "green" : "white",

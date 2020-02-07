@@ -9,7 +9,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput
+  TextInput,
+  Keyboard
 } from "react-native";
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
@@ -82,7 +83,7 @@ export default class CrosswordTable extends React.Component {
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
       this.socket.on("change puzzle", msg => {
-        console.log("updating state from socket");
+        // console.log("updating state from socket");
         this.setState({ guesses: msg });
       });
     } catch (err) {
@@ -103,23 +104,24 @@ export default class CrosswordTable extends React.Component {
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
+    this.traverse(idx, letter);
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
       this.setState({ direction: "backwards" });
       //if the cell was already empty (don't need to update game state)
       if (allGuesses[idx].guess === "") {
-        this.traverse(idx, letter);
+        // this.traverse(idx, letter);
       } else {
         allGuesses[idx].guess = "";
         this.setState({ guesses: allGuesses }, this.changeHelper);
-        this.traverse(idx, letter);
+        // this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
       allGuesses[idx].guess = letter.nativeEvent.key;
       this.setState({ guesses: allGuesses }, this.changeHelper);
-      this.traverse(idx, letter);
+      // this.traverse(idx, letter);
     }
   };
 
@@ -166,12 +168,10 @@ export default class CrosswordTable extends React.Component {
 
   //this function sends a message to the socket with the current state and roomId
   changeHelper() {
-    console.log("in change helper");
     let socketMsg = {
       guesses: this.state.guesses,
       room: this.state.gameId
     };
-    console.log("socket msg ready");
     this.socket.emit("change puzzle", socketMsg);
   }
 
