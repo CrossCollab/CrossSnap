@@ -8,22 +8,36 @@ class UserProfileScreen extends React.Component {
     super();
     this.handleLogout = this.handleLogout.bind(this);
   }
+
+  // async componentDidMount() {
+  //   const userId = await AsyncStorage.getItem("userId");
+  //   console.log("userId", userId);
+  // }
+
   static navigationOptions = {
     header: null
   };
+
   async handleLogout() {
     // await AsyncStorage.setItem("isLoggedIn", );
     await AsyncStorage.clear();
     this.props.navigation.navigate("Login");
   }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcomeContainer}>
-          Welcome, {this.props.user.firstName}
+          Welcome testing testing, {this.props.user.firstName}
         </Text>
         <TouchableOpacity style={styles.userButton} onPress={this.handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.userButton}
+          onPress={() => this.props.navigation.navigate("UserActiveCrosswords")}
+        >
+          <Text style={styles.buttonText}>My active crosswords button</Text>
         </TouchableOpacity>
       </View>
     );
@@ -73,6 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
 const mapState = state => {
   return { user: state.user };
 };

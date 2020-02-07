@@ -1,14 +1,50 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { connect } from "react-redux";
-import { fetchCrosswords } from "../store/allCrosswords";
+import { StyleSheet, Text, View, AsyncStorage, FlatList } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { connect } from "react-redux";
+import { fetchUserActiveCrosswords } from "../store/userActiveCrosswords";
 
-export class allCrosswordsScreen extends Component {
+export class UserActiveCrosswordsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+  static navigationOptions = {
+    header: null
+  };
+
+  async componentDidMount() {
+    try {
+      await this.props.fetchUserActiveCrosswords(this.props.user.id);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //   render() {
+  //     return (
+  //       <View>
+  //         <Text>
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           {"\n"}
+  //           Welcome, this is the screen for showing the list of all active
+  //           crosswords for a specific user
+  //         </Text>
+  //       </View>
+  //     );
+  //   }
+  // }
 
   renderItem({ item, index }) {
     return (
@@ -35,15 +71,15 @@ export class allCrosswordsScreen extends Component {
           >
             <Text style={styles.itemText}>
               {"\n"}
-              ID: {item.id}
+              ID: {item.crosswordId}
             </Text>
             <Text style={styles.itemText}>
               {"\n"}
-              Crossword Name: {item.name}
+              Crossword Name: {item.crossword.name}
             </Text>
             <Text style={styles.itemText}>
               {"\n"}
-              {item.date}
+              {item.crossword.date}
             </Text>
           </View>
         </View>
@@ -51,22 +87,20 @@ export class allCrosswordsScreen extends Component {
     );
   }
 
-  componentDidMount() {
-    try {
-      this.props.fetchCrosswords();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   render() {
+    console.log("PROPS HERE", this.props);
     return (
       <View>
         <TouchableOpacity>
-          <Text>**Hi, Click here to test TouchableOpacity**</Text>
           <Text>
-            ***Don't forget a filter box here to allow users to view crosswords
-            based on selected criteria***
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            **{this.props.user.firstName}'s active puzzles:**
           </Text>
         </TouchableOpacity>
         <FlatList
@@ -75,7 +109,7 @@ export class allCrosswordsScreen extends Component {
           //   console.debug("on end reached ", distanceFromEnd);
           // }}
           contentContainerStyle={styles.list}
-          data={this.props.crosswords}
+          data={this.props.userActiveCrosswords}
           renderItem={this.renderItem}
         />
       </View>
@@ -97,23 +131,18 @@ const styles = StyleSheet.create({
   }
 });
 
-allCrosswordsScreen.navigationOptions = {
-  title: "All Crosswords"
-};
-
-// Remove yellow warning box
-console.disableYellowBox = true;
-
 const mapState = state => {
   return {
-    crosswords: state.crosswords
+    user: state.user,
+    userActiveCrosswords: state.userActiveCrosswords
   };
 };
 
 const mapDispatch = dispatch => {
   return {
-    fetchCrosswords: () => dispatch(fetchCrosswords())
+    fetchUserActiveCrosswords: userid =>
+      dispatch(fetchUserActiveCrosswords(userid))
   };
 };
 
-export default connect(mapState, mapDispatch)(allCrosswordsScreen);
+export default connect(mapState, mapDispatch)(UserActiveCrosswordsScreen);
