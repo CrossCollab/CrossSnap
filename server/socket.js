@@ -4,7 +4,6 @@ let roomInfo = {};
 module.exports = io => {
   io.on("connection", socket => {
     socket.on("change puzzle", async msg => {
-      console.log("cell?", msg.cell);
       socket.broadcast.to(msg.room).emit("change puzzle", msg.cell);
       try {
         if (!roomInfo[msg.room]) {

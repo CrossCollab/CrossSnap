@@ -98,7 +98,6 @@ class CrosswordTable extends React.Component {
       });
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-        console.log("msg.gues in socketChange", msg);
         allGuesses[msg.index].guess = msg.guess;
         allGuesses[msg.index].color = msg.color;
         this.setState({ guesses: allGuesses });
