@@ -67,17 +67,18 @@ class CrosswordTable extends React.Component {
         guesses: data.guesses,
         isReady: true,
         gameId,
-        userId: this.props.user.id,
+        userName: this.props.user.firstName,
         columnLength: Math.sqrt(data.answers.length)
       });
-      const userId = this.state.userId;
+      const userName = this.state.userName;
+      const guesses = this.state.guesses;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", { gameId, userId });
+        this.emit("join", { gameId, userName, guesses });
       }
 
       //once the socket receives the connect message from the server-side, ask to join the
@@ -89,16 +90,17 @@ class CrosswordTable extends React.Component {
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
       this.socket.on("new player", info => {
-        const { firstName, users } = info;
+        const { userName, users } = info;
         console.log("users", users);
         Toast.show({
-          text: `${firstName} has entered the game!`
+          text: `${userName} has entered the game!`
         });
         this.setState({ currentPlayers: users });
       });
       this.socket.on("change puzzle", msg => {
-        // console.log("updating state from socket");
-        this.setState({ guesses: msg });
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+        allGuesses[msg.index].guess = msg.guess;
+        this.setState({ guesses: allGuesses });
       });
     } catch (err) {
       console.err(err);
@@ -128,13 +130,25 @@ class CrosswordTable extends React.Component {
         // this.traverse(idx, letter);
       } else {
         allGuesses[idx].guess = "";
-        this.setState({ guesses: allGuesses }, this.changeHelper);
+        allGuesses[idx].userId = this.props.user.id;
+        const cell = allGuesses[idx];
+        this.setState(
+          { guesses: allGuesses }
+          // this.changeHelper
+        );
+        this.changeHelper(cell);
         // this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
       allGuesses[idx].guess = letter.nativeEvent.key;
-      this.setState({ guesses: allGuesses }, this.changeHelper);
+      allGuesses[idx].userId = this.props.user.id;
+      const cell = allGuesses[idx];
+      this.setState(
+        { guesses: allGuesses }
+        // this.changeHelper
+      );
+      this.changeHelper(cell);
       // this.traverse(idx, letter);
     }
   };
@@ -181,9 +195,10 @@ class CrosswordTable extends React.Component {
   }
 
   //this function sends a message to the socket with the current state and roomId
-  changeHelper() {
+  changeHelper(cell) {
     let socketMsg = {
-      guesses: this.state.guesses,
+      // guesses: this.state.guesses,
+      cell,
       room: this.state.gameId
     };
     this.socket.emit("change puzzle", socketMsg);

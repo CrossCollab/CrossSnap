@@ -4,12 +4,12 @@ let roomInfo = {};
 module.exports = io => {
   io.on("connection", socket => {
     socket.on("change puzzle", async msg => {
-      socket.broadcast.to(msg.room).emit("change puzzle", msg.guesses);
+      socket.broadcast.to(msg.room).emit("change puzzle", msg.cell);
       try {
         if (!roomInfo[msg.room]) {
           roomInfo[msg.room] = { guesses: [], canRequest: true };
         }
-        roomInfo[msg.room].guesses = msg.guesses;
+        roomInfo[msg.room].guesses[msg.cell.index] = msg.cell;
         if (roomInfo[msg.room].canRequest === undefined) {
           roomInfo[msg.room].canRequest = true;
         }
@@ -31,19 +31,14 @@ module.exports = io => {
     });
 
     socket.on("join", async function(payload) {
-      console.log("joined", payload);
-      const { gameId, userId } = payload;
+      const { gameId, userName, guesses } = payload;
       if (!roomInfo[gameId]) {
-        roomInfo[gameId] = { ...roomInfo[gameId], users: [userId] };
-      } else if (!roomInfo[gameId].users.includes(userId)) {
-        roomInfo[gameId].users.push(userId);
+        roomInfo[gameId] = { ...roomInfo[gameId], users: [userName], guesses };
+      } else if (!roomInfo[gameId].users.includes(userName)) {
+        roomInfo[gameId].users.push(userName);
       }
-      console.log("roomInfo", roomInfo);
-      const newUser = await User.findOne({ where: { id: userId } });
-
-      const { firstName } = newUser;
       io.in(gameId).emit("new player", {
-        firstName,
+        userName,
         users: roomInfo[gameId].users
       });
       //on receiving the join message from client socket in CWScreen.js,

@@ -89,15 +89,6 @@ export class allCrosswordsScreen extends Component {
 
     return (
       <View>
-<<<<<<< HEAD
-        <TouchableOpacity onPress={this.handlePress}>
-          <Text>**Hi, Click here to test TouchableOpacity**</Text>
-          <Text>
-            ***Don't forget a filter box here to allow users to view crosswords
-            based on selected criteria***
-          </Text>
-        </TouchableOpacity>
-=======
         <Picker
           selectedValue={this.state.size}
           onValueChange={this.handleChangeSize}
@@ -121,7 +112,6 @@ export class allCrosswordsScreen extends Component {
           <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
           <Picker.Item label={"hard"} value={"hard"} color={"red"} />
         </Picker>
->>>>>>> 092919e3c2b235e7e33486f069b1c18d2212eb84
         <FlatList
           onEndReachedThreshold={0}
           contentContainerStyle={styles.list}
