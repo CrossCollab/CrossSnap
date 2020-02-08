@@ -105,24 +105,25 @@ export default class CrosswordTable extends React.Component {
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
-    this.traverse(idx, letter);
-    const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
       this.setState({ direction: "backwards" });
-      //if the cell was already empty (don't need to update game state)
-      if (allGuesses[idx].guess === "") {
-        // this.traverse(idx, letter);
-      } else {
+
+      //if the cell is not empty, just delete the value
+      if (this.state.guesses[idx].guess !== "") {
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[idx].guess = "";
         this.setState({ guesses: allGuesses }, this.changeHelper);
-        // this.traverse(idx, letter);
+      } else {
+        //if the cell was empty just move back
+        this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
+      this.traverse(idx, letter);
+      const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
       allGuesses[idx].guess = letter.nativeEvent.key;
       this.setState({ guesses: allGuesses }, this.changeHelper);
-      // this.traverse(idx, letter);
     }
   };
 
