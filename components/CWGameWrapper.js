@@ -50,6 +50,10 @@ export default function CWGameWrapper(props) {
         acrossClue={props.acrossClue}
         downClue={props.downClue}
         swapView={props.swapView}
+        refs={props.refs}
+        currentCell={props.currentCell}
+        findNextClue={props.findNextClue}
+        findPreviousClue={props.findPreviousClue}
       />
     </View>
   );
