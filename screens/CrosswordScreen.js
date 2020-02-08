@@ -34,7 +34,8 @@ export default class CrosswordTable extends React.Component {
       confetti: false,
       refs: [],
       columnLength: 0,
-      direction: "forward"
+      direction: "forward",
+      gridNums: []
     };
 
     //bind these functions so child components can call them in OG context
@@ -44,6 +45,8 @@ export default class CrosswordTable extends React.Component {
     this.checkBoard = this.checkBoard.bind(this);
     this.traverse = this.traverse.bind(this);
     this.swapView = this.swapView.bind(this);
+    this.findNextAcross = this.findNextAcross.bind(this);
+    this.findPreviousAcross = this.findPreviousAcross.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -63,7 +66,8 @@ export default class CrosswordTable extends React.Component {
         guesses: data.guesses,
         isReady: true,
         gameId,
-        columnLength: Math.sqrt(data.answers.length)
+        columnLength: Math.sqrt(data.answers.length),
+        gridNums: data.numbers
       });
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
@@ -220,6 +224,47 @@ export default class CrosswordTable extends React.Component {
       guesses: this.state.guesses
     });
   }
+
+  findNextAcross() {
+    //find the index
+    let nextIndex = this.state.guesses.findIndex(
+      guess =>
+        guess.index > this.state.currentCell.index &&
+        guess.across !== this.state.currentCell.across
+    );
+    console.log("next index", nextIndex);
+    if (nextIndex !== -1) {
+      this.state.refs[nextIndex].current.focus();
+    } else {
+      this.state.refs[0].current.focus();
+    }
+  }
+
+  findPreviousAcross() {
+    for (let i = this.state.currentCell.index - 1; i >= 0; i--) {
+      //looping through all the cells, starting with the previous, going backwards
+      let thisGuess = this.state.guesses[i];
+      //if it's a blank cell skip it
+      if (thisGuess.answer === ".") {
+        continue;
+      }
+      //if the current cell's across clue is different from the one we started from, you've found the last letter of a new across clue
+      if (thisGuess.across !== this.state.currentCell.across) {
+        //found the current previous cell
+        let newAcrossClue = thisGuess.across;
+        //find the first instance of that across clue in the guesses array
+        for (let k = 0; k < this.state.guesses.length; k++) {
+          if (this.state.guesses[k].across === newAcrossClue) {
+            this.state.refs[k].current.focus();
+            break;
+          }
+        }
+        break;
+      } else {
+        this.state.refs[this.state.answers.length - 1].current.focus();
+      }
+    }
+  }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -254,6 +299,8 @@ export default class CrosswordTable extends React.Component {
           direction={this.state.direction}
           columnLength={this.state.columnLength}
           swapView={this.swapView}
+          findNextAcross={this.findNextAcross}
+          findPreviousAcross={this.findPreviousAcross}
         />
       );
     }

@@ -6,7 +6,9 @@ import {
   View,
   KeyboardAvoidingView,
   Keyboard,
-  Animated
+  Animated,
+  Button,
+  StyleSheet
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -43,23 +45,47 @@ export default function CWClue(props) {
     <View
       style={{
         backgroundColor: "#c1ebb2",
-        height: "8%",
+        height: "auto",
+        width: "100%",
         zIndex: 999,
-        paddingBottom: isKeyboardVisible === true ? 380 : "0%"
+        marginBottom: isKeyboardVisible === true ? 335 : "0%",
+        flexDirection: "row",
+        justifyContent: "space-between"
       }}
     >
+      <Button
+        onPress={() => props.findPreviousAcross()}
+        title="<"
+        style={{ position: "relative", flex: 1 }}
+      ></Button>
       <Text
         style={{
-          justifyContent: "center",
-          alignContent: "center",
-          alignSelf: "center",
-          alignItems: "center",
-          paddingTop: "2%",
-          paddingBottom: isKeyboardVisible === true ? 380 : "0%"
+          // justifyContent: "center",
+          // alignContent: "center",
+          // alignSelf: "center",
+          // alignItems: "center",
+          // paddingTop: "2%",
+          // paddingBottom: isKeyboardVisible === true ? 380 : "0%",
+          textAlign: "center",
+          height: "auto",
+          width: "85%",
+          flex: 1
         }}
       >
         {currentClue}
       </Text>
+      <Button
+        onPress={() => props.findNextAcross()}
+        title=">"
+        style={{ position: "relative", flex: 1 }}
+      ></Button>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 16
+  }
+});
