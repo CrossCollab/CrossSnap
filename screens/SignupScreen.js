@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from "react-native";
 import { connect } from "react-redux";
 import { createUser } from "../store/user";
@@ -14,10 +15,10 @@ class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "sample",
-      lastName: "shample",
-      password: "212",
-      email: "sampleSHAMPLE@gmail.com"
+      firstName: "",
+      lastName: "",
+      password: "",
+      email: ""
     };
 
     this.submitNewUser = this.submitNewUser.bind(this);

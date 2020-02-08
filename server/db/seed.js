@@ -2427,7 +2427,7 @@ const crosswordsToSeed = [
   {
     name: "test3",
     description: "lorem ipsum",
-    difficulty: "hard",
+    difficulty: "medium",
     size: "big",
     date: "06/03/2015",
     theme: "",
@@ -3088,7 +3088,7 @@ const crosswordsToSeed = [
   {
     name: faker.name.findName(),
     description: "lorem ipsum",
-    difficulty: "hard",
+    difficulty: "medium",
     size: "big",
     theme: "",
     crosswordObjectString: {
@@ -3741,8 +3741,8 @@ const crosswordsToSeed = [
   {
     name: faker.name.findName(),
     description: "lorem ipsum",
-    difficulty: "hard",
-    size: "big",
+    difficulty: "medium",
+    size: "medium",
     theme: "",
     crosswordObjectString: {
       acrossmap: null,
@@ -4624,7 +4624,7 @@ const crosswordsToSeed = [
   {
     name: faker.name.findName(),
     description: "lorem ipsum",
-    difficulty: "hard",
+    difficulty: "easy",
     size: "big",
     theme: "",
     crosswordObjectString: {
@@ -5278,7 +5278,7 @@ const crosswordsToSeed = [
     name: faker.name.findName(),
     description: "lorem ipsum",
     difficulty: "hard",
-    size: "big",
+    size: "small",
     theme: "",
     crosswordObjectString: {
       acrossmap: null,
@@ -6591,7 +6591,7 @@ const crosswordsToSeed = [
   {
     name: faker.name.findName(),
     description: "lorem ipsum",
-    difficulty: "hard",
+    difficulty: "easy",
     size: "big",
     theme: "",
     crosswordObjectString: {
@@ -7901,7 +7901,7 @@ const crosswordsToSeed = [
   {
     name: faker.name.findName(),
     description: "lorem ipsum",
-    difficulty: "hard",
+    difficulty: "easy",
     size: "big",
     theme: "",
     crosswordObjectString: {
@@ -8545,7 +8545,7 @@ const crosswordsToSeed = [
     name: faker.name.findName(),
     description: "lorem ipsum",
     difficulty: "hard",
-    size: "big",
+    size: "medium",
     theme: "",
     crosswordObjectString: {
       acrossmap: null,
@@ -9760,7 +9760,7 @@ const crosswordsToSeed = [
     name: faker.name.findName(),
     description: "lorem ipsum",
     difficulty: "hard",
-    size: "big",
+    size: "small",
     theme: "",
     crosswordObjectString: {
       acrossmap: null,
@@ -10415,7 +10415,7 @@ const crosswordsToSeed = [
     name: faker.name.findName(),
     description: "lorem ipsum",
     difficulty: "hard",
-    size: "big",
+    size: "small",
     theme: "",
     crosswordObjectString: {
       acrossmap: null,

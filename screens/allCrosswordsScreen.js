@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Picker } from "react-native";
 import { connect } from "react-redux";
 import { fetchCrosswords } from "../store/allCrosswords";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,8 +7,28 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 export class allCrosswordsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.handlePress = this.handlePress.bind(this);
+    this.state = {
+      size: "",
+      difficulty: ""
+    };
+    this.handleChangeDifficulty = this.handleChangeDifficulty.bind(this);
+    this.handleChangeSize = this.handleChangeSize.bind(this);
+  }
+
+  handleChangeSize(size) {
+    if (size !== 0) {
+      this.setState({
+        size: size
+      });
+    }
+  }
+
+  handleChangeDifficulty(difficulty) {
+    if (difficulty !== 0) {
+      this.setState({
+        difficulty: difficulty
+      });
+    }
   }
 
   renderItem({ item, index }) {
@@ -23,29 +43,21 @@ export class allCrosswordsScreen extends Component {
             maxWidth: 120,
             height: 120,
             maxHeight: 120,
-            backgroundColor: "rgb(169, 169, 169)"
+            backgroundColor: "rgb(51, 153, 255)"
           }}
         >
           <View
             style={{
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
               flex: 1,
               margin: 1
             }}
           >
-            <Text style={styles.itemText}>
-              {"\n"}
-              ID: {item.id}
-            </Text>
-            <Text style={styles.itemText}>
-              {"\n"}
-              Crossword Name: {item.name}
-            </Text>
-            <Text style={styles.itemText}>
-              {"\n"}
-              {item.date}
-            </Text>
+            <Text style={styles.itemText}>Name: {item.name}</Text>
+            <Text style={styles.itemText}>Date: {item.date}</Text>
+            <Text style={styles.itemText}>Difficulty: {item.difficulty}</Text>
+            <Text style={styles.itemText}>Size: {item.size}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -61,8 +73,23 @@ export class allCrosswordsScreen extends Component {
   }
 
   render() {
+    let filteredData = this.props.crosswords;
+
+    if (this.state.size !== "all" && this.state.size !== "") {
+      filteredData = this.props.crosswords.filter(
+        elem => elem.size === this.state.size
+      );
+    }
+
+    if (this.state.difficulty !== "all" && this.state.difficulty !== "") {
+      filteredData = filteredData.filter(
+        elem => elem.difficulty === this.state.difficulty
+      );
+    }
+
     return (
       <View>
+<<<<<<< HEAD
         <TouchableOpacity onPress={this.handlePress}>
           <Text>**Hi, Click here to test TouchableOpacity**</Text>
           <Text>
@@ -70,13 +97,35 @@ export class allCrosswordsScreen extends Component {
             based on selected criteria***
           </Text>
         </TouchableOpacity>
+=======
+        <Picker
+          selectedValue={this.state.size}
+          onValueChange={this.handleChangeSize}
+          itemStyle={{ color: "white" }}
+        >
+          <Picker.Item label="Size" value="0" color="grey" />
+          <Picker.Item label={"all"} value={"all"} color={"black"} />
+          <Picker.Item label={"small"} value={"small"} color={"green"} />
+          <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
+          <Picker.Item label={"big"} value={"big"} color={"red"} />
+        </Picker>
+
+        <Picker
+          selectedValue={this.state.difficulty}
+          onValueChange={this.handleChangeDifficulty}
+          itemStyle={{ color: "white" }}
+        >
+          <Picker.Item label="Difficulty" value="0" color="grey" />
+          <Picker.Item label={"all"} value={"all"} color={"black"} />
+          <Picker.Item label={"easy"} value={"easy"} color={"green"} />
+          <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
+          <Picker.Item label={"hard"} value={"hard"} color={"red"} />
+        </Picker>
+>>>>>>> 092919e3c2b235e7e33486f069b1c18d2212eb84
         <FlatList
           onEndReachedThreshold={0}
-          // onEndReached={({ distanceFromEnd }) => {
-          //   console.debug("on end reached ", distanceFromEnd);
-          // }}
           contentContainerStyle={styles.list}
-          data={this.props.crosswords}
+          data={filteredData}
           renderItem={this.renderItem}
         />
       </View>
@@ -93,8 +142,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 12,
     color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    fontWeight: "bold"
   }
 });
 
