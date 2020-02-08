@@ -282,36 +282,56 @@ class CrosswordTable extends React.Component {
         this.state.refs[0].current.focus();
       }
     } else {
-      //get the clue number of the current cell
-      //if it is 0, traverse upwards until you hit a grid number
-      //if it is not zero you have it
-      //once you have your current clue's down clue number (complicated)
-      //find the location of the next clue number in the this.state.gridNums array
-      //set the focus on that index
-      let startingDownClue = this.state.currentCell.down;
-      let indexOfDownClueStart;
-      for (let i = 0; i < this.state.answers.length; i++) {
-        if (this.state.guesses[i].down == startingDownClue) {
-          indexOfDownClueStart = i;
+      //loop through the clues left to right top to bottom, (skip blank cells) if the cell above the cell you are looking at is a blank cell or is undefined,
+      //then that is the next cell
+      for (
+        let i = this.state.currentCell.index + 1;
+        i < this.state.answers.length;
+        i++
+      ) {
+        let thisCell = this.state.guesses[i];
+        if (thisCell.answer === ".") {
+          //if blank cell, skip
+          continue;
+        }
+        let aboveCell;
+        if (i < this.state.columnLength) {
+          //first row
+          aboveCell = { answer: "." };
+        } else {
+          //subtract column length to get cell above
+          aboveCell = this.state.guesses[i - this.state.columnLength];
+        }
+        if (aboveCell.answer === ".") {
+          this.state.refs[i].current.focus();
           break;
         }
       }
-      let startingDownClueNum = this.state.gridNums[indexOfDownClueStart];
-      console.log("clue num = ", startingDownClueNum);
-      let j = 1;
-      while (j < this.state.answers.length) {
-        let indexOfNextDownClue = this.state.gridNums.findIndex(
-          clueNum => clueNum === startingDownClueNum + j
-        );
 
-        //if this isn't a truly new down clue
-        if (
-          this.state.guesses[indexOfNextDownClue].down ===
-          this.state.guesses[indexOfNextDownClue - this.state.columnLength].down
-        )
-          this.state.refs[indexOfNextDownClue].current.focus();
-        break;
-      }
+      // let startingDownClue = this.state.currentCell.down;
+      // let indexOfDownClueStart;
+      // for (let i = 0; i < this.state.answers.length; i++) {
+      //   if (this.state.guesses[i].down == startingDownClue) {
+      //     indexOfDownClueStart = i;
+      //     break;
+      //   }
+      // }
+      // let startingDownClueNum = this.state.gridNums[indexOfDownClueStart];
+      // console.log("clue num = ", startingDownClueNum);
+      // let j = 1;
+      // while (j < this.state.answers.length) {
+      //   let indexOfNextDownClue = this.state.gridNums.findIndex(
+      //     clueNum => clueNum === startingDownClueNum + j
+      //   );
+
+      //   //if this isn't a truly new down clue
+      //   if (
+      //     this.state.guesses[indexOfNextDownClue].down ===
+      //     this.state.guesses[indexOfNextDownClue - this.state.columnLength].down
+      //   )
+      //     this.state.refs[indexOfNextDownClue].current.focus();
+      //   break;
+      // }
     }
   }
 
@@ -341,7 +361,25 @@ class CrosswordTable extends React.Component {
         }
       }
     } else {
-      console.log("current view is down");
+      for (let i = this.state.currentCell.index - 1; i >= 0; i--) {
+        let thisCell = this.state.guesses[i];
+        if (thisCell.answer === ".") {
+          //if blank cell, skip
+          continue;
+        }
+        let aboveCell;
+        if (i < this.state.columnLength) {
+          //first row
+          aboveCell = { answer: "." };
+        } else {
+          //subtract column length to get cell above
+          aboveCell = this.state.guesses[i - this.state.columnLength];
+        }
+        if (aboveCell.answer === ".") {
+          this.state.refs[i].current.focus();
+          break;
+        }
+      }
     }
   }
   //need to remove the socket listeners, turn them 'off' in here
