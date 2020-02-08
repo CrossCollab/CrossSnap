@@ -10,7 +10,6 @@ import {
 export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
-
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
     return (
@@ -92,7 +91,8 @@ export default function CWCell(props) {
             width: "80%",
             alignSelf: "center",
             marginBottom: "35%",
-            zIndex: 9999
+            zIndex: 9999,
+            color: cell.color
           }}
           ref={props.refs[cell.index]}
           textAlign={"center"}

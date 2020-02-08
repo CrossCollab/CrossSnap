@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  Picker
 } from "react-native";
 import { connect } from "react-redux";
 import { createUser } from "../store/user";
@@ -18,7 +19,9 @@ class SignupScreen extends React.Component {
       firstName: "",
       lastName: "",
       password: "",
-      email: ""
+      email: "",
+      colors: ["Black", "Blue", "Green", "Red", "Orange"],
+      textColor: ""
     };
 
     this.submitNewUser = this.submitNewUser.bind(this);
@@ -37,6 +40,11 @@ class SignupScreen extends React.Component {
   }
 
   render() {
+    const colorItems = this.state.colors.map((color, index) => {
+      return (
+        <Picker.Item key={index} value={color.toLowerCase()} label={color} />
+      );
+    });
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -71,6 +79,13 @@ class SignupScreen extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
+        <Picker
+          selectedValue={this.state.textColor}
+          onValueChange={itemValue => this.setState({ textColor: itemValue })}
+          style={{ height: 50, width: 100 }}
+        >
+          {colorItems}
+        </Picker>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity

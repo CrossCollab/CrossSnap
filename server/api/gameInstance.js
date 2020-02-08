@@ -26,13 +26,11 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:gameId", async (req, res, next) => {
   try {
-    // console.log("params", req.params.gameId);
     const game = await GameInstance.findOne({
       where: {
         id: req.params.gameId
       }
     });
-    // console.log("game: ", game);
     let guessesAnswers = {
       answers: game.answers,
       guesses: game.guesses,
@@ -70,7 +68,6 @@ router.put("/:id", async (req, res, next) => {
       guesses: jsonGuesses,
       status: "filled"
     });
-    // console.log(updatedInstance.guesses[0]);
     res.send(updatedInstance);
   } catch (err) {
     next(err);

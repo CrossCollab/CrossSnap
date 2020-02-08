@@ -99,7 +99,8 @@ export default class LinksScreen extends React.Component {
         index,
         number: data.crosswordObjectString.gridnums[index],
         across: findAcross(index),
-        down: findDown(index)
+        down: findDown(index),
+        color: "black"
       };
     });
     //make a new game instance object that will be used to create one in the db

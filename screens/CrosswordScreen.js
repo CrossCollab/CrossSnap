@@ -91,7 +91,6 @@ class CrosswordTable extends React.Component {
       //update the state of the guesses array
       this.socket.on("new player", info => {
         const { userName, users } = info;
-        console.log("users", users);
         Toast.show({
           text: `${userName} has entered the game!`
         });
@@ -99,7 +98,9 @@ class CrosswordTable extends React.Component {
       });
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+        console.log("msg.gues in socketChange", msg);
         allGuesses[msg.index].guess = msg.guess;
+        allGuesses[msg.index].color = msg.color;
         this.setState({ guesses: allGuesses });
       });
     } catch (err) {
@@ -142,6 +143,7 @@ class CrosswordTable extends React.Component {
     } else {
       this.setState({ direction: "forward" });
       allGuesses[idx].guess = letter.nativeEvent.key;
+      allGuesses[idx].color = this.props.user.textColor;
       allGuesses[idx].userId = this.props.user.id;
       const cell = allGuesses[idx];
       this.setState(
