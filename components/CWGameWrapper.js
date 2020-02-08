@@ -27,6 +27,8 @@ export default function CWGameWrapper(props) {
       <HeaderOptions
         checkBoard={props.checkBoard}
         currentUsers={props.currentUsers}
+        swapView={props.swapView}
+        refs={props.refs}
       />
       <CWTable
         rows={rows}
@@ -47,6 +49,7 @@ export default function CWGameWrapper(props) {
         currentView={props.currentView}
         acrossClue={props.acrossClue}
         downClue={props.downClue}
+        swapView={props.swapView}
       />
     </View>
   );

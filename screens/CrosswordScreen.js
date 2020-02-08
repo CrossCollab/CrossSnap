@@ -10,7 +10,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput
+  TextInput,
+  Keyboard
 } from "react-native";
 import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
@@ -46,6 +47,7 @@ class CrosswordTable extends React.Component {
     this.changeHelper = this.changeHelper.bind(this);
     this.checkBoard = this.checkBoard.bind(this);
     this.traverse = this.traverse.bind(this);
+    this.swapView = this.swapView.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -95,6 +97,7 @@ class CrosswordTable extends React.Component {
         this.setState({ currentPlayers: users });
       });
       this.socket.on("change puzzle", msg => {
+        // console.log("updating state from socket");
         this.setState({ guesses: msg });
       });
     } catch (err) {
@@ -115,23 +118,24 @@ class CrosswordTable extends React.Component {
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
+    this.traverse(idx, letter);
     const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
       this.setState({ direction: "backwards" });
       //if the cell was already empty (don't need to update game state)
       if (allGuesses[idx].guess === "") {
-        this.traverse(idx, letter);
+        // this.traverse(idx, letter);
       } else {
         allGuesses[idx].guess = "";
         this.setState({ guesses: allGuesses }, this.changeHelper);
-        this.traverse(idx, letter);
+        // this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
       allGuesses[idx].guess = letter.nativeEvent.key;
       this.setState({ guesses: allGuesses }, this.changeHelper);
-      this.traverse(idx, letter);
+      // this.traverse(idx, letter);
     }
   };
 
@@ -183,6 +187,14 @@ class CrosswordTable extends React.Component {
       room: this.state.gameId
     };
     this.socket.emit("change puzzle", socketMsg);
+  }
+
+  swapView() {
+    if (this.state.currentView === "across") {
+      this.setState({ currentView: "down" });
+    } else {
+      this.setState({ currentView: "across" });
+    }
   }
 
   handlePress(cell) {
@@ -252,6 +264,7 @@ class CrosswordTable extends React.Component {
           traverse={this.traverse}
           direction={this.state.direction}
           columnLength={this.state.columnLength}
+          swapView={this.swapView}
         />
       );
     }

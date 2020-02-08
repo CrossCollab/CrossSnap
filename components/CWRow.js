@@ -8,7 +8,7 @@ export default function CWRow(props) {
       style={{
         flex: 1,
         flexDirection: "row",
-        height: `${100 / props.rowCount}%`
+        height: `${200 / props.rowCount}%`
       }}
       key={props.index + 500}
     >
