@@ -135,7 +135,8 @@ export default function CWCell(props) {
             marginBottom: "35%",
             zIndex: 9999,
             top: "12%",
-            fontSize: 8
+            fontSize: 8,
+            color: cell.color
           }}
           ref={props.refs[cell.index]}
           textAlign={"center"}

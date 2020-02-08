@@ -13,7 +13,6 @@ router.get("/:userid/userprofile", async (req, res, next) => {
         id: req.params.userid
       }
     });
-    // console.log("Magic methods here:", user.__proto__);
     res.json(user);
   } catch (err) {
     next(err);
@@ -23,7 +22,6 @@ router.get("/:userid/userprofile", async (req, res, next) => {
 // Placeholder route; not actually used by client, more for testing purposes
 router.get("/allusers", async (req, res, next) => {
   try {
-    // console.log("Magic methods for User (model below):", User);
     const users = await User.findAll();
     res.json(users);
   } catch (err) {

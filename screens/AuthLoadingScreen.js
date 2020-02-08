@@ -11,7 +11,6 @@ class AuthLoadingScreen extends React.Component {
   _loadData = async () => {
     const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
     const userId = await AsyncStorage.getItem("userId");
-    // console.log("userId", userId);
     if (userId) {
       this.props.fetchUser(userId);
     }
