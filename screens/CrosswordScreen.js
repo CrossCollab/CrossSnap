@@ -42,7 +42,6 @@ class CrosswordTable extends React.Component {
       gridNums: [],
 
       currentPlayers: []
-
     };
 
     //bind these functions so child components can call them in OG context
@@ -77,8 +76,7 @@ class CrosswordTable extends React.Component {
         columnLength: Math.sqrt(data.answers.length),
         gridNums: data.numbers,
 
-        userName: this.props.user.firstName,
-  
+        userName: this.props.user.firstName
       });
       const userName = this.state.userName;
       const guesses = this.state.guesses;
@@ -138,9 +136,13 @@ class CrosswordTable extends React.Component {
       if (this.state.guesses[idx].guess !== "") {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[idx].guess = "";
-//still need to update state
+        this.setState(
+          { guesses: allGuesses }
+          // this.changeHelper
+        );
+        //still need to update state
       } else {
-        
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         //if the cell was empty just move back
         this.traverse(idx, letter);
         allGuesses[idx].userId = this.props.user.id;
@@ -151,7 +153,6 @@ class CrosswordTable extends React.Component {
         );
         this.changeHelper(cell);
         // this.traverse(idx, letter);
-
       }
     } else {
       this.setState({ direction: "forward" });
@@ -266,7 +267,6 @@ class CrosswordTable extends React.Component {
     });
   }
 
-
   findNextClue() {
     //find the index
     if (this.state.currentView === "across") {
@@ -346,7 +346,6 @@ class CrosswordTable extends React.Component {
   }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
-
 
   render() {
     if (this.state && !this.state.isReady) {
