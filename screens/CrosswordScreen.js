@@ -1,6 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import SERVER_URL from "../serverUrl";
+import { connect } from "react-redux";
 import {
   Image,
   Platform,
@@ -12,6 +13,7 @@ import {
   TextInput,
   Keyboard
 } from "react-native";
+import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
 import CWTable from "../components/CWTable";
@@ -21,7 +23,7 @@ import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 import Confetti from "../components/Confetti";
 
-export default class CrosswordTable extends React.Component {
+class CrosswordTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,9 +35,14 @@ export default class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
+      userId: 0,
       columnLength: 0,
       direction: "forward",
-      gridNums: []
+
+      gridNums: [],
+
+      currentPlayers: []
+
     };
 
     //bind these functions so child components can call them in OG context
@@ -66,17 +73,22 @@ export default class CrosswordTable extends React.Component {
         guesses: data.guesses,
         isReady: true,
         gameId,
+
         columnLength: Math.sqrt(data.answers.length),
-        gridNums: data.numbers
+        gridNums: data.numbers,
+
+        userName: this.props.user.firstName,
+  
       });
+      const userName = this.state.userName;
+      const guesses = this.state.guesses;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
-        console.log("joined socket");
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", gameId);
+        this.emit("join", { gameId, userName, guesses });
       }
 
       //once the socket receives the connect message from the server-side, ask to join the
@@ -87,12 +99,21 @@ export default class CrosswordTable extends React.Component {
 
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
+      this.socket.on("new player", info => {
+        const { userName, users } = info;
+        Toast.show({
+          text: `${userName} has entered the game!`
+        });
+        this.setState({ currentPlayers: users });
+      });
       this.socket.on("change puzzle", msg => {
-        // console.log("updating state from socket");
-        this.setState({ guesses: msg });
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+        allGuesses[msg.index].guess = msg.guess;
+        allGuesses[msg.index].color = msg.color;
+        this.setState({ guesses: allGuesses });
       });
     } catch (err) {
-      // console.err(err);
+      console.err(err);
     }
 
     let references = Array(this.state.answers.length)
@@ -117,17 +138,36 @@ export default class CrosswordTable extends React.Component {
       if (this.state.guesses[idx].guess !== "") {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[idx].guess = "";
-        this.setState({ guesses: allGuesses }, this.changeHelper);
+//still need to update state
       } else {
+        
         //if the cell was empty just move back
         this.traverse(idx, letter);
+        allGuesses[idx].userId = this.props.user.id;
+        const cell = allGuesses[idx];
+        this.setState(
+          { guesses: allGuesses }
+          // this.changeHelper
+        );
+        this.changeHelper(cell);
+        // this.traverse(idx, letter);
+
       }
     } else {
       this.setState({ direction: "forward" });
       this.traverse(idx, letter);
       const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
       allGuesses[idx].guess = letter.nativeEvent.key;
-      this.setState({ guesses: allGuesses }, this.changeHelper);
+
+      allGuesses[idx].color = this.props.user.textColor;
+      allGuesses[idx].userId = this.props.user.id;
+      const cell = allGuesses[idx];
+      this.setState(
+        { guesses: allGuesses }
+        // this.changeHelper
+      );
+      this.changeHelper(cell);
+      // this.traverse(idx, letter);
     }
   };
 
@@ -173,9 +213,10 @@ export default class CrosswordTable extends React.Component {
   }
 
   //this function sends a message to the socket with the current state and roomId
-  changeHelper() {
+  changeHelper(cell) {
     let socketMsg = {
-      guesses: this.state.guesses,
+      // guesses: this.state.guesses,
+      cell,
       room: this.state.gameId
     };
     this.socket.emit("change puzzle", socketMsg);
@@ -224,6 +265,7 @@ export default class CrosswordTable extends React.Component {
       guesses: this.state.guesses
     });
   }
+
 
   findNextClue() {
     //find the index
@@ -305,6 +347,7 @@ export default class CrosswordTable extends React.Component {
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
+
   render() {
     if (this.state && !this.state.isReady) {
       return <Text>Loading...</Text>;
@@ -322,6 +365,7 @@ export default class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
+          currentUsers={this.state.currentUsers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}
@@ -343,4 +387,7 @@ export default class CrosswordTable extends React.Component {
     }
   }
 }
-const styles = StyleSheet.create({});
+const mapState = state => {
+  return { user: state.user };
+};
+export default connect(mapState)(CrosswordTable);

@@ -1,14 +1,15 @@
 const GameInstance = require("./db/models/gameInstance");
+const User = require("./db/models/user");
 let roomInfo = {};
 module.exports = io => {
   io.on("connection", socket => {
-    // console.log(socket.id, " has made a persistent connection to the server!");
     socket.on("change puzzle", async msg => {
+      socket.broadcast.to(msg.room).emit("change puzzle", msg.cell);
       try {
         if (!roomInfo[msg.room]) {
           roomInfo[msg.room] = { guesses: [], canRequest: true };
         }
-        roomInfo[msg.room].guesses = msg.guesses;
+        roomInfo[msg.room].guesses[msg.cell.index] = msg.cell;
         if (roomInfo[msg.room].canRequest === undefined) {
           roomInfo[msg.room].canRequest = true;
         }
@@ -20,7 +21,6 @@ module.exports = io => {
             guesses: roomInfo[msg.room].guesses
           });
           roomInfo[msg.room].canRequest = false;
-
           setTimeout(function() {
             roomInfo[msg.room].canRequest = true;
           }, 1000);
@@ -28,16 +28,23 @@ module.exports = io => {
       } catch (err) {
         console.log(err);
       }
-      socket.to(msg.room).emit("change puzzle", msg.guesses);
     });
 
-    socket.on("join", function(room) {
+    socket.on("join", async function(payload) {
+      const { gameId, userName, guesses } = payload;
+      if (!roomInfo[gameId]) {
+        roomInfo[gameId] = { ...roomInfo[gameId], users: [userName], guesses };
+      } else if (!roomInfo[gameId].users.includes(userName)) {
+        roomInfo[gameId].users.push(userName);
+      }
+      io.in(gameId).emit("new player", {
+        userName,
+        users: roomInfo[gameId].users
+      });
       //on receiving the join message from client socket in CWScreen.js,
       //join the room requested (currently set to gameId value)
-      // console.log("join", room);
-      socket.join(room, function() {
-        // console.log("rooms: ", socket.rooms);
-      });
+
+      socket.join(gameId, function() {});
     });
   });
 };

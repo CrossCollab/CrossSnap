@@ -16,7 +16,7 @@ export const setCrossword = id => {
       const { data } = await axios.get(`${SERVER_URL}/api/crossword/${id}`);
       dispatch(getCrossword(data));
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 };
