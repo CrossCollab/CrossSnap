@@ -37,7 +37,7 @@ module.exports = io => {
       } else if (!roomInfo[gameId].users.includes(userName)) {
         roomInfo[gameId].users.push(userName);
       }
-      io.in(gameId).emit("new player", {
+      socket.broadcast.to(gameId).emit("new player", {
         userName,
         users: roomInfo[gameId].users
       });
