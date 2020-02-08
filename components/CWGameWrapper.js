@@ -52,8 +52,8 @@ export default function CWGameWrapper(props) {
         swapView={props.swapView}
         refs={props.refs}
         currentCell={props.currentCell}
-        findNextAcross={props.findNextAcross}
-        findPreviousAcross={props.findPreviousAcross}
+        findNextClue={props.findNextClue}
+        findPreviousClue={props.findPreviousClue}
       />
     </View>
   );

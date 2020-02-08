@@ -54,7 +54,7 @@ export default function CWClue(props) {
       }}
     >
       <Button
-        onPress={() => props.findPreviousAcross()}
+        onPress={() => props.findPreviousClue()}
         title="<"
         style={{ position: "relative", flex: 1 }}
       ></Button>
@@ -75,7 +75,7 @@ export default function CWClue(props) {
         {currentClue}
       </Text>
       <Button
-        onPress={() => props.findNextAcross()}
+        onPress={() => props.findNextClue()}
         title=">"
         style={{ position: "relative", flex: 1 }}
       ></Button>
