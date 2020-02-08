@@ -262,7 +262,12 @@ export default class CrosswordTable extends React.Component {
           clueNum => clueNum === startingDownClueNum + j
         );
 
-        this.state.refs[indexOfNextDownClue].current.focus();
+        //if this isn't a truly new down clue
+        if (
+          this.state.guesses[indexOfNextDownClue].down ===
+          this.state.guesses[indexOfNextDownClue - this.state.columnLength].down
+        )
+          this.state.refs[indexOfNextDownClue].current.focus();
         break;
       }
     }
