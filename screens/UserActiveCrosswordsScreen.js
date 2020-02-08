@@ -21,31 +21,6 @@ export class UserActiveCrosswordsScreen extends React.Component {
     }
   }
 
-  //   render() {
-  //     return (
-  //       <View>
-  //         <Text>
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           {"\n"}
-  //           Welcome, this is the screen for showing the list of all active
-  //           crosswords for a specific user
-  //         </Text>
-  //       </View>
-  //     );
-  //   }
-  // }
-
   renderItem({ item, index }) {
     return (
       <TouchableOpacity>
