@@ -146,7 +146,7 @@ class CrosswordTable extends React.Component {
               room: this.state.gameId
             });
 
-            counter++;
+
             // this.socket.emit("join", { newGameInstance, userName, guesses });
             //update state with new game instance information
             let guesses = data.guesses;
