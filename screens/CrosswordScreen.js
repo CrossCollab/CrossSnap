@@ -98,7 +98,7 @@ export default class CrosswordTable extends React.Component {
     this.setState({ refs: references });
 
     //build the column traversal order
-    //for example w/ a 3x3 grid it would be [0, 3, 6, 1, 4, 7, 2, 5, 8]
+    //for example w/  a 3x3 grid it would be [0, 3, 6, 1, 4, 7, 2, 5, 8]
   }
 
   //whenever the client changes the value of a crossword square, copy the guesses obj
