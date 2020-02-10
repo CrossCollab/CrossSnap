@@ -103,9 +103,8 @@ class CrosswordTable extends React.Component {
         Toast.show({
           text: `${userName} has entered the game!`
         });
-        this.setState({ currentPlayers: users });
+        this.setState({ currentPlayers: users }, this.checkUsers);
       });
-      console.log("state cu", this.state.currentPlayers);
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[msg.index].guess = msg.guess;
@@ -129,6 +128,9 @@ class CrosswordTable extends React.Component {
   //whenever the client changes the value of a crossword square, copy the guesses obj
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
+  checkUsers() {
+    console.log("current USERS", this.state.currentPlayers);
+  }
   handleChange = idx => letter => {
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
@@ -404,7 +406,7 @@ class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
-          currentUsers={this.state.currentUsers}
+          currentPlayers={this.state.currentPlayers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}

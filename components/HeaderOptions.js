@@ -32,6 +32,13 @@ export default function HeaderOptions(props) {
       >
         <Text>Across/Down</Text>
       </TouchableOpacity>
+      {props.currentPlayers && props.currentPlayers.length ? (
+        <Text style={{ backgroundColor: "red" }}>
+          {props.currentPlayers.length} here
+        </Text>
+      ) : (
+        <Text style={{ backgroundColor: "red" }} />
+      )}
     </View>
   );
 }

@@ -26,7 +26,7 @@ export default function CWGameWrapper(props) {
     <View style={{ height: "100%", width: "100%" }}>
       <HeaderOptions
         checkBoard={props.checkBoard}
-        currentUsers={props.currentUsers}
+        currentPlayers={props.currentPlayers}
         swapView={props.swapView}
         refs={props.refs}
       />
