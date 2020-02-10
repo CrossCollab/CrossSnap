@@ -15,6 +15,8 @@ export default function CWRow(props) {
       {props.row.map((cell, index) => {
         return (
           <CWCell
+            handleCellChange={props.handleCellChange}
+            activeCells={props.activeCells}
             cell={cell}
             handleChange={props.handleChange}
             handlePress={props.handlePress}

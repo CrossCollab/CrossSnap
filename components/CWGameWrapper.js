@@ -31,6 +31,8 @@ export default function CWGameWrapper(props) {
         refs={props.refs}
       />
       <CWTable
+        handleCellChange={props.handleCellChange}
+        activeCells={props.activeCells}
         rows={rows}
         numOfRows={numOfRows}
         handleChange={props.handleChange}

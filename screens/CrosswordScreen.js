@@ -35,12 +35,12 @@ class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
-      userId: 0,
+      userId: this.props.user.id,
       columnLength: 0,
       direction: "forward",
 
       gridNums: [],
-
+      activeCells: [],
       currentPlayers: []
     };
 
@@ -80,14 +80,18 @@ class CrosswordTable extends React.Component {
       });
       const userName = this.state.userName;
       const guesses = this.state.guesses;
+      const userId = this.state.userId;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", { gameId, userName, guesses });
+        this.emit("join", { gameId, userName, guesses, userId });
       }
+      this.socket.on("cell focus", array => {
+        this.setState({ activeCells: array });
+      });
 
       //once the socket receives the connect message from the server-side, ask to join the
       //room with the id matching the gameId
@@ -99,11 +103,10 @@ class CrosswordTable extends React.Component {
       //update the state of the guesses array
       this.socket.on("new player", info => {
         const { userName, users } = info;
-        console.log("users from socket", users);
         Toast.show({
           text: `${userName} has entered the game!`
         });
-        this.setState({ currentPlayers: users }, this.checkUsers);
+        this.setState({ currentPlayers: users });
       });
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
@@ -128,9 +131,6 @@ class CrosswordTable extends React.Component {
   //whenever the client changes the value of a crossword square, copy the guesses obj
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
-  checkUsers() {
-    console.log("current USERS", this.state.currentPlayers);
-  }
   handleChange = idx => letter => {
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
@@ -175,7 +175,9 @@ class CrosswordTable extends React.Component {
       // this.traverse(idx, letter);
     }
   };
-
+  handleCellChange(cell) {
+    this.setState({ myCurrentCell: cell });
+  }
   traverse(idx, letter) {
     //if the key is delete, move backwards, else move forwards
     if (letter.nativeEvent.key === "Backspace") {
@@ -236,7 +238,8 @@ class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    this.setState({ currentCell: cell });
+    this.setState({ currentCell: cell }, this.handlePressHelper);
+
     if (cell.index === this.state.currentCell.index) {
       if (this.state.currentView === "across") {
         this.setState({ currentView: "down" });
@@ -244,6 +247,10 @@ class CrosswordTable extends React.Component {
         this.setState({ currentView: "across" });
       }
     }
+  }
+  handlePressHelper() {
+    const { currentCell, gameId, userId } = this.state;
+    this.socket.emit("change cell focus", { gameId, userId, currentCell });
   }
   checkBoard() {
     const checkedGuesses = this.state.guesses.map(guess => {
@@ -406,7 +413,9 @@ class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
-          currentPlayers={this.state.currentPlayers}
+          handleCellChange={this.handleCellChange}
+          activeCells={this.state.activeCells}
+          currentUsers={this.state.currentUsers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}
