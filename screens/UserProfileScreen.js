@@ -15,7 +15,9 @@ class UserProfileScreen extends React.Component {
 
   async handleLogout() {
     // await AsyncStorage.setItem("isLoggedIn", );
+    console.log(AsyncStorage);
     await AsyncStorage.clear();
+    console.log(AsyncStorage);
     this.props.navigation.navigate("Login");
   }
 
