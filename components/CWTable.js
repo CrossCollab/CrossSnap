@@ -22,6 +22,8 @@ export default function CWTable(props) {
       {props.rows.map((row, index) => {
         return (
           <CWRow
+            handleCellChange={props.handleCellChange}
+            activeCells={props.activeCells}
             row={row}
             index={index}
             handleChange={props.handleChange}
