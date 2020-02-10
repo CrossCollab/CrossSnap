@@ -124,7 +124,7 @@ export default function CWCell(props) {
           ></Text>
         )}
         <TextInput
-          blurOnSubmit={false}
+          // blurOnSubmit={false}
           autoCapitalize="characters"
           maxLength={1}
           style={{

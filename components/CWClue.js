@@ -8,7 +8,8 @@ import {
   Keyboard,
   Animated,
   Button,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -48,7 +49,10 @@ export default function CWClue(props) {
         height: "auto",
         width: "100%",
         zIndex: 999,
-        marginBottom: isKeyboardVisible === true ? 335 : "0%",
+        marginBottom:
+          isKeyboardVisible === true
+            ? Dimensions.get("window").height * 0.41
+            : "0%",
         flexDirection: "row",
         justifyContent: "space-between"
       }}
@@ -67,6 +71,7 @@ export default function CWClue(props) {
           // paddingTop: "2%",
           // paddingBottom: isKeyboardVisible === true ? 380 : "0%",
           textAlign: "center",
+          textAlignVertical: "center",
           height: "auto",
           width: "85%",
           flex: 1
