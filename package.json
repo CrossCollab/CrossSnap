@@ -35,6 +35,7 @@
     "react-native-confetti": "^0.1.0",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-keyboard-manager": "^4.0.13-16",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-reanimated": "~1.4.0",
     "react-native-safe-area-context": "0.6.0",

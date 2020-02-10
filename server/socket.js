@@ -59,6 +59,12 @@ module.exports = io => {
         userName,
         users: roomInfo[gameId].users
       });
+
+      socket.emit("welcome", {
+        greeting: "hello",
+        players: roomInfo[gameId].users
+      });
+
       //on receiving the join message from client socket in CWScreen.js,
       //join the room requested (currently set to gameId value)
 

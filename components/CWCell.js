@@ -124,7 +124,7 @@ export default function CWCell(props) {
           ></Text>
         )}
         <TextInput
-          blurOnSubmit={false}
+          // blurOnSubmit={false}
           autoCapitalize="characters"
           maxLength={1}
           style={{
@@ -135,7 +135,7 @@ export default function CWCell(props) {
               ).length
                 ? "yellow"
                 : cell.correct
-                ? "green"
+                ? "#c2e0ad"
                 : "white",
             height: "60%",
             width: "60%",

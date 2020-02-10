@@ -6,6 +6,7 @@ import CWTable from "./CWTable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CWClue from "./CWClue";
 import HeaderOptions from "./HeaderOptions";
+import CWGameInfo from "./CWGameInfo";
 
 export default function CWGameWrapper(props) {
   let numOfRows = Math.sqrt(props.guesses.length);
@@ -49,6 +50,7 @@ export default function CWGameWrapper(props) {
         direction={props.direction}
         columnLength={props.columnLength}
       />
+      <CWGameInfo currentPlayers={props.currentPlayers} />
       <CWClue
         currentView={props.currentView}
         acrossClue={props.acrossClue}
