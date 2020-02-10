@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,17 @@ import {
 } from "react-native";
 
 export default function HeaderOptions(props) {
+  const [view, setView] = useState("View Down");
+
+  const toggleView = () => {
+    if (view === "View Across") {
+      setView("View Down");
+    } else {
+      setView("View Across");
+    }
+    props.swapView();
+  };
+
   return (
     <View
       style={{
@@ -26,11 +37,8 @@ export default function HeaderOptions(props) {
       >
         <Text>FocusTop</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() => props.swapView()}
-      >
-        <Text>Across/Down</Text>
+      <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
+        <Text>{view}</Text>
       </TouchableOpacity>
       {props.currentPlayers && props.currentPlayers.length ? (
         <Text style={{ backgroundColor: "red" }}>

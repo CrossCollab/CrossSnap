@@ -71,7 +71,6 @@ export default function CWClue(props) {
           // paddingTop: "2%",
           // paddingBottom: isKeyboardVisible === true ? 380 : "0%",
           textAlign: "center",
-          textAlignVertical: "center",
           height: "auto",
           width: "85%",
           flex: 1
