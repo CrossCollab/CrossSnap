@@ -59,6 +59,10 @@ const User = db.define("user", {
   points: {
     type: Sequelize.INTEGER,
     defaultValue: 0
+  },
+  textColor: {
+    type: Sequelize.STRING,
+    defaultValue: "black"
   }
 });
 

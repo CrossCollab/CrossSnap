@@ -1,6 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import SERVER_URL from "../serverUrl";
+import { connect } from "react-redux";
 import {
   Image,
   Platform,
@@ -12,6 +13,7 @@ import {
   TextInput,
   Keyboard
 } from "react-native";
+import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
 import CWRow from "../components/CWRow";
 import CWTable from "../components/CWTable";
@@ -21,7 +23,7 @@ import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 import Confetti from "../components/Confetti";
 
-export default class CrosswordTable extends React.Component {
+class CrosswordTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +35,13 @@ export default class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
+      userId: 0,
       columnLength: 0,
-      direction: "forward"
+      direction: "forward",
+
+      gridNums: [],
+
+      currentPlayers: []
     };
 
     //bind these functions so child components can call them in OG context
@@ -44,6 +51,8 @@ export default class CrosswordTable extends React.Component {
     this.checkBoard = this.checkBoard.bind(this);
     this.traverse = this.traverse.bind(this);
     this.swapView = this.swapView.bind(this);
+    this.findNextClue = this.findNextClue.bind(this);
+    this.findPreviousClue = this.findPreviousClue.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -63,16 +72,21 @@ export default class CrosswordTable extends React.Component {
         guesses: data.guesses,
         isReady: true,
         gameId,
-        columnLength: Math.sqrt(data.answers.length)
+
+        columnLength: Math.sqrt(data.answers.length),
+        gridNums: data.numbers,
+
+        userName: this.props.user.firstName
       });
+      const userName = this.state.userName;
+      const guesses = this.state.guesses;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
-        console.log("joined socket");
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", gameId);
+        this.emit("join", { gameId, userName, guesses });
       }
 
       //once the socket receives the connect message from the server-side, ask to join the
@@ -83,12 +97,21 @@ export default class CrosswordTable extends React.Component {
 
       //when the client receives a message from server socket of change puzzle,
       //update the state of the guesses array
+      this.socket.on("new player", info => {
+        const { userName, users } = info;
+        Toast.show({
+          text: `${userName} has entered the game!`
+        });
+        this.setState({ currentPlayers: users });
+      });
       this.socket.on("change puzzle", msg => {
-        // console.log("updating state from socket");
-        this.setState({ guesses: msg });
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+        allGuesses[msg.index].guess = msg.guess;
+        allGuesses[msg.index].color = msg.color;
+        this.setState({ guesses: allGuesses });
       });
     } catch (err) {
-      // console.err(err);
+      console.err(err);
     }
 
     let references = Array(this.state.answers.length)
@@ -105,23 +128,46 @@ export default class CrosswordTable extends React.Component {
   //update the value of the appropo letter, update state
   //kind of confusing b/c this is handling both traversal and game updates, ideally should be split up
   handleChange = idx => letter => {
-    this.traverse(idx, letter);
-    const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
     //if backspace is pressed
     if (letter.nativeEvent.key === "Backspace") {
       this.setState({ direction: "backwards" });
-      //if the cell was already empty (don't need to update game state)
-      if (allGuesses[idx].guess === "") {
-        // this.traverse(idx, letter);
-      } else {
+
+      //if the cell is not empty, just delete the value
+      if (this.state.guesses[idx].guess !== "") {
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[idx].guess = "";
-        this.setState({ guesses: allGuesses }, this.changeHelper);
+        this.setState(
+          { guesses: allGuesses }
+          // this.changeHelper
+        );
+        //still need to update state
+      } else {
+        const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
+        //if the cell was empty just move back
+        this.traverse(idx, letter);
+        allGuesses[idx].userId = this.props.user.id;
+        const cell = allGuesses[idx];
+        this.setState(
+          { guesses: allGuesses }
+          // this.changeHelper
+        );
+        this.changeHelper(cell);
         // this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
+      this.traverse(idx, letter);
+      const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
       allGuesses[idx].guess = letter.nativeEvent.key;
-      this.setState({ guesses: allGuesses }, this.changeHelper);
+
+      allGuesses[idx].color = this.props.user.textColor;
+      allGuesses[idx].userId = this.props.user.id;
+      const cell = allGuesses[idx];
+      this.setState(
+        { guesses: allGuesses }
+        // this.changeHelper
+      );
+      this.changeHelper(cell);
       // this.traverse(idx, letter);
     }
   };
@@ -168,9 +214,10 @@ export default class CrosswordTable extends React.Component {
   }
 
   //this function sends a message to the socket with the current state and roomId
-  changeHelper() {
+  changeHelper(cell) {
     let socketMsg = {
-      guesses: this.state.guesses,
+      // guesses: this.state.guesses,
+      cell,
       room: this.state.gameId
     };
     this.socket.emit("change puzzle", socketMsg);
@@ -219,6 +266,122 @@ export default class CrosswordTable extends React.Component {
       guesses: this.state.guesses
     });
   }
+
+  findNextClue() {
+    //find the index
+    if (this.state.currentView === "across") {
+      let nextIndex = this.state.guesses.findIndex(
+        guess =>
+          guess.index > this.state.currentCell.index &&
+          guess.across !== this.state.currentCell.across
+      );
+      console.log("next index", nextIndex);
+      if (nextIndex !== -1) {
+        this.state.refs[nextIndex].current.focus();
+      } else {
+        this.state.refs[0].current.focus();
+      }
+    } else {
+      //loop through the clues left to right top to bottom, (skip blank cells) if the cell above the cell you are looking at is a blank cell or is undefined,
+      //then that is the next cell
+      for (
+        let i = this.state.currentCell.index + 1;
+        i < this.state.answers.length;
+        i++
+      ) {
+        let thisCell = this.state.guesses[i];
+        if (thisCell.answer === ".") {
+          //if blank cell, skip
+          continue;
+        }
+        let aboveCell;
+        if (i < this.state.columnLength) {
+          //first row
+          aboveCell = { answer: "." };
+        } else {
+          //subtract column length to get cell above
+          aboveCell = this.state.guesses[i - this.state.columnLength];
+        }
+        if (aboveCell.answer === ".") {
+          this.state.refs[i].current.focus();
+          break;
+        }
+      }
+
+      // let startingDownClue = this.state.currentCell.down;
+      // let indexOfDownClueStart;
+      // for (let i = 0; i < this.state.answers.length; i++) {
+      //   if (this.state.guesses[i].down == startingDownClue) {
+      //     indexOfDownClueStart = i;
+      //     break;
+      //   }
+      // }
+      // let startingDownClueNum = this.state.gridNums[indexOfDownClueStart];
+      // console.log("clue num = ", startingDownClueNum);
+      // let j = 1;
+      // while (j < this.state.answers.length) {
+      //   let indexOfNextDownClue = this.state.gridNums.findIndex(
+      //     clueNum => clueNum === startingDownClueNum + j
+      //   );
+
+      //   //if this isn't a truly new down clue
+      //   if (
+      //     this.state.guesses[indexOfNextDownClue].down ===
+      //     this.state.guesses[indexOfNextDownClue - this.state.columnLength].down
+      //   )
+      //     this.state.refs[indexOfNextDownClue].current.focus();
+      //   break;
+      // }
+    }
+  }
+
+  findPreviousClue() {
+    if (this.state.currentView === "across") {
+      for (let i = this.state.currentCell.index - 1; i >= 0; i--) {
+        //looping through all the cells, starting with the previous, going backwards
+        let thisGuess = this.state.guesses[i];
+        //if it's a blank cell skip it
+        if (thisGuess.answer === ".") {
+          continue;
+        }
+        //if the current cell's across clue is different from the one we started from, you've found the last letter of a new across clue
+        if (thisGuess.across !== this.state.currentCell.across) {
+          //found the current previous cell
+          let newAcrossClue = thisGuess.across;
+          //find the first instance of that across clue in the guesses array
+          for (let k = 0; k < this.state.guesses.length; k++) {
+            if (this.state.guesses[k].across === newAcrossClue) {
+              this.state.refs[k].current.focus();
+              break;
+            }
+          }
+          break;
+        } else {
+          this.state.refs[this.state.answers.length - 1].current.focus();
+        }
+      }
+    } else {
+      for (let i = this.state.currentCell.index - 1; i >= 0; i--) {
+        let thisCell = this.state.guesses[i];
+        if (thisCell.answer === ".") {
+          //if blank cell, skip
+          continue;
+        }
+        let aboveCell;
+        if (i < this.state.columnLength) {
+          //first row
+          aboveCell = { answer: "." };
+        } else {
+          //subtract column length to get cell above
+          aboveCell = this.state.guesses[i - this.state.columnLength];
+        }
+        if (aboveCell.answer === ".") {
+          this.state.refs[i].current.focus();
+          break;
+        }
+      }
+    }
+  }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -239,6 +402,7 @@ export default class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
+          currentUsers={this.state.currentUsers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}
@@ -253,9 +417,14 @@ export default class CrosswordTable extends React.Component {
           direction={this.state.direction}
           columnLength={this.state.columnLength}
           swapView={this.swapView}
+          findNextClue={this.findNextClue}
+          findPreviousClue={this.findPreviousClue}
         />
       );
     }
   }
 }
-const styles = StyleSheet.create({});
+const mapState = state => {
+  return { user: state.user };
+};
+export default connect(mapState)(CrosswordTable);

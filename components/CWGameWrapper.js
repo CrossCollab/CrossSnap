@@ -13,7 +13,6 @@ export default function CWGameWrapper(props) {
   for (let i = 0; i < numOfRows; i++) {
     rows.push([]);
   }
-  // console.log("props in wrapper", props.guesses);
   for (let i = 0; i < props.guesses.length; i++) {
     let currentRow = Math.floor(i / numOfRows);
     let currentGuess = props.guesses[i];
@@ -26,8 +25,9 @@ export default function CWGameWrapper(props) {
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <HeaderOptions
-        swapView={props.swapView}
         checkBoard={props.checkBoard}
+        currentUsers={props.currentUsers}
+        swapView={props.swapView}
         refs={props.refs}
       />
       <CWTable
@@ -50,6 +50,10 @@ export default function CWGameWrapper(props) {
         acrossClue={props.acrossClue}
         downClue={props.downClue}
         swapView={props.swapView}
+        refs={props.refs}
+        currentCell={props.currentCell}
+        findNextClue={props.findNextClue}
+        findPreviousClue={props.findPreviousClue}
       />
     </View>
   );
