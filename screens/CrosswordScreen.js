@@ -98,6 +98,11 @@ class CrosswordTable extends React.Component {
       //once the socket receives the connect message from the server-side, ask to join the
       //room with the id matching the gameId
       this.socket.on("connect", onConnect);
+      this.socket.on("welcome", payload => {
+        console.log("message: ", payload.greeting);
+        console.log("current players", payload.players);
+        this.setState({ currentPlayers: payload.players });
+      });
 
       //NEED TO ADD SOMETHING PULLING IN THE CURRENT ROOM STATE FOR A NEW PLAYER ADDITION?
 
@@ -110,6 +115,7 @@ class CrosswordTable extends React.Component {
         });
         this.setState({ currentPlayers: users });
       });
+
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[msg.index].guess = msg.guess;
@@ -145,7 +151,6 @@ class CrosswordTable extends React.Component {
               userId: this.state.userId,
               room: this.state.gameId
             });
-
 
             // this.socket.emit("join", { newGameInstance, userName, guesses });
             //update state with new game instance information
@@ -377,31 +382,6 @@ class CrosswordTable extends React.Component {
           break;
         }
       }
-
-      // let startingDownClue = this.state.currentCell.down;
-      // let indexOfDownClueStart;
-      // for (let i = 0; i < this.state.answers.length; i++) {
-      //   if (this.state.guesses[i].down == startingDownClue) {
-      //     indexOfDownClueStart = i;
-      //     break;
-      //   }
-      // }
-      // let startingDownClueNum = this.state.gridNums[indexOfDownClueStart];
-      // console.log("clue num = ", startingDownClueNum);
-      // let j = 1;
-      // while (j < this.state.answers.length) {
-      //   let indexOfNextDownClue = this.state.gridNums.findIndex(
-      //     clueNum => clueNum === startingDownClueNum + j
-      //   );
-
-      //   //if this isn't a truly new down clue
-      //   if (
-      //     this.state.guesses[indexOfNextDownClue].down ===
-      //     this.state.guesses[indexOfNextDownClue - this.state.columnLength].down
-      //   )
-      //     this.state.refs[indexOfNextDownClue].current.focus();
-      //   break;
-      // }
     }
   }
 
@@ -474,7 +454,7 @@ class CrosswordTable extends React.Component {
         <CWGameWrapper
           handleCellChange={this.handleCellChange}
           activeCells={this.state.activeCells}
-          currentUsers={this.state.currentUsers}
+          currentPlayers={this.state.currentPlayers}
           gameId={gameId}
           guesses={this.state.guesses}
           handleChange={this.handleChange}

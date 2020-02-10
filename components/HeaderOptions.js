@@ -40,13 +40,6 @@ export default function HeaderOptions(props) {
       <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
         <Text>{view}</Text>
       </TouchableOpacity>
-      {props.currentPlayers && props.currentPlayers.length ? (
-        <Text style={{ backgroundColor: "red" }}>
-          {props.currentPlayers.length} here
-        </Text>
-      ) : (
-        <Text style={{ backgroundColor: "red" }} />
-      )}
     </View>
   );
 }

@@ -135,7 +135,7 @@ export default function CWCell(props) {
               ).length
                 ? "yellow"
                 : cell.correct
-                ? "green"
+                ? "#c2e0ad"
                 : "white",
             height: "60%",
             width: "60%",
