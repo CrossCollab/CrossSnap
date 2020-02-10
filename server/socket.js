@@ -46,5 +46,18 @@ module.exports = io => {
 
       socket.join(gameId, function() {});
     });
+
+    socket.on("leave", async function(payload) {
+      // console.log("user attempting to leave");
+      // console.log(
+      //   "user: ",
+      //   payload.userId,
+      //   "room: ",
+      //   payload.room,
+      //   "counter: ",
+      //   payload.counter
+      // );
+      socket.leave(payload.room);
+    });
   });
 };
