@@ -24,12 +24,14 @@ export default function CWGameWrapper(props) {
   //still need info on selected cell and on the neighbor cells
   return (
     <View style={{ height: "100%", width: "100%" }}>
+      <View style={{ height: "8%" }}></View>
       <HeaderOptions
         checkBoard={props.checkBoard}
         currentPlayers={props.currentPlayers}
         swapView={props.swapView}
         refs={props.refs}
       />
+      <View style={{ height: "2%" }}></View>
       <CWTable
         handleCellChange={props.handleCellChange}
         activeCells={props.activeCells}

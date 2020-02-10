@@ -98,15 +98,18 @@ SettingsStack.path = "";
 /////////////////////////////
 ///single crossword screen///
 /////////////////////////////
-const CrosswordStack = createStackNavigator({
-  Crossword: {
-    screen: CrosswordScreen,
-    navigationOptions: {
-      header: null
+
+const CrosswordStack = createStackNavigator(
+  {
+    Crossword: {
+      screen: CrosswordScreen,
+      navigationOptions: {
+        header: null
+      }
     }
-  }
-  // config
-});
+  },
+  config
+);
 
 CrosswordStack.navigationOptions = {
   tabBarLabel: "Crossword",
