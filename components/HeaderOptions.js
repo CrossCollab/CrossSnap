@@ -38,9 +38,10 @@ export default function HeaderOptions(props) {
 
 const styles = StyleSheet.create({
   touchable: {
-    borderColor: "black",
+    color: "grey",
+    borderColor: "lightgrey",
     borderWidth: 1,
-    backgroundColor: "lightgreen"
+    backgroundColor: "#c1ebb2"
     // height: "8%"
   }
 });

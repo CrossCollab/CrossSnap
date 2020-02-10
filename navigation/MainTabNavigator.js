@@ -97,7 +97,12 @@ SettingsStack.path = "";
 /////////////////////////////
 const CrosswordStack = createStackNavigator(
   {
-    Crossword: CrosswordScreen
+    Crossword: {
+      screen: CrosswordScreen,
+      navigationOptions: {
+        header: null
+      }
+    }
   },
   config
 );
