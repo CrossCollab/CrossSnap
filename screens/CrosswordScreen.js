@@ -56,8 +56,10 @@ class CrosswordTable extends React.Component {
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
+
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
+    // this.props.navigation.state.params = null;
 
     try {
       //get the gameInstance model instance from the backend
@@ -117,6 +119,63 @@ class CrosswordTable extends React.Component {
     } catch (err) {
       console.err(err);
     }
+
+    this._navListener = this.props.navigation.addListener(
+      "didFocus",
+      async event => {
+        // console.log("back to game screen");
+        //oddly the game instance param was in a weird spot
+        // console.log("data:", event.action.params.gameInstance);
+
+        try {
+          let newGameInstance = event.action.params.gameInstance;
+          // console.log("new game instance? :", newGameInstance);
+
+          if (newGameInstance === this.state.gameId) {
+            // console.log("same as before");
+            //same game as before, do nothing
+          } else {
+            //different game, update state, leave old socket, connect to new socket
+            // console.log("different game");
+            const { data } = await axios.get(
+              `${SERVER_URL}/api/gameInstance/${newGameInstance}`
+            );
+            //leave old room
+            this.socket.emit("leave", {
+              userId: this.state.userId,
+              room: this.state.gameId
+            });
+
+            counter++;
+            // this.socket.emit("join", { newGameInstance, userName, guesses });
+            //update state with new game instance information
+            let guesses = data.guesses;
+            let gameId = newGameInstance;
+            let userName = this.props.user.firstName;
+
+            this.setState({
+              answers: data.answers,
+              guesses: data.guesses,
+              isReady: true,
+              gameId: newGameInstance,
+
+              columnLength: Math.sqrt(data.answers.length),
+              gridNums: data.numbers,
+
+              userName: this.props.user.firstName
+            });
+
+            this.socket.emit("join", { gameId, userName, guesses });
+
+            // console.log("my socket info", this.socket);
+
+            //join the new room
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    );
 
     let references = Array(this.state.answers.length)
       .fill(0)
