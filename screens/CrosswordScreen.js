@@ -35,10 +35,10 @@ class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
-      userId: this.props.user.id,
+      userId: 0,
       columnLength: 0,
       direction: "forward",
-
+      userName: "",
       gridNums: [],
       activeCells: [],
       currentPlayers: []
@@ -77,7 +77,7 @@ class CrosswordTable extends React.Component {
 
         columnLength: Math.sqrt(data.answers.length),
         gridNums: data.numbers,
-
+        userId: this.props.user.id,
         userName: this.props.user.firstName
       });
       const userName = this.state.userName;
@@ -106,7 +106,10 @@ class CrosswordTable extends React.Component {
       this.socket.on("new player", info => {
         const { userName, users } = info;
         Toast.show({
-          text: `${userName} has entered the game!`
+          text:
+            userName === this.state.userName
+              ? "You have entered the game!"
+              : `${userName} has entered the game!`
         });
         this.setState({ currentPlayers: users });
       });
@@ -143,7 +146,23 @@ class CrosswordTable extends React.Component {
             //leave old room
             this.socket.emit("leave", {
               userId: this.state.userId,
-              room: this.state.gameId
+              room: this.state.gameId,
+              userName: this.state.userName
+            });
+            this.socket.on("player leaving", data => {
+              const { userName, currentPlayers, activeCells } = data;
+              if(userName === this.state.userName){
+                this.setState({activeCells: []})
+              }else{
+
+                this.setState(
+                  { activeCells, currentPlayers },
+                  Toast.show({
+                    text: `${userName} has left the game!`
+                  })
+                );
+              }
+              // this.setState({ currentPlayers });
             });
 
             // this.socket.emit("join", { newGameInstance, userName, guesses });
