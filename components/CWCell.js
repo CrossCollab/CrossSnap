@@ -128,7 +128,15 @@ export default function CWCell(props) {
           autoCapitalize="characters"
           maxLength={1}
           style={{
-            backgroundColor: cell.correct ? "green" : "white",
+            backgroundColor:
+              props.activeCells &&
+              props.activeCells.filter(
+                activeCell => activeCell.index === cell.index
+              ).length
+                ? "yellow"
+                : cell.correct
+                ? "green"
+                : "white",
             height: "60%",
             width: "60%",
             alignSelf: "center",

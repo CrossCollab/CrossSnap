@@ -35,12 +35,12 @@ class CrosswordTable extends React.Component {
       currentView: "across",
       confetti: false,
       refs: [],
-      userId: 0,
+      userId: this.props.user.id,
       columnLength: 0,
       direction: "forward",
 
       gridNums: [],
-
+      activeCells: [],
       currentPlayers: []
     };
 
@@ -56,8 +56,10 @@ class CrosswordTable extends React.Component {
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
+
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
+    // this.props.navigation.state.params = null;
 
     try {
       //get the gameInstance model instance from the backend
@@ -80,14 +82,18 @@ class CrosswordTable extends React.Component {
       });
       const userName = this.state.userName;
       const guesses = this.state.guesses;
+      const userId = this.state.userId;
       //set up a client-side socket
       this.socket = io(`${SERVER_URL}`);
 
       function onConnect() {
         //this.emit rather than this.socket.emit because the socket is already the this object
         //as it's being called inside this.socket.on
-        this.emit("join", { gameId, userName, guesses });
+        this.emit("join", { gameId, userName, guesses, userId });
       }
+      this.socket.on("cell focus", array => {
+        this.setState({ activeCells: array });
+      });
 
       //once the socket receives the connect message from the server-side, ask to join the
       //room with the id matching the gameId
@@ -113,6 +119,63 @@ class CrosswordTable extends React.Component {
     } catch (err) {
       console.err(err);
     }
+
+    this._navListener = this.props.navigation.addListener(
+      "didFocus",
+      async event => {
+        // console.log("back to game screen");
+        //oddly the game instance param was in a weird spot
+        // console.log("data:", event.action.params.gameInstance);
+
+        try {
+          let newGameInstance = event.action.params.gameInstance;
+          // console.log("new game instance? :", newGameInstance);
+
+          if (newGameInstance === this.state.gameId) {
+            // console.log("same as before");
+            //same game as before, do nothing
+          } else {
+            //different game, update state, leave old socket, connect to new socket
+            // console.log("different game");
+            const { data } = await axios.get(
+              `${SERVER_URL}/api/gameInstance/${newGameInstance}`
+            );
+            //leave old room
+            this.socket.emit("leave", {
+              userId: this.state.userId,
+              room: this.state.gameId
+            });
+
+
+            // this.socket.emit("join", { newGameInstance, userName, guesses });
+            //update state with new game instance information
+            let guesses = data.guesses;
+            let gameId = newGameInstance;
+            let userName = this.props.user.firstName;
+
+            this.setState({
+              answers: data.answers,
+              guesses: data.guesses,
+              isReady: true,
+              gameId: newGameInstance,
+
+              columnLength: Math.sqrt(data.answers.length),
+              gridNums: data.numbers,
+
+              userName: this.props.user.firstName
+            });
+
+            this.socket.emit("join", { gameId, userName, guesses });
+
+            // console.log("my socket info", this.socket);
+
+            //join the new room
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    );
 
     let references = Array(this.state.answers.length)
       .fill(0)
@@ -171,7 +234,9 @@ class CrosswordTable extends React.Component {
       // this.traverse(idx, letter);
     }
   };
-
+  handleCellChange(cell) {
+    this.setState({ myCurrentCell: cell });
+  }
   traverse(idx, letter) {
     //if the key is delete, move backwards, else move forwards
     if (letter.nativeEvent.key === "Backspace") {
@@ -232,7 +297,8 @@ class CrosswordTable extends React.Component {
   }
 
   handlePress(cell) {
-    this.setState({ currentCell: cell });
+    this.setState({ currentCell: cell }, this.handlePressHelper);
+
     if (cell.index === this.state.currentCell.index) {
       if (this.state.currentView === "across") {
         this.setState({ currentView: "down" });
@@ -240,6 +306,10 @@ class CrosswordTable extends React.Component {
         this.setState({ currentView: "across" });
       }
     }
+  }
+  handlePressHelper() {
+    const { currentCell, gameId, userId } = this.state;
+    this.socket.emit("change cell focus", { gameId, userId, currentCell });
   }
   checkBoard() {
     const checkedGuesses = this.state.guesses.map(guess => {
@@ -402,6 +472,8 @@ class CrosswordTable extends React.Component {
     } else {
       return (
         <CWGameWrapper
+          handleCellChange={this.handleCellChange}
+          activeCells={this.state.activeCells}
           currentUsers={this.state.currentUsers}
           gameId={gameId}
           guesses={this.state.guesses}

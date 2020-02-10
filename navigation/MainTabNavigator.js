@@ -27,7 +27,10 @@ const HomeStack = createStackNavigator(
       }
     },
     UserActiveCrosswords: {
-      screen: UserActiveCrosswordsScreen
+      screen: UserActiveCrosswordsScreen,
+      navigationOptions: {
+        header: null
+      }
     }
   },
   config
@@ -95,6 +98,7 @@ SettingsStack.path = "";
 /////////////////////////////
 ///single crossword screen///
 /////////////////////////////
+
 const CrosswordStack = createStackNavigator(
   {
     Crossword: {
