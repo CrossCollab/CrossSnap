@@ -146,7 +146,6 @@ class CrosswordTable extends React.Component {
               room: this.state.gameId
             });
 
-
             // this.socket.emit("join", { newGameInstance, userName, guesses });
             //update state with new game instance information
             let guesses = data.guesses;
@@ -468,7 +467,32 @@ class CrosswordTable extends React.Component {
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
     if (this.state.confetti) {
-      return <Confetti />;
+      return (
+        <View style={{ height: "100%", width: "100%" }}>
+          <Confetti />
+          <CWGameWrapper
+            handleCellChange={this.handleCellChange}
+            activeCells={this.state.activeCells}
+            currentUsers={this.state.currentUsers}
+            gameId={gameId}
+            guesses={this.state.guesses}
+            handleChange={this.handleChange}
+            handlePress={this.handlePress}
+            acrossClue={this.state.currentCell.across}
+            downClue={this.state.currentCell.down}
+            currentCell={this.state.currentCell}
+            currentView={this.state.currentView}
+            checkBoard={this.checkBoard}
+            refs={this.state.refs}
+            traverse={this.traverse}
+            direction={this.state.direction}
+            columnLength={this.state.columnLength}
+            swapView={this.swapView}
+            findNextClue={this.findNextClue}
+            findPreviousClue={this.findPreviousClue}
+          />
+        </View>
+      );
     } else {
       return (
         <CWGameWrapper
