@@ -13,16 +13,23 @@ export default function CWCell(props) {
   let myColor;
   // console.log("player colors: ", playerColors);
   // console.log("cell user id", cell.userId);
-  if (cell.index === 224) {
-    console.log("user", cell.userId);
-  }
 
-  if (playerColors.filter(player => player.userId === cell.userId)[0]) {
+  if (
+    props.playerColors.filter(player => player.userId === cell.userId)
+      .length === 0
+  ) {
+    myColor = "black";
+  } else {
     myColor = playerColors.filter(player => player.userId === cell.userId)[0]
       .color;
-  } else {
-    myColor = "purple";
   }
+
+  // if (playerColors.filter(player => player.userId === cell.userId)[0]) {
+  //   myColor = playerColors.filter(player => player.userId === cell.userId)[0]
+  //     .color;
+  // } else {
+  //   myColor = "purple";
+  // }
 
   // console.log("my color - ", myColor);
 

@@ -70,19 +70,34 @@ module.exports = io => {
     });
 
     socket.on("picked", function(msg) {
-      console.log(
-        "my color in socket",
-        msg.color,
-        "user id ",
-        msg.userId,
-        "room: ",
-        msg.room
-      );
+      // console.log(
+      //   "my color in socket",
+      //   msg.color,
+      //   "user id ",
+      //   msg.userId,
+      //   "room: ",
+      //   msg.room
+      // );
       if (!roomInfo[msg.room].colorChoices) {
+        console.log("first player in room to choose color");
         roomInfo[msg.room].colorChoices = [
           { userId: msg.userId, color: msg.color }
         ];
+      } else if (
+        roomInfo[msg.room].colorChoices.filter(playerColor => {
+          return playerColor.userId === msg.userId;
+        }).length
+      ) {
+        console.log("player chose a second color");
+        let index = roomInfo[msg.room].colorChoices.findIndex(
+          playerChoice => playerChoice.userId === msg.userId
+        );
+        roomInfo[msg.room].colorChoices[index] = {
+          userId: msg.userId,
+          color: msg.color
+        };
       } else {
+        console.log("new player (not first) chose color");
         roomInfo[msg.room].colorChoices.push({
           userId: msg.userId,
           color: msg.color

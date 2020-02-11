@@ -130,6 +130,7 @@ class CrosswordTable extends React.Component {
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[msg.index].guess = msg.guess;
+        allGuesses[msg.index].userId = msg.userId;
         allGuesses[msg.index].color = msg.color;
         this.setState({ guesses: allGuesses });
       });
@@ -316,6 +317,7 @@ class CrosswordTable extends React.Component {
       cell,
       room: this.state.gameId
     };
+    console.log("cell sent to socket", cell);
     this.socket.emit("change puzzle", socketMsg);
   }
 
