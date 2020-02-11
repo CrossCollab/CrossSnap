@@ -87,7 +87,7 @@ export default function CWCell(props) {
               ? "#c1ebb2"
               : cell.down === props.downClue && props.currentView === "down"
               ? "#c1ebb2"
-              : "#d1d9e6",
+              : "white",
           height: "100%",
           width: `${100 / props.rowCount}%`,
           borderColor: "gray",
@@ -100,14 +100,15 @@ export default function CWCell(props) {
           <Text
             style={{
               flex: 1,
-              fontSize: 4,
+              fontSize: 5,
               zIndex: 99999,
               position: "absolute",
               left: "0%",
               top: "0%",
-              backgroundColor: "lightgrey",
-              borderColor: "grey",
-              borderWidth: 1
+              // backgroundColor: "white",
+              fontWeight: "bold"
+              // borderColor: "grey",
+              // borderWidth: 1
             }}
           >
             {cell.number}
