@@ -31,9 +31,12 @@ export default function CWGameWrapper(props) {
         currentPlayers={props.currentPlayers}
         swapView={props.swapView}
         refs={props.refs}
+        reZoom={props.reZoom}
+        zoomFactor={props.zoomFactor}
       />
-      <View style={{ height: "2%" }}></View>
       <CWTable
+        zoomFactor={props.zoomFactor}
+        reZoom={props.reZoom}
         handleCellChange={props.handleCellChange}
         activeCells={props.activeCells}
         rows={rows}
@@ -50,6 +53,7 @@ export default function CWGameWrapper(props) {
         direction={props.direction}
         columnLength={props.columnLength}
       />
+      <View style={{ height: "2%" }} />
       <CWGameInfo currentPlayers={props.currentPlayers} />
       <CWClue
         currentView={props.currentView}

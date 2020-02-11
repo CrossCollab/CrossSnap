@@ -12,10 +12,18 @@ export default function CWTable(props) {
         alignContent: "flex-start",
         // justifyContent: "flex-start",
         height: "100%",
-        marginTop: "0%"
+        marginTop: "1%",
+        paddingTop: "2%",
+        paddingLeft: "2%",
+        paddingRight: "2%"
       }}
+      keyboardShouldPersistTaps="always"
       maximumZoomScale="2.5"
       minimumZoomScale="1"
+      zoomScale={props.zoomFactor}
+      // onScroll={e => props.reZoom(e.nativeEvent.zoomScale)}
+      scrollEventThrottle="100"
+      // zoomScale="2"
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
     >
