@@ -138,6 +138,7 @@ export default class LinksScreen extends React.Component {
     );
     //route to crossword Screen with component passed in
   };
+
   render() {
     return (
       // <ScrollView style={styles.container}>
@@ -181,6 +182,7 @@ export default class LinksScreen extends React.Component {
             marginRight: 20
           }}
         ></TextInput>
+
         <Button
           title="join game"
           style={{ width: 50, height: 50, backgroundColor: "grey" }}
@@ -197,8 +199,15 @@ export default class LinksScreen extends React.Component {
     );
   }
 }
+
 LinksScreen.navigationOptions = {
-  title: "Links"
+  title: "Links",
+  headerStyle: {
+    backgroundColor: "rgb(0, 0, 102)"
+  },
+  headerTitleStyle: {
+    color: "white"
+  }
 };
 
 const styles = StyleSheet.create({
@@ -208,3 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   }
 });
+
+/////////////////////////////////
+// Links is currently hard-coded
+/////////////////////////////////
