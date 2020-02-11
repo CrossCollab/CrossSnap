@@ -472,7 +472,7 @@ class CrosswordTable extends React.Component {
           <CWGameWrapper
             handleCellChange={this.handleCellChange}
             activeCells={this.state.activeCells}
-            currentUsers={this.state.currentUsers}
+            currentPlayers={this.state.currentPlayers}
             gameId={gameId}
             guesses={this.state.guesses}
             handleChange={this.handleChange}
