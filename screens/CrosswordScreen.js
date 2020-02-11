@@ -42,7 +42,7 @@ class CrosswordTable extends React.Component {
       gridNums: [],
       activeCells: [],
       currentPlayers: [],
-      zoomFactor: "1"
+      zoomFactor: 1
     };
 
     //bind these functions so child components can call them in OG context

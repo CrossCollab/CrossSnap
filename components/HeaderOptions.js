@@ -8,19 +8,19 @@ import {
 } from "react-native";
 
 export default function HeaderOptions(props) {
-  const [view, setView] = useState("View Down");
+  const [view, setView] = useState("View across");
 
   const toggleView = () => {
-    if (view === "View Across") {
-      setView("View Down");
-    } else {
-      setView("View Across");
-    }
     props.swapView();
+    if (view === "View across") {
+      setView(`View ${props.currentView}`);
+    } else {
+      setView(`View ${props.currentView}`);
+    }
   };
 
   const refocus = () => {
-    props.reZoom(props.zoomFactor + 0.001);
+    props.reZoom(props.zoomFactor + 0.01);
     props.refs[0].current.focus();
     props.refs[0].current.blur();
     // props.refs[0].current.focus();
@@ -35,7 +35,9 @@ export default function HeaderOptions(props) {
         padding: 3,
         backgroundColor: "#c1ebb2",
         alignContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        borderBottomColor: "grey",
+        borderBottomWidth: 0
       }}
     >
       <TouchableOpacity style={styles.touchable} onPress={props.checkBoard}>

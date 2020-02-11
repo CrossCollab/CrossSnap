@@ -25,7 +25,7 @@ export default function CWGameWrapper(props) {
   //still need info on selected cell and on the neighbor cells
   return (
     <View style={{ height: "100%", width: "100%" }}>
-      <View style={{ height: "8%" }}></View>
+      <View style={{ height: "4%", backgroundColor: "#c1ebb2" }}></View>
       <HeaderOptions
         checkBoard={props.checkBoard}
         currentPlayers={props.currentPlayers}
@@ -33,6 +33,7 @@ export default function CWGameWrapper(props) {
         refs={props.refs}
         reZoom={props.reZoom}
         zoomFactor={props.zoomFactor}
+        currentView={props.currentView}
       />
       <CWTable
         zoomFactor={props.zoomFactor}
@@ -53,7 +54,6 @@ export default function CWGameWrapper(props) {
         direction={props.direction}
         columnLength={props.columnLength}
       />
-      <View style={{ height: "2%" }} />
       <CWGameInfo currentPlayers={props.currentPlayers} />
       <CWClue
         currentView={props.currentView}
