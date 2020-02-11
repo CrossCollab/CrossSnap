@@ -36,9 +36,8 @@ module.exports = io => {
     });
     socket.on("change cell focus", cell => {
       const { gameId, userId, currentCell } = cell;
-      roomInfo[gameId].activeCells[userId] = currentCell;
-      const focusArray = Object.values(roomInfo[gameId].activeCells);
-      io.in(gameId).emit("cell focus", focusArray);
+      roomInfo[gameId].activeCells[cell.userId] = cell.currentCell.index;
+      io.in(gameId).emit("cell focus", roomInfo[gameId].activeCells);
     });
 
     socket.on("join", async function(payload) {
@@ -79,7 +78,7 @@ module.exports = io => {
       //   msg.room
       // );
       if (!roomInfo[msg.room].colorChoices) {
-        console.log("first player in room to choose color");
+        // console.log("first player in room to choose color");
         roomInfo[msg.room].colorChoices = [
           { userId: msg.userId, color: msg.color }
         ];
@@ -88,7 +87,7 @@ module.exports = io => {
           return playerColor.userId === msg.userId;
         }).length
       ) {
-        console.log("player chose a second color");
+        // console.log("player chose a second color");
         let index = roomInfo[msg.room].colorChoices.findIndex(
           playerChoice => playerChoice.userId === msg.userId
         );
@@ -97,7 +96,7 @@ module.exports = io => {
           color: msg.color
         };
       } else {
-        console.log("new player (not first) chose color");
+        // console.log("new player (not first) chose color");
         roomInfo[msg.room].colorChoices.push({
           userId: msg.userId,
           color: msg.color

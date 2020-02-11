@@ -41,7 +41,7 @@ class CrosswordTable extends React.Component {
       direction: "forward",
       userName: "",
       gridNums: [],
-      activeCells: [],
+      activeCells: {},
       currentPlayers: [],
       myColor: "",
       playerColors: []
@@ -94,8 +94,8 @@ class CrosswordTable extends React.Component {
         //as it's being called inside this.socket.on
         this.emit("join", { gameId, userName, guesses, userId });
       }
-      this.socket.on("cell focus", array => {
-        this.setState({ activeCells: array });
+      this.socket.on("cell focus", activeCellsObj => {
+        this.setState({ activeCells: activeCellsObj });
       });
 
       //once the socket receives the connect message from the server-side, ask to join the
