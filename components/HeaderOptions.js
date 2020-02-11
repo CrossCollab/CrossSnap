@@ -25,7 +25,8 @@ export default function HeaderOptions(props) {
         height: "5%",
         flexDirection: "row",
         justifyContent: "space-around",
-        padding: 3
+        padding: 3,
+        backgroundColor: "#c1ebb2"
       }}
     >
       <TouchableOpacity style={styles.touchable} onPress={props.checkBoard}>
@@ -35,7 +36,7 @@ export default function HeaderOptions(props) {
         style={styles.touchable}
         onPress={() => props.refs[0].current.focus()}
       >
-        <Text>FocusTop</Text>
+        <Text>Refocus</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
         <Text>{view}</Text>
@@ -49,7 +50,10 @@ const styles = StyleSheet.create({
     color: "grey",
     borderColor: "lightgrey",
     borderWidth: 1,
-    backgroundColor: "#c1ebb2"
+    backgroundColor: "#c1ebb2",
+    padding: 4,
+    borderColor: "grey",
+    borderRadius: 5
     // height: "8%"
   }
 });
