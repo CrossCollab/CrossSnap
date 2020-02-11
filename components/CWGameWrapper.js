@@ -36,8 +36,12 @@ export default function CWGameWrapper(props) {
         currentView={props.currentView}
       />
       <CWTable
+
+        playerColors={props.playerColors}
+
         zoomFactor={props.zoomFactor}
         reZoom={props.reZoom}
+
         handleCellChange={props.handleCellChange}
         activeCells={props.activeCells}
         rows={rows}

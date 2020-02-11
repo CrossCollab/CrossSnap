@@ -4,6 +4,10 @@ import CWCell from "./CWCell";
 import CWRow from "./CWRow";
 
 export default function CWTable(props) {
+  console.log(
+    "player color filter",
+    props.playerColors.filter(player => player.userId === 0).length
+  );
   return (
     <ScrollView
       style={{
@@ -35,6 +39,7 @@ export default function CWTable(props) {
         return (
           <CWRow
             handleCellChange={props.handleCellChange}
+            playerColors={props.playerColors}
             activeCells={props.activeCells}
             row={row}
             index={index}
