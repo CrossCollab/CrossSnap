@@ -1,8 +1,15 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, Picker } from "react-native";
+import { View, Text, StyleSheet, FlatList, Picker, Button } from "react-native";
 import { connect } from "react-redux";
 import { fetchCrosswords } from "../store/allCrosswords";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SERVER_URL from "../serverUrl";
+import axios from "axios";
+import UserProfileScreen from "./UserProfileScreen";
+// import { useNavigation } from "@react-navigation/native";
+import { withNavigation } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
 export class allCrosswordsScreen extends Component {
   constructor(props) {
@@ -11,8 +18,12 @@ export class allCrosswordsScreen extends Component {
       size: "",
       difficulty: ""
     };
+
     this.handleChangeDifficulty = this.handleChangeDifficulty.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
+    // this.handlePress = this.handlePress.bind(this);
+    this.handleCombined = this.handleCombined.bind(this);
+    this.joinGame = this.joinGame.bind(this);
   }
 
   handleChangeSize(size) {
@@ -31,9 +42,121 @@ export class allCrosswordsScreen extends Component {
     }
   }
 
-  renderItem({ item, index }) {
+  // // Creates a new game inside the database
+  // async handlePress(value) {
+  //   //fetch the crossword object from the database
+  //   const { data } = await axios.get(
+  //     `${SERVER_URL}/api/crossword/${this.state.crosswordId}`
+  //   );
+  //   //make a new game instance object that will be used to create one in the db
+  //   let acrossObj = {};
+  //   data.crosswordObjectString.clues.across.forEach((clue, index) => {
+  //     let clueNumber = clue.split(". ")[0];
+  //     let cluePhrase = clue.split(". ")[1];
+  //     acrossObj[clueNumber] = cluePhrase;
+  //   });
+  //   let downObj = {};
+  //   data.crosswordObjectString.clues.down.forEach((clue, index) => {
+  //     let clueNumber = clue.split(". ")[0];
+  //     let cluePhrase = clue.split(". ")[1];
+  //     downObj[clueNumber] = cluePhrase;
+  //   });
+  //   let guessArray = data.crosswordObjectString.grid.map((answer, index) => {
+  //     if (answer === ".") {
+  //       return (guessObj = {
+  //         answer: answer,
+  //         guess: ".",
+  //         userId: 0,
+  //         index
+  //       });
+  //     }
+  //     const findAcross = index => {
+  //       const clueNumber = data.crosswordObjectString.gridnums[index];
+  //       if (data.crosswordObjectString.grid[index] === ".") {
+  //         return undefined;
+  //       } else if (clueNumber) {
+  //         if (!acrossObj[`${clueNumber}`]) {
+  //           const lowerNumber = index - 1;
+  //           return findAcross(lowerNumber);
+  //         } else {
+  //           return acrossObj[`${clueNumber}`];
+  //         }
+  //       } else {
+  //         const lowerNumber = index - 1;
+  //         return findAcross(lowerNumber);
+  //       }
+  //     };
+  //     const tableLength = Math.sqrt(data.crosswordObjectString.gridnums.length);
+  //     const findDown = index => {
+  //       const clueNumber = data.crosswordObjectString.gridnums[index];
+  //       if (data.crosswordObjectString.grid[index] === ".") {
+  //         return undefined;
+  //       } else if (clueNumber) {
+  //         if (!downObj[`${clueNumber}`]) {
+  //           const lowerNumber = index - tableLength;
+  //           return findDown(lowerNumber);
+  //         } else {
+  //           return downObj[`${clueNumber}`];
+  //         }
+  //       } else {
+  //         const lowerNumber = index - tableLength;
+  //         return findDown(lowerNumber);
+  //       }
+  //     };
+  //     return {
+  //       answer: answer,
+  //       guess: "",
+  //       userId: 0,
+  //       index,
+  //       number: data.crosswordObjectString.gridnums[index],
+  //       across: findAcross(index),
+  //       down: findDown(index),
+  //       color: "black"
+  //     };
+  //   });
+  //   //make a new game instance object that will be used to create one in the db
+  //   let newGameInstance = {
+  //     crosswordId: this.state.crosswordId,
+  //     status: "incomplete",
+  //     answers: data.crosswordObjectString.grid,
+  //     numbers: data.crosswordObjectString.gridnums,
+  //     across: data.crosswordObjectString.clues.across,
+  //     down: data.crosswordObjectString.clues.down,
+  //     guesses: guessArray
+  //   };
+  //   //create new gameInstance in DB
+  //   await axios.post(`${SERVER_URL}/api/gameInstance/`, newGameInstance);
+  //   //route to crossword Screen with component passed in
+  // }
+
+  joinGame() {
+    this.props.navigation.navigate("Crossword", {
+      gameInstance: 3
+    });
+  }
+
+  handleCombined() {
+    this.handlePress();
+    this.joinGame();
+  }
+
+  renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          // this.handlePress;
+          // console.log("hello");
+          // console.log("hi", this.props.navigation);
+          // this.props.navigation.navigate("Crossword");
+          this.props.navigation.navigate("Crossword", {
+            gameInstance: 3
+          });
+          // console.log("props here", this.props);
+        }}
+        // onPress={() => {
+        //   this.joinGame();
+        // }}
+      >
         <View
           style={{
             borderRadius: 10,
@@ -62,7 +185,7 @@ export class allCrosswordsScreen extends Component {
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
   componentDidMount() {
     try {
@@ -87,8 +210,28 @@ export class allCrosswordsScreen extends Component {
       );
     }
 
+    // const navigation = useNavigation();
+
+    // console.log("this.props here", this.props.navigation);
+
     return (
       <View>
+        <Button
+          title="joinGame"
+          onPress={() =>
+            this.props.navigation.navigate("Crossword", {
+              gameInstance: 3
+            })
+          }
+        ></Button>
+        <TouchableOpacity
+        // onPress={() =>
+        //   this.props.navigation.actions.navigate("UserProfileScreen")
+        // }
+        >
+          <Text>Hi, this is sample text</Text>
+        </TouchableOpacity>
+
         <Picker
           selectedValue={this.state.size}
           onValueChange={this.handleChangeSize}
@@ -117,6 +260,7 @@ export class allCrosswordsScreen extends Component {
           contentContainerStyle={styles.list}
           data={filteredData}
           renderItem={this.renderItem}
+          // renderItem={item => this.renderItem.bind(this, item)}
         />
       </View>
     );
@@ -137,7 +281,7 @@ const styles = StyleSheet.create({
 });
 
 allCrosswordsScreen.navigationOptions = {
-  title: "All Crosswords"
+  title: "allCrosswordsScreen"
 };
 
 // Remove yellow warning box
