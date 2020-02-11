@@ -157,10 +157,9 @@ class CrosswordTable extends React.Component {
             });
             this.socket.on("player leaving", data => {
               const { userName, currentPlayers, activeCells } = data;
-              if(userName === this.state.userName){
-                this.setState({activeCells: []})
-              }else{
-
+              if (userName === this.state.userName) {
+                this.setState({ activeCells: [], currentPlayers: [] });
+              } else {
                 this.setState(
                   { activeCells, currentPlayers },
                   Toast.show({
