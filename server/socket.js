@@ -59,23 +59,29 @@ module.exports = io => {
         userName,
         users: roomInfo[gameId].users
       });
+
+      socket.emit("welcome", {
+        greeting: "hello",
+        players: roomInfo[gameId].users
+      });
+
       //on receiving the join message from client socket in CWScreen.js,
       //join the room requested (currently set to gameId value)
 
       socket.join(gameId, function() {});
     });
 
-    socket.on("leave", async function(payload) {
-      // console.log("user attempting to leave");
-      // console.log(
-      //   "user: ",
-      //   payload.userId,
-      //   "room: ",
-      //   payload.room,
-      //   "counter: ",
-      //   payload.counter
-      // );
-      socket.leave(payload.room);
+    socket.on("leave", function(payload) {
+      const { room, userId, userName } = payload;
+      roomInfo[room].users.filter(name => name !== userName);
+      socket.leave(room);
+      roomInfo[room].activeCells[userId] = {};
+      const focusArray = Object.values(roomInfo[room].activeCells);
+      io.in(room).emit("player leaving", {
+        userName,
+        currentPlayers: roomInfo[room].users,
+        activeCells: focusArray
+      });
     });
   });
 };
