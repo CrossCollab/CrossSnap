@@ -10,5 +10,11 @@ export default function SettingsScreen() {
 }
 
 SettingsScreen.navigationOptions = {
-  title: "app.json"
+  title: "app.json",
+  headerStyle: {
+    backgroundColor: "rgb(0, 0, 102)"
+  },
+  headerTitleStyle: {
+    color: "white"
+  }
 };

@@ -128,10 +128,11 @@ CrosswordStack.path = "";
 ////////////////////////////
 const allCrosswordsStack = createStackNavigator(
   {
-    allCrosswordsScreen
+    allCrosswordsScreen: allCrosswordsScreen
   },
   config
 );
+
 allCrosswordsStack.navigationOptions = {
   tabBarLabel: "All Crosswords",
   tabBarIcon: ({ focused }) => (
@@ -143,6 +144,24 @@ allCrosswordsStack.navigationOptions = {
 };
 
 allCrosswordsStack.path = "";
+
+// const LinksStack = createStackNavigator(
+//   {
+//     Links: LinksScreen
+//   },
+//   config
+// );
+
+// LinksStack.navigationOptions = {
+//   tabBarLabel: "Links",
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+//     />
+//   )
+// };
+// LinksStack.path = "";
 
 //////////////////////////////////////////
 //user-specific active crosswords screen//
