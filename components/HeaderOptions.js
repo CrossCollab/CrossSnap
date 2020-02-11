@@ -20,7 +20,7 @@ export default function HeaderOptions(props) {
   };
 
   const refocus = () => {
-    props.reZoom(props.zoomFactor + 0.01);
+    props.reZoom(props.zoomFactor - 0.01);
     props.refs[0].current.focus();
     props.refs[0].current.blur();
     // props.refs[0].current.focus();
