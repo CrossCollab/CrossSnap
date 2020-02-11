@@ -8,36 +8,51 @@ import {
 } from "react-native";
 
 export default function HeaderOptions(props) {
-  const [view, setView] = useState("View Down");
+  const [view, setView] = useState("View across");
 
   const toggleView = () => {
-    if (view === "View Across") {
-      setView("View Down");
-    } else {
-      setView("View Across");
-    }
     props.swapView();
+    if (view === "View across") {
+      setView(`View ${props.currentView}`);
+    } else {
+      setView(`View ${props.currentView}`);
+    }
+  };
+
+  const refocus = () => {
+    props.reZoom(props.zoomFactor - 0.01);
+    props.refs[0].current.focus();
+    props.refs[0].current.blur();
+    // props.refs[0].current.focus();
   };
 
   return (
     <View
       style={{
-        height: "5%",
+        height: "7%",
         flexDirection: "row",
         justifyContent: "space-around",
         padding: 3,
-        backgroundColor: "#c1ebb2"
+        backgroundColor: "#c1ebb2",
+        alignContent: "center",
+        alignItems: "center",
+        borderBottomColor: "grey",
+        borderBottomWidth: 0
       }}
     >
       <TouchableOpacity style={styles.touchable} onPress={props.checkBoard}>
         <Text>Check Game</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() => props.refs[0].current.focus()}
-      >
+      <TouchableOpacity style={styles.touchable} onPress={() => refocus()}>
         <Text>Refocus</Text>
       </TouchableOpacity>
+      {/* could make the refocus a toggleable focus on focus, incorporating below */}
+      {/* <TouchableOpacity
+        style={styles.touchable}
+        onPress={() => props.refs[0].current.blur()}
+      >
+        <Text>Unfocus</Text>
+      </TouchableOpacity> */}
       <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
         <Text>{view}</Text>
       </TouchableOpacity>
@@ -53,7 +68,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#c1ebb2",
     padding: 4,
     borderColor: "grey",
-    borderRadius: 5
-    // height: "8%"
+    borderRadius: 5,
+    height: "70%",
+    alignContent: "center"
   }
 });
