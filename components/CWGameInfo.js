@@ -10,22 +10,26 @@ import {
 export default function CWGameInfo(props) {
   console.log("current players", props.currentPlayers);
   return (
-    <View style={{ height: "15%" }}>
+    <View
+      style={{ height: "15%", position: "absolute", top: "70%", width: "100%" }}
+    >
       <View style={{ height: "60%" }}>
         {props.currentPlayers && props.currentPlayers.length ? (
           <Text style={{ backgroundColor: "lightblue" }}>
+            Active Players:{" "}
             {props.currentPlayers ? props.currentPlayers.length : "unknown"}{" "}
-            here
           </Text>
         ) : (
           <Text style={{ backgroundColor: "lightblue" }} />
         )}
       </View>
-      {props.currentPlayers.map(player => (
-        <View style={{ height: "40%", backgroundColor: "green" }}>
-          <Text>${player} Playing!</Text>
-        </View>
-      ))}
+      <View style={{ height: "30%" }}>
+        {props.currentPlayers.map((player, index) => (
+          <View key={index}>
+            <Text>{player}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
