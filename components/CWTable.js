@@ -11,13 +11,25 @@ export default function CWTable(props) {
         flex: 1,
         alignContent: "flex-start",
         // justifyContent: "flex-start",
-        height: "100%",
-        marginTop: "0%"
+        height: "100%"
+        // borderWidth: 3,
+        // borderColor: "grey"
+
+        // marginTop: "1%"
+        // paddingTop: "2%",
+        // paddingLeft: "2%",
+        // paddingRight: "2%"
       }}
+      // keyboardShouldPersistTaps="always"
       maximumZoomScale="2.5"
       minimumZoomScale="1"
+      zoomScale={props.zoomFactor}
+      // onScroll={e => props.reZoom(e.nativeEvent.zoomScale)}
+      // scrollEventThrottle="100"
+      // zoomScale="2"
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
+      // scrollEnabled={false}
     >
       {props.rows.map((row, index) => {
         return (

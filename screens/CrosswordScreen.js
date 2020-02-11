@@ -41,7 +41,8 @@ class CrosswordTable extends React.Component {
       userName: "",
       gridNums: [],
       activeCells: [],
-      currentPlayers: []
+      currentPlayers: [],
+      zoomFactor: 1
     };
 
     //bind these functions so child components can call them in OG context
@@ -53,6 +54,7 @@ class CrosswordTable extends React.Component {
     this.swapView = this.swapView.bind(this);
     this.findNextClue = this.findNextClue.bind(this);
     this.findPreviousClue = this.findPreviousClue.bind(this);
+    this.reZoom = this.reZoom.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -450,6 +452,10 @@ class CrosswordTable extends React.Component {
       }
     }
   }
+
+  reZoom(value) {
+    this.setState({ zoomFactor: value });
+  }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -472,7 +478,7 @@ class CrosswordTable extends React.Component {
           <CWGameWrapper
             handleCellChange={this.handleCellChange}
             activeCells={this.state.activeCells}
-            currentUsers={this.state.currentUsers}
+            currentPlayers={this.state.currentPlayers}
             gameId={gameId}
             guesses={this.state.guesses}
             handleChange={this.handleChange}
@@ -489,12 +495,15 @@ class CrosswordTable extends React.Component {
             swapView={this.swapView}
             findNextClue={this.findNextClue}
             findPreviousClue={this.findPreviousClue}
+            zoomFactor={this.state.zoomFactor}
+            reZoom={this.reZoom}
           />
         </View>
       );
     } else {
       return (
         <CWGameWrapper
+          zoomFactor={this.state.zoomFactor}
           handleCellChange={this.handleCellChange}
           activeCells={this.state.activeCells}
           currentPlayers={this.state.currentPlayers}
@@ -514,6 +523,7 @@ class CrosswordTable extends React.Component {
           swapView={this.swapView}
           findNextClue={this.findNextClue}
           findPreviousClue={this.findPreviousClue}
+          reZoom={this.reZoom}
         />
       );
     }

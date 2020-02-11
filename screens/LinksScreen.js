@@ -200,7 +200,6 @@ export default class LinksScreen extends React.Component {
   }
 }
 
-
 LinksScreen.navigationOptions = {
   title: "Links",
   headerStyle: {
@@ -210,7 +209,6 @@ LinksScreen.navigationOptions = {
     color: "white"
   }
 };
-
 
 const styles = StyleSheet.create({
   container: {
