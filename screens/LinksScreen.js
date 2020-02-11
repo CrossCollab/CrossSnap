@@ -197,9 +197,9 @@ export default class LinksScreen extends React.Component {
     );
   }
 }
-LinksScreen.navigationOptions = {
-  title: "Links"
-};
+// LinksScreen.navigationOptions = {
+//   title: "Links"
+// };
 
 const styles = StyleSheet.create({
   container: {

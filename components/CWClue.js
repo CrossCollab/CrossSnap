@@ -51,7 +51,7 @@ export default function CWClue(props) {
         zIndex: 999,
         marginBottom:
           isKeyboardVisible === true
-            ? Dimensions.get("window").height * 0.41
+            ? Dimensions.get("window").height * 0.42
             : "0%",
         flexDirection: "row",
         justifyContent: "space-between"
