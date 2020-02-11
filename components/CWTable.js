@@ -23,6 +23,7 @@ export default function CWTable(props) {
         return (
           <CWRow
             handleCellChange={props.handleCellChange}
+            playerColors={props.playerColors}
             activeCells={props.activeCells}
             row={row}
             index={index}

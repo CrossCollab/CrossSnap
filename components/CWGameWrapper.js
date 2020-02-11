@@ -34,6 +34,7 @@ export default function CWGameWrapper(props) {
       />
       <View style={{ height: "2%" }}></View>
       <CWTable
+        playerColors={props.playerColors}
         handleCellChange={props.handleCellChange}
         activeCells={props.activeCells}
         rows={rows}

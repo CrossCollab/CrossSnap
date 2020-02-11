@@ -69,6 +69,29 @@ module.exports = io => {
       socket.join(gameId, function() {});
     });
 
+    socket.on("picked", function(msg) {
+      console.log(
+        "my color in socket",
+        msg.color,
+        "user id ",
+        msg.userId,
+        "room: ",
+        msg.room
+      );
+      if (!roomInfo[msg.room].colorChoices) {
+        roomInfo[msg.room].colorChoices = [
+          { userId: msg.userId, color: msg.color }
+        ];
+      } else {
+        roomInfo[msg.room].colorChoices.push({
+          userId: msg.userId,
+          color: msg.color
+        });
+      }
+      roomInfo[msg.room].colorChoices;
+      io.in(msg.room).emit("color choice", roomInfo[msg.room].colorChoices);
+    });
+
     socket.on("leave", function(payload) {
       const { room, userId, userName } = payload;
       const newArray = roomInfo[room].users.filter(name => name !== userName);

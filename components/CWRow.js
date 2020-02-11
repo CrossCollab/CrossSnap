@@ -15,6 +15,7 @@ export default function CWRow(props) {
       {props.row.map((cell, index) => {
         return (
           <CWCell
+            playerColors={props.playerColors}
             handleCellChange={props.handleCellChange}
             activeCells={props.activeCells}
             cell={cell}

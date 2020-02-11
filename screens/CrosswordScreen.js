@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Keyboard
+  Keyboard,
+  Picker
 } from "react-native";
 import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
@@ -41,7 +42,9 @@ class CrosswordTable extends React.Component {
       userName: "",
       gridNums: [],
       activeCells: [],
-      currentPlayers: []
+      currentPlayers: [],
+      myColor: "",
+      playerColors: []
     };
 
     //bind these functions so child components can call them in OG context
@@ -102,6 +105,11 @@ class CrosswordTable extends React.Component {
         console.log("message: ", payload.greeting);
         console.log("current players", payload.players);
         this.setState({ currentPlayers: payload.players });
+      });
+
+      this.socket.on("color choice", msg => {
+        console.log("choices", msg);
+        this.setState({ playerColors: msg });
       });
 
       //NEED TO ADD SOMETHING PULLING IN THE CURRENT ROOM STATE FOR A NEW PLAYER ADDITION?
@@ -464,6 +472,7 @@ class CrosswordTable extends React.Component {
     //pushes each guess from this.state into a row array
     //unclear... perhaps this should be inside a functional component?
     const { navigation } = this.props;
+    // console.log("my color", this.state.myColor);
     let gameId = navigation.getParam("gameInstance");
     if (this.state.confetti) {
       return (
@@ -492,6 +501,36 @@ class CrosswordTable extends React.Component {
           />
         </View>
       );
+    } else if (!this.state.myColor.length) {
+      return (
+        <View style={{ height: "100%", width: "100%" }}>
+          <Picker
+            selectedValue={this.state.myColor}
+            onValueChange={selectedValue => {
+              this.setState({ myColor: selectedValue });
+              let msg = {
+                color: selectedValue,
+                userId: this.props.user.id,
+                room: this.state.gameId
+              };
+              this.socket.emit("picked", msg);
+            }}
+            itemStyle={{ color: "white" }}
+          >
+            <Picker.Item label="Pink" value="pink" color="pink" />
+            <Picker.Item label="Green" value="green" color="green" />
+            <Picker.Item label="Blue" value="blue" color="blue" />
+          </Picker>
+          <TouchableOpacity
+            onPress={event => {
+              console.log("event", event);
+              // this.setState({ myColor: event });
+            }}
+          >
+            <Text>Select Color</Text>
+          </TouchableOpacity>
+        </View>
+      );
     } else {
       return (
         <CWGameWrapper
@@ -514,6 +553,7 @@ class CrosswordTable extends React.Component {
           swapView={this.swapView}
           findNextClue={this.findNextClue}
           findPreviousClue={this.findPreviousClue}
+          playerColors={this.state.playerColors}
         />
       );
     }

@@ -1,15 +1,30 @@
 import React from "react";
-import {
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-  View
-} from "react-native";
+import { Text, TextInput, View } from "react-native";
 
 export default function CWCell(props) {
   let idx = props.index;
   let cell = props.cell;
+
+  let playerColors = props.playerColors;
+  // let cellUser = cell.userId;
+
+  // console.log("cell user", cell.userId);
+
+  let myColor;
+  // console.log("player colors: ", playerColors);
+  // console.log("cell user id", cell.userId);
+  if (cell.index === 224) {
+    console.log("user", cell.userId);
+  }
+
+  if (playerColors.filter(player => player.userId === cell.userId)[0]) {
+    myColor = playerColors.filter(player => player.userId === cell.userId)[0]
+      .color;
+  } else {
+    myColor = "purple";
+  }
+
+  // console.log("my color - ", myColor);
 
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
@@ -145,7 +160,7 @@ export default function CWCell(props) {
             zIndex: 9999,
             top: "12%",
             fontSize: 8,
-            color: cell.color
+            color: myColor ? myColor : "black"
           }}
           ref={props.refs[cell.index]}
           textAlign={"center"}
