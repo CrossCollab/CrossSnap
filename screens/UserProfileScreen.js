@@ -22,7 +22,7 @@ class UserProfileScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcomeContainer}>
-          Welcome testing testing, {this.props.user.firstName}
+          Welcome, {this.props.user.firstName}
         </Text>
         <TouchableOpacity style={styles.userButton} onPress={this.handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
