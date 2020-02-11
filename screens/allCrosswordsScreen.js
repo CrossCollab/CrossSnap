@@ -118,8 +118,6 @@ export class allCrosswordsScreen extends Component {
       guesses: guessArray,
       user: this.props.user.id
     };
-
-    console.log("this state user:", this.props.user);
     //create new gameInstance in DB
     const response = await axios.post(
       `${SERVER_URL}/api/gameInstance/`,

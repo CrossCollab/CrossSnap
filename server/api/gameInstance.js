@@ -50,7 +50,6 @@ router.post("/", async (req, res, next) => {
     const gameInstance = await GameInstance.create(req.body);
     //add a user to that game instance (later this will be sent along req.body as well)
     const user = await User.findByPk(req.body.user);
-    console.log("found user:", user);
     await gameInstance.addUser(user);
     res.json(gameInstance);
   } catch (err) {
