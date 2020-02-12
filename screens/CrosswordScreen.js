@@ -140,6 +140,25 @@ class CrosswordTable extends React.Component {
         allGuesses[msg.index].color = msg.color;
         this.setState({ guesses: allGuesses });
       });
+      this.socket.on("player leaving", data => {
+        const { userName, currentPlayers, activeCells } = data;
+        console.log("updatedColors");
+        if (userName === this.state.userName) {
+          this.setState({
+            activeCells: [],
+            currentPlayers: []
+          });
+        } else {
+          this.setState(
+            { activeCells, currentPlayers, playerColors: data.playerColors },
+            Toast.show({
+              duration: 5000,
+              text: `${userName} has left the game!`
+            })
+          );
+        }
+        // this.setState({ currentPlayers });
+      });
     } catch (err) {
       console.err(err);
     }
@@ -171,7 +190,13 @@ class CrosswordTable extends React.Component {
               userName: this.state.userName
             });
             this.socket.on("player leaving", data => {
-              const { userName, currentPlayers, activeCells } = data;
+              const {
+                userName,
+                currentPlayers,
+                activeCells,
+                playerColors
+              } = data;
+              console.log("updatedColors");
               if (userName === this.state.userName) {
                 this.setState({ activeCells: [], currentPlayers: [] });
               } else {
@@ -185,7 +210,7 @@ class CrosswordTable extends React.Component {
               }
               // this.setState({ currentPlayers });
             });
-
+            this.setState({ myColor: "", playerColors: [] });
             // this.socket.emit("join", { newGameInstance, userName, guesses });
             //update state with new game instance information
             let guesses = data.guesses;

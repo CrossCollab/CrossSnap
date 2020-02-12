@@ -225,7 +225,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "rgb(0, 0, 102)"
+    backgroundColor: "rgb(0, 0, 102)",
+    paddingBottom: "20%"
   },
   headerText: {
     fontWeight: "bold",
