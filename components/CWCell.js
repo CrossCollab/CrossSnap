@@ -187,7 +187,10 @@ export default function CWCell(props) {
             zIndex: 9999,
             top: "12%",
             fontSize: 8,
+
+
             color: myColor ? myColor : "black",
+
             fontWeight: "bold"
           }}
           ref={props.refs[cell.index]}
