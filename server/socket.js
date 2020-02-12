@@ -36,9 +36,8 @@ module.exports = io => {
     });
     socket.on("change cell focus", cell => {
       const { gameId, userId, currentCell } = cell;
-      roomInfo[gameId].activeCells[userId] = currentCell;
-      const focusArray = Object.values(roomInfo[gameId].activeCells);
-      io.in(gameId).emit("cell focus", focusArray);
+      roomInfo[gameId].activeCells[cell.userId] = cell.currentCell.index;
+      io.in(gameId).emit("cell focus", roomInfo[gameId].activeCells);
     });
 
     socket.on("join", async function(payload) {
@@ -67,6 +66,46 @@ module.exports = io => {
       //join the room requested (currently set to gameId value)
 
       socket.join(gameId, function() {});
+    });
+
+    socket.on("picked", function(msg) {
+      // console.log(
+      //   "my color in socket",
+      //   msg.color,
+      //   "user id ",
+      //   msg.userId,
+      //   "room: ",
+      //   msg.room
+      // );
+      if (!roomInfo[msg.room].colorChoices) {
+        // console.log("first player in room to choose color");
+        roomInfo[msg.room].colorChoices = [
+          { userId: msg.userId, color: msg.color, firstName: msg.firstName }
+        ];
+      } else if (
+        roomInfo[msg.room].colorChoices.filter(playerColor => {
+          return playerColor.userId === msg.userId;
+        }).length
+      ) {
+        // console.log("player chose a second color");
+        let index = roomInfo[msg.room].colorChoices.findIndex(
+          playerChoice => playerChoice.userId === msg.userId
+        );
+        roomInfo[msg.room].colorChoices[index] = {
+          userId: msg.userId,
+          color: msg.color,
+          firstName: msg.firstName
+        };
+      } else {
+        // console.log("new player (not first) chose color");
+        roomInfo[msg.room].colorChoices.push({
+          userId: msg.userId,
+          color: msg.color,
+          firstName: msg.firstName
+        });
+      }
+      roomInfo[msg.room].colorChoices;
+      io.in(msg.room).emit("color choice", roomInfo[msg.room].colorChoices);
     });
 
     socket.on("leave", function(payload) {

@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Keyboard
+  Keyboard,
+  Picker
 } from "react-native";
 import { Toast } from "native-base";
 import CWCell from "../components/CWCell";
@@ -40,8 +41,14 @@ class CrosswordTable extends React.Component {
       direction: "forward",
       userName: "",
       gridNums: [],
-      activeCells: [],
-      currentPlayers: []
+      activeCells: {},
+      currentPlayers: [],
+      myColor: "",
+      playerColors: [],
+
+      currentColorChoice: "",
+
+      zoomFactor: 1
     };
 
     //bind these functions so child components can call them in OG context
@@ -53,6 +60,7 @@ class CrosswordTable extends React.Component {
     this.swapView = this.swapView.bind(this);
     this.findNextClue = this.findNextClue.bind(this);
     this.findPreviousClue = this.findPreviousClue.bind(this);
+    this.reZoom = this.reZoom.bind(this);
   }
   async componentDidMount() {
     //a user should always be coming here with some gameInstance ID via nav props
@@ -91,8 +99,8 @@ class CrosswordTable extends React.Component {
         //as it's being called inside this.socket.on
         this.emit("join", { gameId, userName, guesses, userId });
       }
-      this.socket.on("cell focus", array => {
-        this.setState({ activeCells: array });
+      this.socket.on("cell focus", activeCellsObj => {
+        this.setState({ activeCells: activeCellsObj });
       });
 
       //once the socket receives the connect message from the server-side, ask to join the
@@ -104,6 +112,11 @@ class CrosswordTable extends React.Component {
         this.setState({ currentPlayers: payload.players });
       });
 
+      this.socket.on("color choice", msg => {
+        console.log("choices", msg);
+        this.setState({ playerColors: msg });
+      });
+
       //NEED TO ADD SOMETHING PULLING IN THE CURRENT ROOM STATE FOR A NEW PLAYER ADDITION?
 
       //when the client receives a message from server socket of change puzzle,
@@ -111,6 +124,7 @@ class CrosswordTable extends React.Component {
       this.socket.on("new player", info => {
         const { userName, users } = info;
         Toast.show({
+          duration: 5000,
           text:
             userName === this.state.userName
               ? "You have entered the game!"
@@ -122,6 +136,7 @@ class CrosswordTable extends React.Component {
       this.socket.on("change puzzle", msg => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[msg.index].guess = msg.guess;
+        allGuesses[msg.index].userId = msg.userId;
         allGuesses[msg.index].color = msg.color;
         this.setState({ guesses: allGuesses });
       });
@@ -163,6 +178,7 @@ class CrosswordTable extends React.Component {
                 this.setState(
                   { activeCells, currentPlayers },
                   Toast.show({
+                    duration: 5000,
                     text: `${userName} has left the game!`
                   })
                 );
@@ -308,6 +324,7 @@ class CrosswordTable extends React.Component {
       cell,
       room: this.state.gameId
     };
+    console.log("cell sent to socket", cell);
     this.socket.emit("change puzzle", socketMsg);
   }
 
@@ -450,6 +467,10 @@ class CrosswordTable extends React.Component {
       }
     }
   }
+
+  reZoom(value) {
+    this.setState({ zoomFactor: value });
+  }
   //need to remove the socket listeners, turn them 'off' in here
   componentWillUnmount() {}
 
@@ -464,15 +485,16 @@ class CrosswordTable extends React.Component {
     //pushes each guess from this.state into a row array
     //unclear... perhaps this should be inside a functional component?
     const { navigation } = this.props;
+    // console.log("my color", this.state.myColor);
     let gameId = navigation.getParam("gameInstance");
     if (this.state.confetti) {
       return (
         <View style={{ height: "100%", width: "100%" }}>
-          <Confetti />
+          <Confetti confettiCount={300} duration={10000} />
           <CWGameWrapper
             handleCellChange={this.handleCellChange}
             activeCells={this.state.activeCells}
-            currentUsers={this.state.currentUsers}
+            currentPlayers={this.state.currentPlayers}
             gameId={gameId}
             guesses={this.state.guesses}
             handleChange={this.handleChange}
@@ -489,12 +511,52 @@ class CrosswordTable extends React.Component {
             swapView={this.swapView}
             findNextClue={this.findNextClue}
             findPreviousClue={this.findPreviousClue}
+            zoomFactor={this.state.zoomFactor}
+            reZoom={this.reZoom}
+            playerColors={this.state.playerColors}
           />
+        </View>
+      );
+    } else if (!this.state.myColor.length) {
+      return (
+        <View style={{ height: "100%", width: "100%" }}>
+          <Picker
+            selectedValue={this.state.currentColorChoice}
+            onValueChange={selectedValue => {
+              this.setState({ currentColorChoice: selectedValue });
+            }}
+            itemStyle={{ color: "white" }}
+          >
+            <Picker.Item label="Pink" value="pink" color="pink" />
+            <Picker.Item label="Green" value="green" color="green" />
+            <Picker.Item label="Blue" value="blue" color="blue" />
+            <Picker.Item label="Salmon" value="salmon" color="salmon" />
+            <Picker.Item label="Yellow" value="yellow" color="yellow" />
+            <Picker.Item label="Cyan" value="cyan" color="cyan" />
+            <Picker.Item label="Skyblue" value="skyblue" color="skyblue" />
+            <Picker.Item label="Gray" value="gray" color="gray" />
+          </Picker>
+          <TouchableOpacity
+            onPress={event => {
+              let msg = {
+                color: this.state.currentColorChoice,
+                userId: this.props.user.id,
+                room: this.state.gameId,
+                firstName: this.props.user.firstName
+              };
+
+              this.socket.emit("picked", msg);
+              this.setState({ myColor: this.state.currentColorChoice });
+            }}
+          >
+            <Text>Select Color</Text>
+          </TouchableOpacity>
         </View>
       );
     } else {
       return (
         <CWGameWrapper
+          zoomFactor={this.state.zoomFactor}
           handleCellChange={this.handleCellChange}
           activeCells={this.state.activeCells}
           currentPlayers={this.state.currentPlayers}
@@ -514,6 +576,8 @@ class CrosswordTable extends React.Component {
           swapView={this.swapView}
           findNextClue={this.findNextClue}
           findPreviousClue={this.findPreviousClue}
+          playerColors={this.state.playerColors}
+          reZoom={this.reZoom}
         />
       );
     }

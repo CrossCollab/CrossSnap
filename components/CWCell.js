@@ -1,15 +1,61 @@
 import React from "react";
-import {
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-  View
-} from "react-native";
+import { Text, TextInput, View } from "react-native";
 
 export default function CWCell(props) {
-  let idx = props.index;
   let cell = props.cell;
+
+  let playerColors = props.playerColors;
+  let activeCells = props.activeCells;
+  // let cellUser = cell.userId;
+
+  // console.log("cell user", cell.userId);
+
+  let myColor;
+  // console.log("player colors: ", playerColors);
+  // console.log("cell user id", cell.userId);
+
+  if (
+    !playerColors ||
+    playerColors.filter(player => player.userId === cell.userId).length === 0
+  ) {
+    myColor = "black";
+  } else {
+    myColor = playerColors.filter(player => player.userId === cell.userId)[0]
+      .color;
+  }
+
+  //setting up player active cell status and color
+  let cellBackgroundColor;
+  let hasBackground = false;
+  let activeCellIndexes = Object.values(activeCells);
+
+  let activeUserId;
+
+  for (const userId in activeCells) {
+    if (activeCells[userId] === cell.index) {
+      activeUserId = userId;
+    }
+  }
+
+  if (activeCellIndexes.includes(cell.index)) {
+    // console.log("this is an active cell");
+    // console.log("active user id", activeUserId);
+    // console.log("cell index", cell.index);
+    // console.log("player colors", playerColors);
+    let indexOfPlayer = playerColors.findIndex(
+      element => element.userId == activeUserId
+    );
+    // console.log("index of player in pcolor array", indexOfPlayer);
+    let playerColor = playerColors[indexOfPlayer].color;
+    // cellBackgroundColor = playerColors.filter(
+    //   player => player.userId === activeUserId
+    // )[0].color;
+    cellBackgroundColor = playerColor;
+    // cellBackgroundColor = playerColors.filter(
+    //   player => player.userId === activeCells[cell.index]
+    // )[0].color;
+    hasBackground = true;
+  }
 
   //if the cell is a black cell, e.g. has no answer/input area
   if (cell.answer === ".") {
@@ -129,15 +175,11 @@ export default function CWCell(props) {
           autoCapitalize="characters"
           maxLength={1}
           style={{
-            backgroundColor:
-              props.activeCells &&
-              props.activeCells.filter(
-                activeCell => activeCell.index === cell.index
-              ).length
-                ? "yellow"
-                : cell.correct
-                ? "#c2e0ad"
-                : "white",
+            backgroundColor: hasBackground
+              ? `light${cellBackgroundColor}`
+              : cell.correct
+              ? "#c2e0ad"
+              : "white",
             height: "60%",
             width: "60%",
             alignSelf: "center",
@@ -145,7 +187,11 @@ export default function CWCell(props) {
             zIndex: 9999,
             top: "12%",
             fontSize: 8,
-            color: cell.color
+
+
+            color: myColor ? myColor : "black",
+
+            fontWeight: "bold"
           }}
           ref={props.refs[cell.index]}
           textAlign={"center"}

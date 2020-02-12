@@ -21,18 +21,22 @@ export default function CWClue(props) {
     currentClue = props.downClue;
   }
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [clueMargin, setClueMargin] = useState(0);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
-      () => {
+      event => {
         setKeyboardVisible(true);
+        console.log(event.endCoordinates.height);
+        setClueMargin(event.endCoordinates.height);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
+        setClueMargin(0);
       }
     );
 
@@ -49,10 +53,7 @@ export default function CWClue(props) {
         height: "auto",
         width: "100%",
         zIndex: 999,
-        marginBottom:
-          isKeyboardVisible === true
-            ? Dimensions.get("window").height * 0.42
-            : "0%",
+        marginBottom: isKeyboardVisible === true ? clueMargin : "0%",
         flexDirection: "row",
         justifyContent: "space-between"
       }}
