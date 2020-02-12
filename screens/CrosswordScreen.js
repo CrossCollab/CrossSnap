@@ -47,7 +47,6 @@ class CrosswordTable extends React.Component {
       myColor: "",
       playerColors: [],
 
- 
       zoomFactor: 1
     };
 
@@ -511,6 +510,7 @@ class CrosswordTable extends React.Component {
             findPreviousClue={this.findPreviousClue}
             zoomFactor={this.state.zoomFactor}
             reZoom={this.reZoom}
+            playerColors={this.state.playerColors}
           />
         </View>
       );
@@ -524,7 +524,8 @@ class CrosswordTable extends React.Component {
               let msg = {
                 color: selectedValue,
                 userId: this.props.user.id,
-                room: this.state.gameId
+                room: this.state.gameId,
+                firstName: this.props.user.firstName
               };
               this.socket.emit("picked", msg);
             }}
@@ -567,11 +568,8 @@ class CrosswordTable extends React.Component {
           swapView={this.swapView}
           findNextClue={this.findNextClue}
           findPreviousClue={this.findPreviousClue}
-
           playerColors={this.state.playerColors}
-
           reZoom={this.reZoom}
-
         />
       );
     }
