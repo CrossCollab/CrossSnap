@@ -47,7 +47,6 @@ class CrosswordTable extends React.Component {
       myColor: "",
       playerColors: [],
 
- 
       zoomFactor: 1
     };
 
@@ -124,6 +123,7 @@ class CrosswordTable extends React.Component {
       this.socket.on("new player", info => {
         const { userName, users } = info;
         Toast.show({
+          duration: 5000,
           text:
             userName === this.state.userName
               ? "You have entered the game!"
@@ -177,6 +177,7 @@ class CrosswordTable extends React.Component {
                 this.setState(
                   { activeCells, currentPlayers },
                   Toast.show({
+                    duration: 5000,
                     text: `${userName} has left the game!`
                   })
                 );
@@ -488,7 +489,7 @@ class CrosswordTable extends React.Component {
     if (this.state.confetti) {
       return (
         <View style={{ height: "100%", width: "100%" }}>
-          <Confetti />
+          <Confetti confettiCount={300} duration={10000} />
           <CWGameWrapper
             handleCellChange={this.handleCellChange}
             activeCells={this.state.activeCells}
@@ -567,11 +568,8 @@ class CrosswordTable extends React.Component {
           swapView={this.swapView}
           findNextClue={this.findNextClue}
           findPreviousClue={this.findPreviousClue}
-
           playerColors={this.state.playerColors}
-
           reZoom={this.reZoom}
-
         />
       );
     }

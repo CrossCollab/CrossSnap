@@ -15,8 +15,8 @@ export default function CWCell(props) {
   // console.log("cell user id", cell.userId);
 
   if (
-    props.playerColors.filter(player => player.userId === cell.userId)
-      .length === 0
+    !playerColors ||
+    playerColors.filter(player => player.userId === cell.userId).length === 0
   ) {
     myColor = "black";
   } else {
