@@ -8,15 +8,15 @@ import {
 } from "react-native";
 
 export default function HeaderOptions(props) {
-  const [view, setView] = useState("View across");
+  // const [view, setView] = useState("View down");
 
   const toggleView = () => {
-    props.swapView();
-    if (view === "View across") {
-      setView(`View ${props.currentView}`);
+    if (props.currentView === "across") {
+      // setView(`View across`);
     } else {
-      setView(`View ${props.currentView}`);
+      // setView(`View down`);
     }
+    props.swapView();
   };
 
   const refocus = () => {
@@ -37,6 +37,7 @@ export default function HeaderOptions(props) {
         alignContent: "center",
         alignItems: "center",
         borderBottomColor: "grey",
+
         borderBottomWidth: 0
       }}
     >
@@ -54,7 +55,7 @@ export default function HeaderOptions(props) {
         <Text>Unfocus</Text>
       </TouchableOpacity> */}
       <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
-        <Text>{view}</Text>
+        <Text>View {props.currentView == "across" ? "down" : "across"}</Text>
       </TouchableOpacity>
     </View>
   );

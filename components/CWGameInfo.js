@@ -9,14 +9,14 @@ import {
 
 export default function CWGameInfo(props) {
   let playerColorArray = Object.values(props.playerColors);
-  console.log("player color array:", playerColorArray);
+  // console.log("player color array:", playerColorArray);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       event => {
         setKeyboardVisible(true);
-        console.log(event.endCoordinates.height);
+        // console.log(event.endCoordinates.height);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
@@ -47,36 +47,9 @@ export default function CWGameInfo(props) {
         }}
       >
         <View
-          style={{
-            flex: 1,
-            alignContent: "center",
-            justifyContent: "center",
-            backgroundColor: "#ededda",
-            padding: 5,
-            alignItems: "center"
-          }}
+          style={{ height: "100%", backgroundColor: "#ededda", width: "100%" }}
         >
-          {props.currentPlayers && props.currentPlayers.length ? (
-            <Text
-              style={{
-                backgroundColor: "lightgrey",
-                alignContent: "center",
-                justifyContent: "center",
-                borderWidth: 1,
-                borderColor: "gray",
-                padding: 3
-              }}
-            >
-              Active Players:{" "}
-              {props.currentPlayers ? props.currentPlayers.length : "unknown"}
-            </Text>
-          ) : (
-            <Text style={{ backgroundColor: "lightblue" }} />
-          )}
-        </View>
-        <View
-          style={{ height: "100%", backgroundColor: "#f2f1bf", width: "100%" }}
-        >
+          <View style={{ height: "10%", backgroundColor: "#ededda" }}></View>
           {playerColorArray.map((element, index) => {
             return (
               <View
@@ -103,6 +76,61 @@ export default function CWGameInfo(props) {
               </View>
             );
           })}
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignContent: "center",
+            justifyContent: "center",
+            backgroundColor: "#ededda",
+            padding: 5,
+            alignItems: "center"
+          }}
+        >
+          {props.currentPlayers && props.currentPlayers.length ? (
+            <Text
+              style={{
+                backgroundColor: "lightgrey",
+                alignContent: "center",
+                justifyContent: "center",
+                borderWidth: 1,
+                borderColor: "gray",
+                padding: 3
+              }}
+            >
+              Game ID: {props.currentPlayers ? props.gameId : "unknown"}
+            </Text>
+          ) : (
+            <Text style={{ backgroundColor: "lightblue" }} />
+          )}
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignContent: "center",
+            justifyContent: "center",
+            backgroundColor: "#ededda",
+            padding: 5,
+            alignItems: "center"
+          }}
+        >
+          {props.currentPlayers && props.currentPlayers.length ? (
+            <Text
+              style={{
+                backgroundColor: "lightgrey",
+                alignContent: "center",
+                justifyContent: "center",
+                borderWidth: 1,
+                borderColor: "gray",
+                padding: 3
+              }}
+            >
+              Active Players:{" "}
+              {props.currentPlayers ? props.currentPlayers.length : "unknown"}
+            </Text>
+          ) : (
+            <Text style={{ backgroundColor: "lightblue" }} />
+          )}
         </View>
       </View>
     );
