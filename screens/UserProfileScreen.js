@@ -159,9 +159,10 @@ class UserProfileScreen extends React.Component {
           <View>
             <ScrollView horizontal={true}>
               {this.props && this.props.userActiveCrosswords ? (
-                this.props.userActiveCrosswords.map(crossword => {
+                this.props.userActiveCrosswords.map((crossword, index) => {
                   return (
                     <View
+                      key={index}
                       style={{
                         margin: 5,
                         backgroundColor: "#40E0D0",

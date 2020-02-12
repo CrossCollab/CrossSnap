@@ -516,7 +516,7 @@ class CrosswordTable extends React.Component {
       return (
         <View style={{ height: "100%", width: "100%" }}>
           <Confetti confettiCount={300} duration={10000} />
-          <CWGameWrapper
+          {/* <CWGameWrapper
             handleCellChange={this.handleCellChange}
             activeCells={this.state.activeCells}
             currentPlayers={this.state.currentPlayers}
@@ -539,12 +539,20 @@ class CrosswordTable extends React.Component {
             zoomFactor={this.state.zoomFactor}
             reZoom={this.reZoom}
             playerColors={this.state.playerColors}
-          />
+          /> */}
         </View>
       );
     } else if (!this.state.myColor.length) {
       return (
-        <View style={{ height: "100%", width: "100%" }}>
+        <View
+          style={{
+            height: "100%",
+            width: "100%",
+            // alignItems: "center",
+            justifyContent: "center",
+            alignContent: "center"
+          }}
+        >
           <Picker
             selectedValue={this.state.currentColorChoice}
             onValueChange={selectedValue => {
@@ -562,6 +570,13 @@ class CrosswordTable extends React.Component {
             <Picker.Item label="Gray" value="gray" color="gray" />
           </Picker>
           <TouchableOpacity
+            style={{
+              backgroundColor: "lightgray",
+              width: "30%",
+              alignSelf: "center",
+              borderRadius: 5,
+              padding: 10
+            }}
             onPress={event => {
               let msg = {
                 color: this.state.currentColorChoice,
@@ -574,7 +589,9 @@ class CrosswordTable extends React.Component {
               this.setState({ myColor: this.state.currentColorChoice });
             }}
           >
-            <Text>Select Color</Text>
+            <Text style={{ color: "white", alignSelf: "center" }}>
+              Select Color
+            </Text>
           </TouchableOpacity>
         </View>
       );
