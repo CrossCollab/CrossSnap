@@ -37,6 +37,7 @@ export default function HeaderOptions(props) {
         alignContent: "center",
         alignItems: "center",
         borderBottomColor: "grey",
+
         borderBottomWidth: 0
       }}
     >

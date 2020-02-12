@@ -58,6 +58,7 @@ export default function CWGameWrapper(props) {
       <CWGameInfo
         currentPlayers={props.currentPlayers}
         playerColors={props.playerColors}
+        gameId={props.gameId}
       />
       <CWClue
         currentView={props.currentView}
