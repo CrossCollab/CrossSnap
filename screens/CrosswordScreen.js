@@ -324,7 +324,7 @@ class CrosswordTable extends React.Component {
       cell,
       room: this.state.gameId
     };
-    console.log("cell sent to socket", cell);
+    // console.log("cell sent to socket", cell);
     this.socket.emit("change puzzle", socketMsg);
   }
 
@@ -385,7 +385,7 @@ class CrosswordTable extends React.Component {
           guess.index > this.state.currentCell.index &&
           guess.across !== this.state.currentCell.across
       );
-      console.log("next index", nextIndex);
+      // console.log("next index", nextIndex);
       if (nextIndex !== -1) {
         this.state.refs[nextIndex].current.focus();
       } else {

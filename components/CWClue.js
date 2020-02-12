@@ -28,7 +28,7 @@ export default function CWClue(props) {
       "keyboardDidShow",
       event => {
         setKeyboardVisible(true);
-        console.log(event.endCoordinates.height);
+        // console.log(event.endCoordinates.height);
         setClueMargin(event.endCoordinates.height);
       }
     );

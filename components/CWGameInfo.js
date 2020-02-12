@@ -9,14 +9,14 @@ import {
 
 export default function CWGameInfo(props) {
   let playerColorArray = Object.values(props.playerColors);
-  console.log("player color array:", playerColorArray);
+  // console.log("player color array:", playerColorArray);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       event => {
         setKeyboardVisible(true);
-        console.log(event.endCoordinates.height);
+        // console.log(event.endCoordinates.height);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
