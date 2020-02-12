@@ -118,10 +118,10 @@ export class allCrosswordsScreen extends Component {
       guesses: guessArray
     };
     //create new gameInstance in DB
-    const response = await axios.post(
-      `${SERVER_URL}/api/gameInstance/`,
-      newGameInstance
-    );
+    const response = await axios.post(`${SERVER_URL}/api/gameInstance/`, {
+      newGameInstance,
+      userId: this.props.user.id
+    });
 
     const crosswordInstance = response.data;
     // return createGame.id;
@@ -253,6 +253,7 @@ console.disableYellowBox = true;
 
 const mapState = state => {
   return {
+    user: state.user,
     crosswords: state.crosswords
   };
 };

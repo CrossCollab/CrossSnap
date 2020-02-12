@@ -114,7 +114,10 @@ export default class LinksScreen extends React.Component {
       guesses: guessArray
     };
     //create new gameInstance in DB
-    await axios.post(`${SERVER_URL}/api/gameInstance/`, newGameInstance);
+    await axios.post(`${SERVER_URL}/api/gameInstance/`, {
+      newGameInstance,
+      userId: this.props.user.id
+    });
     //route to crossword Screen with component passed in
   };
 
@@ -200,7 +203,6 @@ export default class LinksScreen extends React.Component {
   }
 }
 
-
 LinksScreen.navigationOptions = {
   title: "Links",
   headerStyle: {
@@ -210,7 +212,6 @@ LinksScreen.navigationOptions = {
     color: "white"
   }
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -223,3 +224,5 @@ const styles = StyleSheet.create({
 /////////////////////////////////
 // Links is currently hard-coded
 /////////////////////////////////
+
+// Need to connect this component to redux store if we want the create/join functionality

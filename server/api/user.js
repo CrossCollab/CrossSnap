@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const User = require("../db/models/user");
 const Crossword = require("../db/models/crossword");
-const gameInstance = require("../db/models/gameInstance");
+const GameInstance = require("../db/models/gameInstance");
 const Op = require("Sequelize").Op;
 module.exports = router;
 
@@ -51,6 +51,39 @@ router.get("/:userid/activecrosswords", async (req, res, next) => {
       ]
     });
     res.json(activeCrosswords);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Join an existing game and commit the gameInstace - UserId connection to the database
+router.post("/joingame", async (req, res, next) => {
+  try {
+    const { userId, gameInstanceId } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        id: userId
+      }
+    });
+    // console.log("user", user);
+    // console.log("Magic methods inside joingame route", user.__proto__);
+
+    const game = await GameInstance.findOne({
+      where: {
+        id: gameInstanceId
+      },
+      include: [
+        {
+          model: Crossword
+        }
+      ]
+    });
+    // console.log("game", game);
+
+    const joinedGame = await user.addGameInstance(game);
+
+    res.send(game);
   } catch (err) {
     next(err);
   }
