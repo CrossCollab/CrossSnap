@@ -49,7 +49,7 @@ const User = db.define("user", {
   },
   imageUrl: {
     type: Sequelize.STRING,
-    defaultValue: "../../../public/default-user-icon.jpg"
+    defaultValue: "../../../assets/images/placeholder.png"
   },
   userStatus: {
     type: Sequelize.ENUM("member", "admin"),

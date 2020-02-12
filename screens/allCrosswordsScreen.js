@@ -119,10 +119,10 @@ export class allCrosswordsScreen extends Component {
       user: this.props.user.id
     };
     //create new gameInstance in DB
-    const response = await axios.post(
-      `${SERVER_URL}/api/gameInstance/`,
-      newGameInstance
-    );
+    const response = await axios.post(`${SERVER_URL}/api/gameInstance/`, {
+      newGameInstance,
+      userId: this.props.user.id
+    });
 
     const crosswordInstance = response.data;
     // return createGame.id;

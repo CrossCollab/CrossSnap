@@ -66,22 +66,10 @@ export class UserActiveCrosswordsScreen extends React.Component {
     return (
       <View>
         <TouchableOpacity>
-          <Text>
-            {"\n"}
-            {"\n"}
-            {"\n"}
-            {"\n"}
-            {"\n"}
-            {"\n"}
-            {"\n"}
-            **{this.props.user.firstName}'s active puzzles:**
-          </Text>
+          <Text>**{this.props.user.firstName}'s active puzzles:**</Text>
         </TouchableOpacity>
         <FlatList
           onEndReachedThreshold={0}
-          // onEndReached={({ distanceFromEnd }) => {
-          //   console.debug("on end reached ", distanceFromEnd);
-          // }}
           contentContainerStyle={styles.list}
           data={this.props.userActiveCrosswords}
           renderItem={this.renderItem}
