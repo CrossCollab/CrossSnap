@@ -80,7 +80,7 @@ module.exports = io => {
       if (!roomInfo[msg.room].colorChoices) {
         // console.log("first player in room to choose color");
         roomInfo[msg.room].colorChoices = [
-          { userId: msg.userId, color: msg.color }
+          { userId: msg.userId, color: msg.color, firstName: msg.firstName }
         ];
       } else if (
         roomInfo[msg.room].colorChoices.filter(playerColor => {
@@ -93,13 +93,15 @@ module.exports = io => {
         );
         roomInfo[msg.room].colorChoices[index] = {
           userId: msg.userId,
-          color: msg.color
+          color: msg.color,
+          firstName: msg.firstName
         };
       } else {
         // console.log("new player (not first) chose color");
         roomInfo[msg.room].colorChoices.push({
           userId: msg.userId,
-          color: msg.color
+          color: msg.color,
+          firstName: msg.firstName
         });
       }
       roomInfo[msg.room].colorChoices;

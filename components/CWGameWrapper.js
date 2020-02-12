@@ -24,7 +24,7 @@ export default function CWGameWrapper(props) {
   //can adjust to pull in gameInstance data here versus in the componentDidMount section...
   //still need info on selected cell and on the neighbor cells
   return (
-    <View style={{ height: "100%", width: "100%" }}>
+    <View style={{ height: "100%", width: "100%", backgroundColor: "#ededda" }}>
       <View style={{ height: "4%", backgroundColor: "#c1ebb2" }}></View>
       <HeaderOptions
         checkBoard={props.checkBoard}
@@ -36,12 +36,9 @@ export default function CWGameWrapper(props) {
         currentView={props.currentView}
       />
       <CWTable
-
         playerColors={props.playerColors}
-
         zoomFactor={props.zoomFactor}
         reZoom={props.reZoom}
-
         handleCellChange={props.handleCellChange}
         activeCells={props.activeCells}
         rows={rows}
@@ -58,7 +55,10 @@ export default function CWGameWrapper(props) {
         direction={props.direction}
         columnLength={props.columnLength}
       />
-      <CWGameInfo currentPlayers={props.currentPlayers} />
+      <CWGameInfo
+        currentPlayers={props.currentPlayers}
+        playerColors={props.playerColors}
+      />
       <CWClue
         currentView={props.currentView}
         acrossClue={props.acrossClue}

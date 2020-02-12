@@ -188,6 +188,7 @@ export default function CWCell(props) {
             top: "12%",
             fontSize: 8,
 
+
             color: myColor ? myColor : "black",
 
             fontWeight: "bold"

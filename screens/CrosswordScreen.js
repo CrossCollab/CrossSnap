@@ -41,11 +41,12 @@ class CrosswordTable extends React.Component {
       direction: "forward",
       userName: "",
       gridNums: [],
-
       activeCells: {},
       currentPlayers: [],
       myColor: "",
       playerColors: [],
+
+      currentColorChoice: "",
 
       zoomFactor: 1
     };
@@ -512,6 +513,7 @@ class CrosswordTable extends React.Component {
             findPreviousClue={this.findPreviousClue}
             zoomFactor={this.state.zoomFactor}
             reZoom={this.reZoom}
+            playerColors={this.state.playerColors}
           />
         </View>
       );
@@ -519,26 +521,32 @@ class CrosswordTable extends React.Component {
       return (
         <View style={{ height: "100%", width: "100%" }}>
           <Picker
-            selectedValue={this.state.myColor}
+            selectedValue={this.state.currentColorChoice}
             onValueChange={selectedValue => {
-              this.setState({ myColor: selectedValue });
-              let msg = {
-                color: selectedValue,
-                userId: this.props.user.id,
-                room: this.state.gameId
-              };
-              this.socket.emit("picked", msg);
+              this.setState({ currentColorChoice: selectedValue });
             }}
             itemStyle={{ color: "white" }}
           >
             <Picker.Item label="Pink" value="pink" color="pink" />
             <Picker.Item label="Green" value="green" color="green" />
             <Picker.Item label="Blue" value="blue" color="blue" />
+            <Picker.Item label="Salmon" value="salmon" color="salmon" />
+            <Picker.Item label="Yellow" value="yellow" color="yellow" />
+            <Picker.Item label="Cyan" value="cyan" color="cyan" />
+            <Picker.Item label="Skyblue" value="skyblue" color="skyblue" />
+            <Picker.Item label="Gray" value="gray" color="gray" />
           </Picker>
           <TouchableOpacity
             onPress={event => {
-              console.log("event", event);
-              // this.setState({ myColor: event });
+              let msg = {
+                color: this.state.currentColorChoice,
+                userId: this.props.user.id,
+                room: this.state.gameId,
+                firstName: this.props.user.firstName
+              };
+
+              this.socket.emit("picked", msg);
+              this.setState({ myColor: this.state.currentColorChoice });
             }}
           >
             <Text>Select Color</Text>
