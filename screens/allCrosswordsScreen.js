@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, FlatList, Picker, Button } from "react-native";
+import { ActionSheet } from "native-base";
 import { connect } from "react-redux";
 import { fetchCrosswords } from "../store/allCrosswords";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -189,10 +190,17 @@ export class allCrosswordsScreen extends Component {
         elem => elem.difficulty === this.state.difficulty
       );
     }
-
+    const actionSheetOptionsSize = ["all", "small", "medium", "big", "cancel"];
+    const actionSheetOptionsDifficulty = [
+      "all",
+      "easy",
+      "medium",
+      "hard",
+      "cancel"
+    ];
     return (
       <View>
-        <Picker
+        {/* <Picker
           selectedValue={this.state.size}
           onValueChange={this.handleChangeSize}
           itemStyle={{ color: "white" }}
@@ -214,7 +222,38 @@ export class allCrosswordsScreen extends Component {
           <Picker.Item label={"easy"} value={"easy"} color={"green"} />
           <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
           <Picker.Item label={"hard"} value={"hard"} color={"red"} />
-        </Picker>
+        </Picker> */}
+        <Button
+          title="Select Size"
+          onPress={() =>
+            ActionSheet.show(
+              {
+                options: actionSheetOptionsSize,
+                cancelButtonIndex: 4
+              },
+              buttonIndex => {
+                this.setState({ size: actionSheetOptionsSize[buttonIndex] });
+              }
+            )
+          }
+        />
+        <Button
+          title="Select Difficulty"
+          onPress={() =>
+            ActionSheet.show(
+              {
+                options: actionSheetOptionsDifficulty,
+                cancelButtonIndex: 4
+              },
+              buttonIndex => {
+                this.setState({
+                  difficulty: actionSheetOptionsDifficulty[buttonIndex]
+                });
+              }
+            )
+          }
+        />
+
         <FlatList
           onEndReachedThreshold={0}
           contentContainerStyle={styles.list}
