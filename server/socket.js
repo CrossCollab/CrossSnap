@@ -109,18 +109,28 @@ module.exports = io => {
     });
 
     socket.on("leave", function(payload) {
+      console.log("in leave socket");
       const { room, userId, userName } = payload;
       const newArray = roomInfo[room].users.filter(name => name !== userName);
       roomInfo[room].users = newArray;
       socket.leave(room);
+      console.log(roomInfo[room].colorChoices);
+      const index = roomInfo[room].colorChoices.findIndex(el => {
+        return el.userId === userId;
+      });
+      roomInfo[room].colorChoices.splice(index, 1);
       delete roomInfo[room].activeCells[userId];
+      console.log(roomInfo[room].colorChoices);
+      // delete roomInfo[room].colorChoices[userId];
       // roomInfo[room].activeCells[userId] = {};
       const focusArray = Object.values(roomInfo[room].activeCells);
       io.in(room).emit("player leaving", {
         userName,
         currentPlayers: roomInfo[room].users,
-        activeCells: focusArray
+        activeCells: focusArray,
+        playerColors: roomInfo[room].colorChoices
       });
+      // io.in(room).emit("color choice", roomInfo[room].colorChoices);
     });
   });
 };
