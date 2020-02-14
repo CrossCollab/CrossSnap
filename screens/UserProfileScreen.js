@@ -160,6 +160,7 @@ class UserProfileScreen extends React.Component {
             <ScrollView horizontal={true}>
               {this.props && this.props.userActiveCrosswords ? (
                 this.props.userActiveCrosswords.map((crossword, index) => {
+                  // console.log("crossword id = ", crossword.id);
                   return (
                     <View
                       key={index}
