@@ -55,10 +55,10 @@ class UserProfileScreen extends React.Component {
       };
 
       this.props.joinGame(message);
+      console.log("attempting to join game: ", this.state.gameInstanceId);
 
       this.props.navigation.navigate("Crossword", {
-        gameInstance: this.state.gameInstanceId,
-        userId: this.props.user.id
+        gameInstance: this.state.gameInstanceId
       });
     } catch (err) {
       console.log(err);
@@ -158,7 +158,7 @@ class UserProfileScreen extends React.Component {
 
           <View>
             <ScrollView horizontal={true}>
-              {this.props && this.props.userActiveCrosswords ? (
+              {this.props && this.props.userActiveCrosswords.length ? (
                 this.props.userActiveCrosswords.map((crossword, index) => {
                   // console.log("crossword id = ", crossword.id);
                   return (
@@ -179,8 +179,7 @@ class UserProfileScreen extends React.Component {
                       <TouchableOpacity
                         onPress={() =>
                           this.props.navigation.navigate("Crossword", {
-                            gameInstance: crossword.id,
-                            userId: this.props.user.id
+                            gameInstance: crossword.id
                           })
                         }
                       >
@@ -211,7 +210,7 @@ class UserProfileScreen extends React.Component {
                   );
                 })
               ) : (
-                <Text>'Loading'</Text>
+                <Text>'No Active Crosswords'</Text>
               )}
             </ScrollView>
           </View>
