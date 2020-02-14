@@ -6,6 +6,7 @@ import { fetchCrosswords } from "../store/allCrosswords";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SERVER_URL from "../serverUrl";
 import axios from "axios";
+import { fetchUserActiveCrosswords } from "../store/userActiveCrosswords";
 
 export class allCrosswordsScreen extends Component {
   constructor(props) {
@@ -128,6 +129,8 @@ export class allCrosswordsScreen extends Component {
     const crosswordInstance = response.data;
     // return createGame.id;
     //route to crossword Screen with component passed in
+
+    await this.props.fetchUserActiveCrosswords(this.props.user.id);
 
     this.props.navigation.navigate("Crossword", {
       gameInstance: crosswordInstance.id
@@ -300,7 +303,9 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    fetchCrosswords: () => dispatch(fetchCrosswords())
+    fetchCrosswords: () => dispatch(fetchCrosswords()),
+    fetchUserActiveCrosswords: userid =>
+      dispatch(fetchUserActiveCrosswords(userid))
   };
 };
 
