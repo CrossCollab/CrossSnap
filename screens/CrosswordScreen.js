@@ -169,10 +169,13 @@ class CrosswordTable extends React.Component {
         // console.log("back to game screen");
         //oddly the game instance param was in a weird spot
         // console.log("data:", event.action.params.gameInstance);
+        console.log("refocusing on game screen");
 
         try {
           let newGameInstance = event.action.params.gameInstance;
           // console.log("new game instance? :", newGameInstance);
+          console.log("old game instance = ", this.state.gameId);
+          console.log("new game instance = ", newGameInstance);
 
           if (newGameInstance === this.state.gameId) {
             // console.log("same as before");
@@ -189,27 +192,27 @@ class CrosswordTable extends React.Component {
               room: this.state.gameId,
               userName: this.state.userName
             });
-            this.socket.on("player leaving", data => {
-              const {
-                userName,
-                currentPlayers,
-                activeCells,
-                playerColors
-              } = data;
-              console.log("updatedColors");
-              if (userName === this.state.userName) {
-                this.setState({ activeCells: [], currentPlayers: [] });
-              } else {
-                this.setState(
-                  { activeCells, currentPlayers },
-                  Toast.show({
-                    duration: 5000,
-                    text: `${userName} has left the game!`
-                  })
-                );
-              }
-              // this.setState({ currentPlayers });
-            });
+            // this.socket.on("player leaving", data => {
+            //   const {
+            //     userName,
+            //     currentPlayers,
+            //     activeCells,
+            //     playerColors
+            //   } = data;
+            //   console.log("updatedColors");
+            //   if (userName === this.state.userName) {
+            //     this.setState({ activeCells: [], currentPlayers: [] });
+            //   } else {
+            //     this.setState(
+            //       { activeCells, currentPlayers },
+            //       Toast.show({
+            //         duration: 5000,
+            //         text: `${userName} has left the game!`
+            //       })
+            //     );
+            //   }
+            //   // this.setState({ currentPlayers });
+            // });
             this.setState({ myColor: "", playerColors: [] });
             // this.socket.emit("join", { newGameInstance, userName, guesses });
             //update state with new game instance information
@@ -578,15 +581,17 @@ class CrosswordTable extends React.Component {
               padding: 10
             }}
             onPress={event => {
+              // console.log("event", event);
               let msg = {
                 color: this.state.currentColorChoice,
                 userId: this.props.user.id,
                 room: this.state.gameId,
                 firstName: this.props.user.firstName
               };
-
-              this.socket.emit("picked", msg);
+              console.log("pressed pick button", this.state.currentColorChoice);
+              console.log("msg", msg);
               this.setState({ myColor: this.state.currentColorChoice });
+              this.socket.emit("picked", msg);
             }}
           >
             <Text style={{ color: "white", alignSelf: "center" }}>

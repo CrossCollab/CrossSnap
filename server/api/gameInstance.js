@@ -66,8 +66,7 @@ router.put("/:id", async (req, res, next) => {
       where: { id: req.params.id }
     });
     const updatedInstance = await gameInstance.update({
-      guesses: jsonGuesses,
-      status: "filled"
+      guesses: jsonGuesses
     });
     res.send(updatedInstance);
   } catch (err) {

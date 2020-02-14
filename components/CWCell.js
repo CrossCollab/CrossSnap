@@ -6,13 +6,8 @@ export default function CWCell(props) {
 
   let playerColors = props.playerColors;
   let activeCells = props.activeCells;
-  // let cellUser = cell.userId;
-
-  // console.log("cell user", cell.userId);
 
   let myColor;
-  // console.log("player colors: ", playerColors);
-  // console.log("cell user id", cell.userId);
 
   if (
     !playerColors ||
@@ -46,7 +41,12 @@ export default function CWCell(props) {
       element => element.userId == activeUserId
     );
     // console.log("index of player in pcolor array", indexOfPlayer);
-    let playerColor = playerColors[indexOfPlayer].color;
+    let playerColor;
+    if (indexOfPlayer < 0) {
+      playerColor = "green";
+    } else {
+      playerColor = playerColors[indexOfPlayer].color;
+    }
     // cellBackgroundColor = playerColors.filter(
     //   player => player.userId === activeUserId
     // )[0].color;
@@ -187,7 +187,6 @@ export default function CWCell(props) {
             zIndex: 9999,
             top: "12%",
             fontSize: 8,
-
 
             color: myColor ? myColor : "black",
 
