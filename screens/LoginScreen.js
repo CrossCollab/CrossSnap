@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgb(0, 0, 102)"
+    backgroundColor: "gray"
   },
   buttonText: {
     fontSize: 18,
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     width: "90%"
   },
   userButton: {
-    backgroundColor: "#00CED1",
+    backgroundColor: "#c1ebb2",
     padding: 10,
     width: "45%"
   },
