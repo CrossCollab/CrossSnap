@@ -80,8 +80,10 @@ router.post("/joingame", async (req, res, next) => {
       ]
     });
     // console.log("game", game);
-
-    const joinedGame = await user.addGameInstance(game);
+    console.log("does user have game", await user.hasGameInstance(game));
+    if (!user.hasGameInstance(game)) {
+      const joinedGame = await user.addGameInstance(game);
+    }
 
     res.send(game);
   } catch (err) {

@@ -55,10 +55,10 @@ class UserProfileScreen extends React.Component {
       };
 
       this.props.joinGame(message);
+      console.log("attempting to join game: ", this.state.gameInstanceId);
 
       this.props.navigation.navigate("Crossword", {
-        gameInstance: this.state.gameInstanceId,
-        userId: this.props.user.id
+        gameInstance: this.state.gameInstanceId
       });
     } catch (err) {
       console.log(err);
@@ -107,7 +107,7 @@ class UserProfileScreen extends React.Component {
                   fontWeight: "bold",
                   fontSize: 14,
                   color: "black",
-                  backgroundColor: "#00CED1",
+                  backgroundColor: "#c1ebb2",
                   padding: 10,
                   borderRadius: 8,
                   width: "100%"
@@ -138,7 +138,7 @@ class UserProfileScreen extends React.Component {
                   fontWeight: "bold",
                   fontSize: 14,
                   color: "black",
-                  backgroundColor: "#00CED1",
+                  backgroundColor: "#c1ebb2",
                   padding: 10,
                   borderRadius: 8,
                   width: "100%"
@@ -158,7 +158,7 @@ class UserProfileScreen extends React.Component {
 
           <View>
             <ScrollView horizontal={true}>
-              {this.props && this.props.userActiveCrosswords ? (
+              {this.props && this.props.userActiveCrosswords.length ? (
                 this.props.userActiveCrosswords.map((crossword, index) => {
                   // console.log("crossword id = ", crossword.id);
                   return (
@@ -166,7 +166,7 @@ class UserProfileScreen extends React.Component {
                       key={index}
                       style={{
                         margin: 5,
-                        backgroundColor: "#40E0D0",
+                        backgroundColor: "#c1ebb2",
                         height: gameHeight * 0.6,
                         width: gameWidth / 3,
                         alignItems: "center",
@@ -179,8 +179,7 @@ class UserProfileScreen extends React.Component {
                       <TouchableOpacity
                         onPress={() =>
                           this.props.navigation.navigate("Crossword", {
-                            gameInstance: crossword.id,
-                            userId: this.props.user.id
+                            gameInstance: crossword.id
                           })
                         }
                       >
@@ -211,7 +210,7 @@ class UserProfileScreen extends React.Component {
                   );
                 })
               ) : (
-                <Text>'Loading'</Text>
+                <Text>'No Active Crosswords'</Text>
               )}
             </ScrollView>
           </View>
@@ -227,7 +226,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "rgb(0, 0, 102)",
+    backgroundColor: "gray",
     paddingBottom: "20%"
   },
   headerText: {
