@@ -4,7 +4,7 @@ let roomInfo = {};
 module.exports = io => {
   io.on("connection", socket => {
     socket.on("change puzzle", async msg => {
-      console.log("room info obj", roomInfo);
+      // console.log("room info obj", roomInfo);
       socket.broadcast.to(msg.room).emit("change puzzle", msg.cell);
       try {
         if (!roomInfo[msg.room]) {
@@ -44,7 +44,7 @@ module.exports = io => {
     socket.on("join", async function(payload) {
       console.log("joining room: ", payload.gameId);
       var clients = io.sockets.clients();
-      console.log("clients to socket", clients);
+      // console.log("clients to socket", clients);
       const { gameId, userName, guesses, userId } = payload;
       if (!roomInfo[gameId]) {
         roomInfo[gameId] = {

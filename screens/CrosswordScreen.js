@@ -107,13 +107,13 @@ class CrosswordTable extends React.Component {
       //room with the id matching the gameId
       this.socket.on("connect", onConnect);
       this.socket.on("welcome", payload => {
-        console.log("message: ", payload.greeting);
-        console.log("current players", payload.players);
+        // console.log("message: ", payload.greeting);
+        // console.log("current players", payload.players);
         this.setState({ currentPlayers: payload.players });
       });
 
       this.socket.on("color choice", msg => {
-        console.log("choices", msg);
+        // console.log("choices", msg);
         this.setState({ playerColors: msg });
       });
 
@@ -142,7 +142,7 @@ class CrosswordTable extends React.Component {
       });
       this.socket.on("player leaving", data => {
         const { userName, currentPlayers, activeCells } = data;
-        console.log("updatedColors");
+        // console.log("updatedColors");
         if (userName === this.state.userName) {
           this.setState({
             activeCells: [],
@@ -169,13 +169,13 @@ class CrosswordTable extends React.Component {
         // console.log("back to game screen");
         //oddly the game instance param was in a weird spot
         // console.log("data:", event.action.params.gameInstance);
-        console.log("refocusing on game screen");
+        // console.log("refocusing on game screen");
 
         try {
           let newGameInstance = event.action.params.gameInstance;
           // console.log("new game instance? :", newGameInstance);
-          console.log("old game instance = ", this.state.gameId);
-          console.log("new game instance = ", newGameInstance);
+          // console.log("old game instance = ", this.state.gameId);
+          // console.log("new game instance = ", newGameInstance);
 
           if (newGameInstance === this.state.gameId) {
             // console.log("same as before");
@@ -588,8 +588,8 @@ class CrosswordTable extends React.Component {
                 room: this.state.gameId,
                 firstName: this.props.user.firstName
               };
-              console.log("pressed pick button", this.state.currentColorChoice);
-              console.log("msg", msg);
+              // console.log("pressed pick button", this.state.currentColorChoice);
+              // console.log("msg", msg);
               this.setState({ myColor: this.state.currentColorChoice });
               this.socket.emit("picked", msg);
             }}
