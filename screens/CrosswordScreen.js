@@ -68,7 +68,6 @@ class CrosswordTable extends React.Component {
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
     // this.props.navigation.state.params = null;
-
     try {
       //get the gameInstance model instance from the backend
       const { data } = await axios.get(
