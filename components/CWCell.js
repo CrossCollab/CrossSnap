@@ -1,3 +1,11 @@
+/**
+ * CWCell is a functional react component that returns a single cell of the CW game board
+ * it uses the cell info from a single entry of the guesses array, as well as information
+ * about the gameboard such as current view, player colors, active cells, current cell, and row/column count.
+ * Additionally, it can call several functions such as:
+ * handleChange (on text input), and handlePress (on view)
+ */
+
 import React from "react";
 import { Text, TextInput, View } from "react-native";
 
