@@ -4,7 +4,7 @@ CrossSnap is an iOS app that allows you to play crosswords with your friends in 
 
 ## Installation
 
-Once forked,
+Once downloaded,
 
 ```bash
 npm install
