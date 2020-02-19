@@ -62,7 +62,15 @@ export class allCrosswordsScreen extends Component {
           answer: answer,
           guess: ".",
           userId: 0,
-          index
+          index,
+          nextAcrossCell: 0,
+          previousAcrossCell: 0,
+          nextAcrossClue: 0,
+          previousAcrossClue: 0,
+          nextDownCell: 0,
+          previousDownCell: 0,
+          nextDownClue: 0,
+          previousDownClue: 0
         });
       }
       const findAcross = index => {
@@ -106,9 +114,23 @@ export class allCrosswordsScreen extends Component {
         number: data.crosswordObjectString.gridnums[index],
         across: findAcross(index),
         down: findDown(index),
-        color: "black"
+        color: "black",
+        nextAcrossCell: 0,
+        previousAcrossCell: 0,
+        nextAcrossClue: 0,
+        previousAcrossClue: 0,
+        nextDownCell: 0,
+        previousDownCell: 0,
+        nextDownClue: 0,
+        previousDownClue: 0
       };
+
+      let guessAndLocs = guessArray.map((cell, index) => {
+        cell.nextAcrossCell = findNextAcrossCell(cell.index);
+      });
     });
+
+    //add a new section to find the locations of the next and previous locations and clues
     //make a new game instance object that will be used to create one in the db
     let newGameInstance = {
       crosswordId: value,
