@@ -55,8 +55,6 @@ class UserProfileScreen extends React.Component {
       };
 
       this.props.joinGame(message);
-      console.log("attempting to join game: ", this.state.gameInstanceId);
-
       this.props.navigation.navigate("Crossword", {
         gameInstance: this.state.gameInstanceId
       });
@@ -210,7 +208,7 @@ class UserProfileScreen extends React.Component {
                   );
                 })
               ) : (
-                <Text>'No Active Crosswords'</Text>
+                <Text>No Active Crosswords</Text>
               )}
             </ScrollView>
           </View>

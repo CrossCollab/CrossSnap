@@ -17,26 +17,7 @@ export class allCrosswordsScreen extends Component {
       crosswordId: "",
       gameInstanceId: ""
     };
-
-    this.handleChangeDifficulty = this.handleChangeDifficulty.bind(this);
-    this.handleChangeSize = this.handleChangeSize.bind(this);
     this.createAndJoin = this.createAndJoin.bind(this);
-  }
-
-  handleChangeSize(size) {
-    if (size !== 0) {
-      this.setState({
-        size: size
-      });
-    }
-  }
-
-  handleChangeDifficulty(difficulty) {
-    if (difficulty !== 0) {
-      this.setState({
-        difficulty: difficulty
-      });
-    }
   }
 
   // Creates a new game inside the database
@@ -203,29 +184,6 @@ export class allCrosswordsScreen extends Component {
     ];
     return (
       <View>
-        {/* <Picker
-          selectedValue={this.state.size}
-          onValueChange={this.handleChangeSize}
-          itemStyle={{ color: "white" }}
-        >
-          <Picker.Item label="Size" value="0" color="grey" />
-          <Picker.Item label={"all"} value={"all"} color={"black"} />
-          <Picker.Item label={"small"} value={"small"} color={"green"} />
-          <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
-          <Picker.Item label={"big"} value={"big"} color={"red"} />
-        </Picker>
-
-        <Picker
-          selectedValue={this.state.difficulty}
-          onValueChange={this.handleChangeDifficulty}
-          itemStyle={{ color: "white" }}
-        >
-          <Picker.Item label="Difficulty" value="0" color="grey" />
-          <Picker.Item label={"all"} value={"all"} color={"black"} />
-          <Picker.Item label={"easy"} value={"easy"} color={"green"} />
-          <Picker.Item label={"medium"} value={"medium"} color={"blue"} />
-          <Picker.Item label={"hard"} value={"hard"} color={"red"} />
-        </Picker> */}
         <Button
           title="Select Size"
           onPress={() =>

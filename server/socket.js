@@ -141,7 +141,7 @@ request
 
     /**
 *leave
-Update roomInfo to not include user who is leaving. Update other members. If the user is the last person in the room, delete the room from the roomInfo object
+Update roomInfo to disclude user who is leaving. Update other members. If the user is the last person in the room, delete the room from the roomInfo object
 @param {payload} object
 @var {room} number
 @var {userId} number

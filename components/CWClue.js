@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  TextInput,
-  View,
-  KeyboardAvoidingView,
-  Keyboard,
-  Animated,
-  Button,
-  StyleSheet,
-  Dimensions
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Text, View, Keyboard, Button, StyleSheet } from "react-native";
 
 export default function CWClue(props) {
   let currentClue;
@@ -28,7 +16,6 @@ export default function CWClue(props) {
       "keyboardDidShow",
       event => {
         setKeyboardVisible(true);
-        // console.log(event.endCoordinates.height);
         setClueMargin(event.endCoordinates.height);
       }
     );
@@ -65,12 +52,6 @@ export default function CWClue(props) {
       ></Button>
       <Text
         style={{
-          // justifyContent: "center",
-          // alignContent: "center",
-          // alignSelf: "center",
-          // alignItems: "center",
-          // paddingTop: "2%",
-          // paddingBottom: isKeyboardVisible === true ? 380 : "0%",
           textAlign: "center",
           height: "auto",
           width: "85%",
