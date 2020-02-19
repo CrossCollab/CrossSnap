@@ -1,9 +1,9 @@
 export function findNextAcrossCell(num, cellArray) {
-  return (num + 1) % totalCells;
+  return (num + 1) % cellArray.length;
 }
 
 export function findPreviousAcrossCell(num, cellArray) {
-  return (num - 1) % totalCells;
+  return (num - 1) % cellArray.length;
 }
 
 export function findNextAcrossClue(num, cellArray) {
@@ -110,10 +110,22 @@ export function findNextDownCell(num, cellArray) {
     }
   }
 
+  // console.log("clue start = ", clueStart);
+
   //from the top of the down clue, go to the right until you hit a cell with a blank above it or an index in the first row
   for (let i = clueStart; i < cellArray.length; i++) {
     //if the cell is in the first row and not a blank cell, return the next cell
     let currentCell = cellArray[i + 1];
+
+    // console.log("current index = ", i + 1);
+    // console.log("current cell = ", currentCell);
+
+    if (i + 1 == 225) return 0;
+
+    if (currentCell.answer == ".") {
+      continue;
+    }
+
     if (currentCell.index < rowLength && currentCell.answer !== ".") {
       return i + 1;
     }
@@ -175,7 +187,7 @@ export function findPreviousDownCell(num, cellArray) {
     let currentClue = cellArray[currentCellIndex];
 
     //if off board
-    if (currentCellIndex > cellArray.length) {
+    if (currentCellIndex >= cellArray.length) {
       endOfPreviousClue = currentCellIndex - rowLength;
       break;
     }

@@ -7,6 +7,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import SERVER_URL from "../serverUrl";
 import axios from "axios";
 import { fetchUserActiveCrosswords } from "../store/userActiveCrosswords";
+import {
+  findNextAcrossCell,
+  findPreviousAcrossCell,
+  findNextAcrossClue,
+  findPreviousAcrossClue,
+  findNextDownCell,
+  findPreviousDownCell
+} from "../components/CellLocations";
 
 export class allCrosswordsScreen extends Component {
   constructor(props) {
@@ -124,12 +132,23 @@ export class allCrosswordsScreen extends Component {
         nextDownClue: 0,
         previousDownClue: 0
       };
-
-      let guessAndLocs = guessArray.map((cell, index) => {
-        cell.nextAcrossCell = findNextAcrossCell(cell.index);
-      });
     });
+    // console.log("in game creation");
 
+    // console.log(
+    //   "testing find next (from 2, expect 3): ",
+    //   findNextAcrossCell(2, guessArray)
+    // );
+    // let guessAndLocs = guessArray.map((cell, index) => {
+    //   // console.log("cell guess = ", cell);
+    //   cell.nextAcrossCell = findNextAcrossCell(index, guessArray);
+    //   cell.previousAcrossCell = findPreviousAcrossCell(index, guessArray);
+    //   cell.nextDownCell = findNextDownCell(index, guessArray);
+    //   cell.previousDownCell = findPreviousDownCell(index, guessArray);
+    //   return cell;
+    // });
+
+    // console.log("checking cell next loc: ", guessAndLocs[8]);
     //add a new section to find the locations of the next and previous locations and clues
     //make a new game instance object that will be used to create one in the db
     let newGameInstance = {
