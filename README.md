@@ -13,7 +13,7 @@ npm run seed
 ```
 
 in serverUrl.js, replace "LOCAL IP ADDRESS HERE" with your IP address (Mac users: found in
-System Preferences => Network, Windows users: select the Start button => start typeing View network connections => select and active network connection => select View status of this connection => select Details)
+System Preferences => Network, Windows users: select the Start button => start typing View network connections => select and active network connection => select View status of this connection => select Details)
 
 In one terminal,
 
