@@ -1,9 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
-import CWCell from "./CWCell";
-import CWRow from "./CWRow";
+import { View } from "react-native";
 import CWTable from "./CWTable";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import CWClue from "./CWClue";
 import HeaderOptions from "./HeaderOptions";
 import CWGameInfo from "./CWGameInfo";

@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Keyboard
-} from "react-native";
+import { View, Text, Keyboard } from "react-native";
 
 export default function CWGameInfo(props) {
   let playerColorArray = Object.values(props.playerColors);
-  // console.log("player color array:", playerColorArray);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       event => {
         setKeyboardVisible(true);
-        // console.log(event.endCoordinates.height);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
@@ -37,13 +29,10 @@ export default function CWGameInfo(props) {
       <View
         style={{
           flex: 1,
-          // top: "70%",
           width: "100%",
           position: "absolute",
           top: "60%",
           backgroundColor: "#ededda"
-          // borderWidth: 2,
-          // borderColor: "black"
         }}
       >
         <View

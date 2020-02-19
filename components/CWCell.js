@@ -33,27 +33,16 @@ export default function CWCell(props) {
   }
 
   if (activeCellIndexes.includes(cell.index)) {
-    // console.log("this is an active cell");
-    // console.log("active user id", activeUserId);
-    // console.log("cell index", cell.index);
-    // console.log("player colors", playerColors);
     let indexOfPlayer = playerColors.findIndex(
       element => element.userId == activeUserId
     );
-    // console.log("index of player in pcolor array", indexOfPlayer);
     let playerColor;
     if (indexOfPlayer < 0) {
       playerColor = "green";
     } else {
       playerColor = playerColors[indexOfPlayer].color;
     }
-    // cellBackgroundColor = playerColors.filter(
-    //   player => player.userId === activeUserId
-    // )[0].color;
     cellBackgroundColor = playerColor;
-    // cellBackgroundColor = playerColors.filter(
-    //   player => player.userId === activeCells[cell.index]
-    // )[0].color;
     hasBackground = true;
   }
 
@@ -151,10 +140,7 @@ export default function CWCell(props) {
               position: "absolute",
               left: "0%",
               top: "0%",
-              // backgroundColor: "white",
               fontWeight: "bold"
-              // borderColor: "grey",
-              // borderWidth: 1
             }}
           >
             {cell.number}
@@ -171,7 +157,6 @@ export default function CWCell(props) {
           ></Text>
         )}
         <TextInput
-          // blurOnSubmit={false}
           autoCapitalize="characters"
           maxLength={1}
           style={{
@@ -187,9 +172,7 @@ export default function CWCell(props) {
             zIndex: 9999,
             top: "12%",
             fontSize: 8,
-
             color: myColor ? myColor : "black",
-
             fontWeight: "bold"
           }}
           ref={props.refs[cell.index]}

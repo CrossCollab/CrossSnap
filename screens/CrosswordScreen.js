@@ -1,26 +1,10 @@
-import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import SERVER_URL from "../serverUrl";
 import { connect } from "react-redux";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Keyboard,
-  Picker
-} from "react-native";
+import { Text, TouchableOpacity, View, Picker } from "react-native";
 import { Toast } from "native-base";
-import CWCell from "../components/CWCell";
-import CWRow from "../components/CWRow";
-import CWTable from "../components/CWTable";
 import CWGameWrapper from "../components/CWGameWrapper";
 import axios from "axios";
-import { MonoText } from "../components/StyledText";
 import io from "socket.io-client";
 import Confetti from "../components/Confetti";
 
@@ -67,8 +51,6 @@ class CrosswordTable extends React.Component {
 
     const { navigation } = this.props;
     let gameId = navigation.getParam("gameInstance");
-    // this.props.navigation.state.params = null;
-
     try {
       //get the gameInstance model instance from the backend
       const { data } = await axios.get(
@@ -106,21 +88,22 @@ class CrosswordTable extends React.Component {
       //once the socket receives the connect message from the server-side, ask to join the
       //room with the id matching the gameId
       this.socket.on("connect", onConnect);
-      this.socket.on("welcome", payload => {
-        // console.log("message: ", payload.greeting);
-        // console.log("current players", payload.players);
-        this.setState({ currentPlayers: payload.players });
+
+      /**
+      *color choice
+      When player updates color choice, an array of objects listing all users userId, color, and firstName is sent and set as this.state.playerColors
+      @param {playerColors} array
+      */
+      this.socket.on("color choice", playerColors => {
+        this.setState({ playerColors });
       });
-
-      this.socket.on("color choice", msg => {
-        // console.log("choices", msg);
-        this.setState({ playerColors: msg });
-      });
-
-      //NEED TO ADD SOMETHING PULLING IN THE CURRENT ROOM STATE FOR A NEW PLAYER ADDITION?
-
-      //when the client receives a message from server socket of change puzzle,
-      //update the state of the guesses array
+      /**
+      *new player
+      When new player enters a room, all players in room receive the user's name and an updated array of all users in room
+      @param {info} object
+      @var {userName} string
+      @var {users} array
+      */
       this.socket.on("new player", info => {
         const { userName, users } = info;
         Toast.show({
@@ -133,16 +116,33 @@ class CrosswordTable extends React.Component {
         this.setState({ currentPlayers: users });
       });
 
-      this.socket.on("change puzzle", msg => {
+      /**
+      *change puzzle
+      When a player makes a change to the puzzle, all users are informed of the new guess for the cell that was altered, the userId of the person who altered it, and the color that user chose.
+      The information is set for the cell that was changed on each player's state
+      @param {cell} object
+      */
+
+      this.socket.on("change puzzle", cell => {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
-        allGuesses[msg.index].guess = msg.guess;
-        allGuesses[msg.index].userId = msg.userId;
-        allGuesses[msg.index].color = msg.color;
+        allGuesses[cell.index].guess = cell.guess;
+        allGuesses[cell.index].userId = cell.userId;
+        allGuesses[cell.index].color = cell.color;
         this.setState({ guesses: allGuesses });
       });
+
+      /**
+      *player leaving
+      When a player leaves, sockets will send all players:
+      @var {userName} string of the player that's leaving,
+      @var {currentPlayers} array all of the current players in the game,
+      @var {activeCells} array the active cells of remaining players (leaving player excluded)
+      All are included in the
+      @param {data} object
+      */
+
       this.socket.on("player leaving", data => {
         const { userName, currentPlayers, activeCells } = data;
-        // console.log("updatedColors");
         if (userName === this.state.userName) {
           this.setState({
             activeCells: [],
@@ -157,7 +157,6 @@ class CrosswordTable extends React.Component {
             })
           );
         }
-        // this.setState({ currentPlayers });
       });
     } catch (err) {
       console.err(err);
@@ -166,23 +165,13 @@ class CrosswordTable extends React.Component {
     this._navListener = this.props.navigation.addListener(
       "didFocus",
       async event => {
-        // console.log("back to game screen");
-        //oddly the game instance param was in a weird spot
-        // console.log("data:", event.action.params.gameInstance);
-        // console.log("refocusing on game screen");
-
         try {
           let newGameInstance = event.action.params.gameInstance;
-          // console.log("new game instance? :", newGameInstance);
-          // console.log("old game instance = ", this.state.gameId);
-          // console.log("new game instance = ", newGameInstance);
 
           if (newGameInstance === this.state.gameId) {
-            // console.log("same as before");
             //same game as before, do nothing
           } else {
             //different game, update state, leave old socket, connect to new socket
-            // console.log("different game");
             const { data } = await axios.get(
               `${SERVER_URL}/api/gameInstance/${newGameInstance}`
             );
@@ -192,30 +181,9 @@ class CrosswordTable extends React.Component {
               room: this.state.gameId,
               userName: this.state.userName
             });
-            // this.socket.on("player leaving", data => {
-            //   const {
-            //     userName,
-            //     currentPlayers,
-            //     activeCells,
-            //     playerColors
-            //   } = data;
-            //   console.log("updatedColors");
-            //   if (userName === this.state.userName) {
-            //     this.setState({ activeCells: [], currentPlayers: [] });
-            //   } else {
-            //     this.setState(
-            //       { activeCells, currentPlayers },
-            //       Toast.show({
-            //         duration: 5000,
-            //         text: `${userName} has left the game!`
-            //       })
-            //     );
-            //   }
-            //   // this.setState({ currentPlayers });
-            // });
+            //forget about your old friends and your old color. You don't need them now.
+            //set the new game on state
             this.setState({ myColor: "", playerColors: [] });
-            // this.socket.emit("join", { newGameInstance, userName, guesses });
-            //update state with new game instance information
             let guesses = data.guesses;
             let gameId = newGameInstance;
             let userName = this.props.user.firstName;
@@ -233,9 +201,6 @@ class CrosswordTable extends React.Component {
             });
 
             this.socket.emit("join", { gameId, userName, guesses });
-
-            // console.log("my socket info", this.socket);
-
             //join the new room
           }
         } catch (err) {
@@ -266,23 +231,15 @@ class CrosswordTable extends React.Component {
       if (this.state.guesses[idx].guess !== "") {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         allGuesses[idx].guess = "";
-        this.setState(
-          { guesses: allGuesses }
-          // this.changeHelper
-        );
-        //still need to update state
+        this.setState({ guesses: allGuesses });
       } else {
         const allGuesses = JSON.parse(JSON.stringify(this.state.guesses));
         //if the cell was empty just move back
         this.traverse(idx, letter);
         allGuesses[idx].userId = this.props.user.id;
         const cell = allGuesses[idx];
-        this.setState(
-          { guesses: allGuesses }
-          // this.changeHelper
-        );
+        this.setState({ guesses: allGuesses });
         this.changeHelper(cell);
-        // this.traverse(idx, letter);
       }
     } else {
       this.setState({ direction: "forward" });
@@ -293,12 +250,8 @@ class CrosswordTable extends React.Component {
       allGuesses[idx].color = this.props.user.textColor;
       allGuesses[idx].userId = this.props.user.id;
       const cell = allGuesses[idx];
-      this.setState(
-        { guesses: allGuesses }
-        // this.changeHelper
-      );
+      this.setState({ guesses: allGuesses });
       this.changeHelper(cell);
-      // this.traverse(idx, letter);
     }
   };
   handleCellChange(cell) {
@@ -348,11 +301,9 @@ class CrosswordTable extends React.Component {
   //this function sends a message to the socket with the current state and roomId
   changeHelper(cell) {
     let socketMsg = {
-      // guesses: this.state.guesses,
       cell,
       room: this.state.gameId
     };
-    // console.log("cell sent to socket", cell);
     this.socket.emit("change puzzle", socketMsg);
   }
 
@@ -413,7 +364,6 @@ class CrosswordTable extends React.Component {
           guess.index > this.state.currentCell.index &&
           guess.across !== this.state.currentCell.across
       );
-      // console.log("next index", nextIndex);
       if (nextIndex !== -1) {
         this.state.refs[nextIndex].current.focus();
       } else {
@@ -513,36 +463,11 @@ class CrosswordTable extends React.Component {
     //pushes each guess from this.state into a row array
     //unclear... perhaps this should be inside a functional component?
     const { navigation } = this.props;
-    // console.log("my color", this.state.myColor);
     let gameId = navigation.getParam("gameInstance");
     if (this.state.confetti) {
       return (
         <View style={{ height: "100%", width: "100%" }}>
           <Confetti confettiCount={300} duration={10000} />
-          {/* <CWGameWrapper
-            handleCellChange={this.handleCellChange}
-            activeCells={this.state.activeCells}
-            currentPlayers={this.state.currentPlayers}
-            gameId={gameId}
-            guesses={this.state.guesses}
-            handleChange={this.handleChange}
-            handlePress={this.handlePress}
-            acrossClue={this.state.currentCell.across}
-            downClue={this.state.currentCell.down}
-            currentCell={this.state.currentCell}
-            currentView={this.state.currentView}
-            checkBoard={this.checkBoard}
-            refs={this.state.refs}
-            traverse={this.traverse}
-            direction={this.state.direction}
-            columnLength={this.state.columnLength}
-            swapView={this.swapView}
-            findNextClue={this.findNextClue}
-            findPreviousClue={this.findPreviousClue}
-            zoomFactor={this.state.zoomFactor}
-            reZoom={this.reZoom}
-            playerColors={this.state.playerColors}
-          /> */}
         </View>
       );
     } else if (!this.state.myColor.length) {
@@ -551,7 +476,6 @@ class CrosswordTable extends React.Component {
           style={{
             height: "100%",
             width: "100%",
-            // alignItems: "center",
             justifyContent: "center",
             alignContent: "center"
           }}
@@ -581,15 +505,13 @@ class CrosswordTable extends React.Component {
               padding: 10
             }}
             onPress={event => {
-              // console.log("event", event);
               let msg = {
                 color: this.state.currentColorChoice,
                 userId: this.props.user.id,
                 room: this.state.gameId,
                 firstName: this.props.user.firstName
               };
-              // console.log("pressed pick button", this.state.currentColorChoice);
-              // console.log("msg", msg);
+
               this.setState({ myColor: this.state.currentColorChoice });
               this.socket.emit("picked", msg);
             }}

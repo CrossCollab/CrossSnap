@@ -1,20 +1,10 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Keyboard
-} from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function HeaderOptions(props) {
-  // const [view, setView] = useState("View down");
-
   const toggleView = () => {
     if (props.currentView === "across") {
-      // setView(`View across`);
     } else {
-      // setView(`View down`);
     }
     props.swapView();
   };
@@ -23,7 +13,6 @@ export default function HeaderOptions(props) {
     props.reZoom(props.zoomFactor - 0.01);
     props.refs[0].current.focus();
     props.refs[0].current.blur();
-    // props.refs[0].current.focus();
   };
 
   return (
@@ -48,12 +37,6 @@ export default function HeaderOptions(props) {
         <Text>Refocus</Text>
       </TouchableOpacity>
       {/* could make the refocus a toggleable focus on focus, incorporating below */}
-      {/* <TouchableOpacity
-        style={styles.touchable}
-        onPress={() => props.refs[0].current.blur()}
-      >
-        <Text>Unfocus</Text>
-      </TouchableOpacity> */}
       <TouchableOpacity style={styles.touchable} onPress={() => toggleView()}>
         <Text>View {props.currentView == "across" ? "down" : "across"}</Text>
       </TouchableOpacity>
