@@ -29,4 +29,6 @@ npm start
 
 Download Expo from the Apple Store, and then hover your phone camera over the QR code in your second terminal.
 
+Once you have signed up, pick a puzzle from the 'All puzzles' page. Invite your friends to join with the same gameId as you!
+
 Have fun!
