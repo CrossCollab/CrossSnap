@@ -15,14 +15,27 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 export default function CWClue(props) {
   let currentClue;
+
+  //The current cell, held in local state on CrosswordScreen.js holds
+  //information about the across and down clues for each cell, which is passed in here as the
+  //acrossClue and downClue.
   if (props.currentView === "across") {
     currentClue = props.acrossClue;
   } else {
     currentClue = props.downClue;
   }
+
+  //uses React hooks to add local state that holds whether the keyboard is visible
+  //and what the height of the clue banner should be such that it sits atop the keyboard,
+  //if the keyboard is shown.
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [clueMargin, setClueMargin] = useState(0);
 
+  //adds a listener for keyboard appearance
+  //Not sure the isKeyboardVisible is needed if we are already setting clue margin height.
+  //useEffect triggers after each render.
+  //The return is the optional cleanup mechanism for useEffect, removing the keyboard listeners,
+  //performed when the component unmounts or re-renders.
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -47,6 +60,7 @@ export default function CWClue(props) {
   }, []);
 
   return (
+    //structure of this clue banner is a view wrapping 2 buttons (prev/next) and the clue text
     <View
       style={{
         backgroundColor: "#c1ebb2",
@@ -65,12 +79,6 @@ export default function CWClue(props) {
       ></Button>
       <Text
         style={{
-          // justifyContent: "center",
-          // alignContent: "center",
-          // alignSelf: "center",
-          // alignItems: "center",
-          // paddingTop: "2%",
-          // paddingBottom: isKeyboardVisible === true ? 380 : "0%",
           textAlign: "center",
           height: "auto",
           width: "85%",
@@ -87,10 +95,3 @@ export default function CWClue(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginHorizontal: 16
-  }
-});
