@@ -4,8 +4,6 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import LinksScreen from "../screens/LinksScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 import CrosswordScreen from "../screens/CrosswordScreen";
 import allCrosswordsScreen from "../screens/allCrosswordsScreen";
 import UserActiveCrosswordsScreen from "../screens/UserActiveCrosswordsScreen";
@@ -51,49 +49,6 @@ HomeStack.navigationOptions = {
 };
 
 HomeStack.path = "";
-
-/////////////////////////////
-////////links screen/////////
-/////////////////////////////
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen
-  },
-  config
-);
-
-LinksStack.navigationOptions = {
-  tabBarLabel: "Links",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
-  )
-};
-LinksStack.path = "";
-
-////////////////////////////
-//////settings screen///////
-////////////////////////////
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen
-  },
-  config
-);
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: "Settings",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
-  )
-};
-
-SettingsStack.path = "";
 
 /////////////////////////////
 ///single crossword screen///
@@ -145,54 +100,13 @@ allCrosswordsStack.navigationOptions = {
 
 allCrosswordsStack.path = "";
 
-// const LinksStack = createStackNavigator(
-//   {
-//     Links: LinksScreen
-//   },
-//   config
-// );
-
-// LinksStack.navigationOptions = {
-//   tabBarLabel: "Links",
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-//     />
-//   )
-// };
-// LinksStack.path = "";
-
-//////////////////////////////////////////
-//user-specific active crosswords screen//
-//////////////////////////////////////////
-// const UserActiveCrosswordsStack = createStackNavigator(
-//   {
-//     UserActiveCrosswordsScreen
-//   },
-//   config
-// );
-// UserActiveCrosswordsStack.navigationOptions = {
-//   tabBarLabel: "Active Crosswords",
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
-//     />
-//   )
-// };
-// UserActiveCrosswordsStack.path = "";
-
 ////////////////////////////
 //////bottom navigator//////
 ////////////////////////////
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
   CrosswordStack,
   allCrosswordsStack
-  // UserActiveCrosswordsStack
 });
 
 tabNavigator.path = "";
