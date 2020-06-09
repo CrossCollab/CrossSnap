@@ -6,7 +6,7 @@ CrossSnap is a fully functional and feature rich sull stack mobile game that all
 
 This project was built using Expo, React Native, Node.js, Express.js, and PostgreSQL. 
 
-To see a video of the pojrect, please check out https://www.youtube.com/watch?v=dNaaMAr8DrE&list=PLx0iOsdUOUmkGPFdAt5kHKxGQw_YseAQI&index=19. 
+To see a video of the project, please check out https://www.youtube.com/watch?v=dNaaMAr8DrE&list=PLx0iOsdUOUmkGPFdAt5kHKxGQw_YseAQI&index=19. 
 
 ## Key Features
 
@@ -30,6 +30,7 @@ Create and Seed Database:
 `also: update serverURL.js file with your IP address`
 
 Start application on your computer:
+
 `npm run server`
 
 `npm run start`
