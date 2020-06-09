@@ -4,7 +4,7 @@
 
 CrossSnap is a fully functional and feature rich sull stack mobile game that allows people to complete crosswords in real-time with their friends. 
 
-This project was built using Expo, React Native, Node.js, Express.js, and PostgreSQL. 
+This project was built using Expo, React Native, socket.io, Node.js, Express.js, and PostgreSQL. 
 
 To see a video of the project, please check out https://www.youtube.com/watch?v=dNaaMAr8DrE&list=PLx0iOsdUOUmkGPFdAt5kHKxGQw_YseAQI&index=19. 
 
