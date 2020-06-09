@@ -26,15 +26,15 @@ Installation:
 Create and Seed Database:
 
 `create database named: 'crosscollab'`
-`update serverURL.js file with your IP address`
+
+`also: update serverURL.js file with your IP address`
 
 Start application on your computer:
 `npm run server`
+
 `npm run start`
 
-Open game on your iPhone/mobile device:
-
-`open your camera app and look at the QR code with your phone, then press open in expo`
+To open game on your iPhone/mobile device: using your phone's camera, look at the QR code in your terminal, then press open in expo`
 
 ## Gameplay
 
